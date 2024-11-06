@@ -22,6 +22,8 @@ export class CalcPage {
         this.testOption1Item1 = this.page.getByText("Не выбрано", { exact: true })
         this.testOption1Item2 = this.page.getByText("тест номенклатура (фикс) 10рублей/шт", { exact: true })
         this.testOption1Item3 = this.page.getByText("тест номенклатура (интервал) (1-10 = 5, 11+=4)", { exact: true })
+        this.testOption1Item4 = this.page.getByText("тест произвольное количество опций (1-10 = 5, 11+=4)+по умолчанию + минималка 10", { exact: true })
+        this.testOption1Item5 = this.page.getByText("нулевая стоимость", { exact: true })
         this.calcAmmount = this.page.locator("div.component__amount input")
         this.calcUnitPrice = this.page.locator("input#ed5").nth(1)
         this.calcTotalAmount = this.page.locator("input#ed6").nth(1)
@@ -96,5 +98,13 @@ export class CalcPage {
         await this.calcAmmount.fill("10")
         await expect(this.calcAmmount).toHaveValue("10")
         await expect(this.calcTotalAmount).toHaveValue("187")
+    }
+
+    ceckingTheCostPerPrintRun = async () => {
+        await this.testOption1.click()
+        await this.testOption1Item4.click()
+        await this.calcAmmount.fill("14")
+        await expect(this.calcAmmount).toHaveValue("14")
+        await expect(this.calcTotalAmount).toHaveValue("374")
     }
 }

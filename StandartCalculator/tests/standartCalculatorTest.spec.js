@@ -37,6 +37,7 @@ test('Calculation in a standard calculator', async ({ page }) => {
   await calcPage.selectTheFirstItemTestOption()
   await calcPage.checkingTheMinimumCost()
   await calcPage.checkingTheCostPerUnit()
+  await calcPage.ceckingTheCostPerPrintRun()
 
   // Pause test
   await page.pause()
