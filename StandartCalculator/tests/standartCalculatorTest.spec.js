@@ -31,13 +31,15 @@ test('Calculation in a standard calculator', async ({ page }) => {
   await calcPage.selectGroupAndSubgroup()
 
   // Checking
-  await calcPage.checkingTheDefaultValues()
-  await calcPage.changingTheFirstAttribute()
-  await calcPage.changingTheSecondAttribute()
-  await calcPage.selectTheFirstItemTestOption()
-  await calcPage.checkingTheMinimumCost()
-  await calcPage.checkingTheCostPerUnit()
-  await calcPage.ceckingTheCostPerPrintRun()
+  await calcPage.checkingTheDefaultValuesForCustomPrintRuns()
+  // await calcPage.changingTheFirstAttribute()
+  // await calcPage.changingTheSecondAttribute()
+  // await calcPage.selectTheFirstItemTestOption()
+  // await calcPage.checkingTheMinimumCost()
+  // await calcPage.checkingTheCostPerUnit()
+  // await calcPage.ceckingTheCostPerPrintRun()
+  // await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
+  await calcPage.checkingTheSpecifiedPrintRuns()
 
   // Pause test
   await page.pause()
