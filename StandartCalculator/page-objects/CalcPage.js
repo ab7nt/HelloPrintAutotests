@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import exp from "constants";
+import { helpers } from "./../utils/helpers"
 
 export class CalcPage {
     constructor(page) {
@@ -28,8 +28,9 @@ export class CalcPage {
         this.calcChoosingAPrintRunList = this.calcChoosingAPrintRun.locator("div.custom-option")
         this.calcPrintRunValue = this.calcChoosingAPrintRun.locator("div.css-79qbkc-singleValue")
         this.calcAmmount = this.page.locator("div.component__amount input")
+        this.calcPriceInputs = this.page.locator("div.right-group__footer input.calculator-price-cost-input")
         this.calcUnitPrice = this.page.locator("input#ed5").nth(1)
-        this.calcTotalAmount = this.page.locator("input#ed6").nth(1)
+        this.calcTotalPrice = this.page.locator("input#ed6").nth(1)
         this.errorAlert = this.page.locator("div[role='alert']")
     }
 
@@ -57,8 +58,8 @@ export class CalcPage {
         expect(await this.calcAmmount.inputValue()).toEqual("4")
         await this.calcUnitPrice.waitFor()
         await expect(this.calcUnitPrice).toHaveValue("27.5")
-        await this.calcTotalAmount.waitFor()
-        await expect(this.calcTotalAmount).toHaveValue("110")
+        await this.calcTotalPrice.waitFor()
+        await expect(this.calcTotalPrice).toHaveValue("110")
     }
 
     changingTheFirstAttribute = async () => {
@@ -92,7 +93,8 @@ export class CalcPage {
         await this.calcAttribute2Item1.click()
         await this.calcTestOption1.click()
         await this.calcTestOption1Item2.click()
-        await expect(this.calcTotalAmount).toHaveValue("154")
+        await expect(this.calcTotalPrice).toHaveValue("154")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     checkingTheCostPerUnit = async () => {
@@ -100,7 +102,8 @@ export class CalcPage {
         await this.calcTestOption1Item3.click()
         await this.calcAmmount.fill("10")
         await expect(this.calcAmmount).toHaveValue("10")
-        await expect(this.calcTotalAmount).toHaveValue("187")
+        await expect(this.calcTotalPrice).toHaveValue("187")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     ceckingTheCostPerPrintRun = async () => {
@@ -108,11 +111,13 @@ export class CalcPage {
         await this.calcTestOption1Item4.click()
         await this.calcAmmount.fill("14")
         await expect(this.calcAmmount).toHaveValue("14")
-        await expect(this.calcTotalAmount).toHaveValue("374")
+        await expect(this.calcTotalPrice).toHaveValue("374")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcAmmount.fill("50")
         await expect(this.calcAmmount).toHaveValue("50")
-        await expect(this.calcTotalAmount).toHaveValue("517")
+        await expect(this.calcTotalPrice).toHaveValue("517")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     checkingTheConnectionWithAnotherCalculatorOrBuild = async () => {
@@ -122,19 +127,22 @@ export class CalcPage {
         await this.calcTestOption1Item2.click()
         await this.calcAmmount.fill("4")
         await expect(this.calcAmmount).toHaveValue("4")
-        await expect(this.calcTotalAmount).toHaveValue("154")
+        await expect(this.calcTotalPrice).toHaveValue("154")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcTestOption1.click()
         await this.calcTestOption1Item3.click()
         await this.calcAmmount.fill("10")
         await expect(this.calcAmmount).toHaveValue("10")
-        await expect(this.calcTotalAmount).toHaveValue("187")
+        await expect(this.calcTotalPrice).toHaveValue("187")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcTestOption1.click()
         await this.calcTestOption1Item4.click()
         await this.calcAmmount.fill("14")
         await expect(this.calcAmmount).toHaveValue("14")
-        await expect(this.calcTotalAmount).toHaveValue("374")
+        await expect(this.calcTotalPrice).toHaveValue("374")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     checkingTheSpecifiedPrintRuns = async () => {
@@ -151,11 +159,13 @@ export class CalcPage {
         await this.calcChoosingAPrintRun.click()
         await this.calcChoosingAPrintRunList.nth(0).click()
         await expect(this.calcPrintRunValue).toHaveText("10")
-        await expect(this.calcTotalAmount).toHaveValue("231")
+        await expect(this.calcTotalPrice).toHaveValue("231")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcChoosingAPrintRun.click()
         await this.calcChoosingAPrintRunList.nth(1).click()
         await expect(this.calcPrintRunValue).toHaveText("20")
-        await expect(this.calcTotalAmount).toHaveValue("462")
+        await expect(this.calcTotalPrice).toHaveValue("462")
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 }

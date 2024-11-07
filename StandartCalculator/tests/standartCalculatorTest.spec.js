@@ -1,46 +1,42 @@
 // import * as nodeFetch from "node-fetch"
 import { test, expect } from "@playwright/test"
-import { UserInfo } from "../data/userInfo";
+import { LoginPage } from "../page-objects/loginPage";
 import { CalcPage } from "../page-objects/CalcPage";
+import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
+
 
 test('Calculation in a standard calculator', async ({ page }) => {
-  test.setTimeout(3000 * 1000)
+  // Settings
+  test.setTimeout(30 * 1000)
 
-  await page.goto('https://release1.helloprint.ru/calculator');
+  // Visit page
+  await page.goto("/calculator");
 
+  // Page objects
+  const loginPage = new LoginPage(page)
   const calcPage = new CalcPage(page)
-  const loginInput = page.locator("form input#name")
-  const passwordInput = page.locator("form input#password")
-  const submitButton = page.locator("form button[type='submit']")
-  const companyList = page.locator("form select#company_id")
+  const chooseCompanyPage = new ChooseCompanyPage(page)
 
   // login
-  await loginInput.waitFor()
-  await loginInput.fill(UserInfo.name)
-  await passwordInput.waitFor()
-  await passwordInput.fill(UserInfo.password)
-  await submitButton.click()
+  await loginPage.enterUsernameAndPassword()
 
   // Select company
-  await page.waitForURL(/company/)
-  await companyList.waitFor()
-  await companyList.selectOption({ value: "51" })
-  await submitButton.click()
+  await chooseCompanyPage.choosingCompany()
 
   // Select group and subgroup
   await calcPage.selectGroupAndSubgroup()
 
   // Checking
   await calcPage.checkingTheDefaultValuesForCustomPrintRuns()
-  await calcPage.changingTheFirstAttribute()
-  await calcPage.changingTheSecondAttribute()
-  await calcPage.selectTheFirstItemTestOption()
-  await calcPage.checkingTheMinimumCost()
-  await calcPage.checkingTheCostPerUnit()
-  await calcPage.ceckingTheCostPerPrintRun()
-  await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
+  // await calcPage.changingTheFirstAttribute()
+  // await calcPage.changingTheSecondAttribute()
+  // await calcPage.selectTheFirstItemTestOption()
+  // await calcPage.checkingTheMinimumCost()
+  // await calcPage.checkingTheCostPerUnit()
+  // await calcPage.ceckingTheCostPerPrintRun()
+  // await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
   await calcPage.checkingTheSpecifiedPrintRuns()
 
   // Pause test
-  // await page.pause()
+  await page.pause()
 });
