@@ -62,7 +62,7 @@ export class CalcPage {
             'Тираж по умолчанию не равен 4')
         await this.calcUnitPrice.waitFor()
         await expect(this.calcUnitPrice).toHaveValue("27.5",
-            'Стоимость за единицу не равно 27.5')
+            'Стоимость за единицу не равна 27.5')
         await this.calcTotalPrice.waitFor()
         await expect(this.calcTotalPrice).toHaveValue("110",
             'Общая сумма расчёта не равна 110')
@@ -71,7 +71,7 @@ export class CalcPage {
 
     changingTheFirstAttribute = async () => {
         await this.calcAttribute2.click()
-        expect(await this.calcAttribute2List.count()).toEqual(2, 'Количество параметров в Атрибуте не равно двум')
+        expect(await this.calcAttribute2List.count()).toEqual(2, 'Количество параметров во втором атрибуте не равно двум')
 
         await this.calcAttribute1.click()
         await this.calcAttribute1Item2.click()
@@ -82,7 +82,7 @@ export class CalcPage {
 
     changingTheSecondAttribute = async () => {
         await this.calcAttribute2.click()
-        expect(await this.calcAttribute2List.count()).toEqual(1)
+        expect(await this.calcAttribute2List.count()).toEqual(1, 'Количество параметров во втором атрибуте не равно одному')
         await this.calcAttribute2Item2.click()
         expect(await this.errorAlert.textContent()).toEqual("Значение не попадает в интервалы :  сборка Значение 2 атрибута 1 / Значение 2 атрибута 2")
     }
@@ -100,7 +100,10 @@ export class CalcPage {
         await this.calcAttribute2Item1.click()
         await this.calcTestOption1.click()
         await this.calcTestOption1Item2.click()
-        await expect(this.calcTotalPrice).toHaveValue("154")
+        await expect(this.calcUnitPrice).toHaveValue("38.5",
+            'Стоимость за единицу не равна 38.5')
+        await expect(this.calcTotalPrice).toHaveValue("154",
+            'Общая сумма расчёта не равна 154')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
@@ -109,7 +112,11 @@ export class CalcPage {
         await this.calcTestOption1Item3.click()
         await this.calcAmmount.fill("10")
         await expect(this.calcAmmount).toHaveValue("10")
-        await expect(this.calcTotalPrice).toHaveValue("187")
+        // await expect(this.calcTotalPrice).toHaveValue("187")
+        await expect(this.calcUnitPrice).toHaveValue("18.7",
+            'Стоимость за единицу не равна 18.7')
+        await expect(this.calcTotalPrice).toHaveValue("187",
+            'Общая сумма расчёта не равна 187')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
@@ -118,12 +125,18 @@ export class CalcPage {
         await this.calcTestOption1Item4.click()
         await this.calcAmmount.fill("14")
         await expect(this.calcAmmount).toHaveValue("14")
-        await expect(this.calcTotalPrice).toHaveValue("374")
+        await expect(this.calcUnitPrice).toHaveValue("26.71",
+            'Стоимость за единицу не равна 26.71')
+        await expect(this.calcTotalPrice).toHaveValue("374",
+            'Общая сумма расчёта не равна 374')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcAmmount.fill("50")
         await expect(this.calcAmmount).toHaveValue("50")
-        await expect(this.calcTotalPrice).toHaveValue("517")
+        await expect(this.calcUnitPrice).toHaveValue("10.34",
+            'Стоимость за единицу не равна 10.34')
+        await expect(this.calcTotalPrice).toHaveValue("517",
+            'Общая сумма расчёта не равна 517')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
@@ -134,30 +147,41 @@ export class CalcPage {
         await this.calcTestOption1Item2.click()
         await this.calcAmmount.fill("4")
         await expect(this.calcAmmount).toHaveValue("4")
-        await expect(this.calcTotalPrice).toHaveValue("154")
+        await expect(this.calcUnitPrice).toHaveValue("38.5",
+            'Стоимость за единицу не равна 38.5')
+        await expect(this.calcTotalPrice).toHaveValue("154",
+            'Общая сумма расчёта не равна 154')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcTestOption1.click()
         await this.calcTestOption1Item3.click()
         await this.calcAmmount.fill("10")
         await expect(this.calcAmmount).toHaveValue("10")
-        await expect(this.calcTotalPrice).toHaveValue("187")
+        await expect(this.calcUnitPrice).toHaveValue("18.7",
+            'Стоимость за единицу не равна 18.7')
+        await expect(this.calcTotalPrice).toHaveValue("187",
+            'Общая сумма расчёта не равна 187')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcTestOption1.click()
         await this.calcTestOption1Item4.click()
         await this.calcAmmount.fill("14")
         await expect(this.calcAmmount).toHaveValue("14")
-        await expect(this.calcTotalPrice).toHaveValue("374")
+        await expect(this.calcUnitPrice).toHaveValue("26.71",
+            'Стоимость за единицу не равна 26.71')
+        await expect(this.calcTotalPrice).toHaveValue("374",
+            'Общая сумма расчёта не равна 374')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     checkingTheSpecifiedPrintRuns = async () => {
         await this.calcSubGroup.click()
         await this.calcSubGroupItem2.click()
-        expect(await this.calcAttribute1.textContent()).toEqual("Значение 1 атрибута 1")
-        expect(await this.calcAttribute2.textContent()).toEqual("Значение 1 атрибута 2")
-        expect(await this.calcTestOption1.textContent()).toEqual("значение")
+        expect(await this.calcAttribute1.textContent()).toEqual("Значение 1 атрибута 1",
+            'В первом атрибуте выбрано значение не "Значение 1 атрибута 1"')
+        expect(await this.calcAttribute2.textContent()).toEqual("Значение 1 атрибута 2",
+            'Во втором атирбуте выбрано не значение "Значение 1 атрибута 2"')
+        expect(await this.calcTestOption1.textContent()).toEqual("значение", 'В тестовой опции выбрано не "значение"')
 
         await this.calcAttribute1.click()
         await this.calcAttribute1Item2.click()
@@ -166,13 +190,19 @@ export class CalcPage {
         await this.calcChoosingAPrintRun.click()
         await this.calcChoosingAPrintRunList.nth(0).click()
         await expect(this.calcPrintRunValue).toHaveText("10")
-        await expect(this.calcTotalPrice).toHaveValue("231")
+        await expect(this.calcUnitPrice).toHaveValue("23.1",
+            'Стоимость за единицу не равна 23.1')
+        await expect(this.calcTotalPrice).toHaveValue("231",
+            'Общая сумма расчёта не равна 231')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
         await this.calcChoosingAPrintRun.click()
         await this.calcChoosingAPrintRunList.nth(1).click()
         await expect(this.calcPrintRunValue).toHaveText("20")
-        await expect(this.calcTotalPrice).toHaveValue("462")
+        await expect(this.calcUnitPrice).toHaveValue("23.1",
+            'Стоимость за единицу не равна 23.1')
+        await expect(this.calcTotalPrice).toHaveValue("462",
+            'Общая сумма расчёта не равна 462')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 }
