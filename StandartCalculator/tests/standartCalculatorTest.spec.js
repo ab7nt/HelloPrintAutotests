@@ -7,7 +7,7 @@ import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 
 test('Calculation in a standard calculator', async ({ page }) => {
   // Settings
-  test.setTimeout(30 * 1000)
+  test.setTimeout(300 * 1000)
 
   // Visit page
   await page.goto("/calculator");

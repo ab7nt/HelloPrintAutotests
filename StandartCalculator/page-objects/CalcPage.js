@@ -32,6 +32,7 @@ export class CalcPage {
         this.calcUnitPrice = this.page.locator("input#ed5").nth(1)
         this.calcTotalPrice = this.page.locator("input#ed6").nth(1)
         this.errorAlert = this.page.locator("div[role='alert']")
+        this.urgentCategoryRadioButtons = this.page.locator("input[name='inlineRadioPriceOptions'] ~ label")
     }
 
     selectGroupAndSubgroup = async () => {
@@ -172,6 +173,9 @@ export class CalcPage {
         await expect(this.calcTotalPrice).toHaveValue("374",
             'Общая сумма расчёта не равна 374')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
+
+        await helpers.applyUrgencyCategories(this.urgentCategoryRadioButtons, this.calcUnitPrice, this.calcTotalPrice)
+
     }
 
     checkingTheSpecifiedPrintRuns = async () => {
@@ -204,5 +208,9 @@ export class CalcPage {
         await expect(this.calcTotalPrice).toHaveValue("462",
             'Общая сумма расчёта не равна 462')
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
+
+        // await this.page.pause()
+
+        await helpers.applyUrgencyCategories(this.urgentCategoryRadioButtons, this.calcUnitPrice, this.calcTotalPrice)
     }
 }
