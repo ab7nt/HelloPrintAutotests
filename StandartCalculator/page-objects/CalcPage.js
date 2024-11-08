@@ -49,28 +49,35 @@ export class CalcPage {
 
     checkingTheDefaultValuesForCustomPrintRuns = async () => {
         await this.calcAttribute1.waitFor()
-        expect(await this.calcAttribute1.textContent()).toEqual("Значение 1 атрибута 1")
+        expect(await this.calcAttribute1.textContent()).toEqual("Значение 1 атрибута 1",
+            'В первом атрибуте выбрано значение не "Значение 1 атрибута 1"')
         await this.calcAttribute2.waitFor()
-        expect(await this.calcAttribute2.textContent()).toEqual("Значение 1 атрибута 2")
+        expect(await this.calcAttribute2.textContent()).toEqual("Значение 1 атрибута 2",
+            'Во втором атирбуте выбрано не значение "Значение 1 атрибута 2"')
         await this.calcTestOption1.waitFor()
-        expect(await this.calcTestOption1.textContent()).toEqual("нулевая стоимость")
+        expect(await this.calcTestOption1.textContent()).toEqual("нулевая стоимость",
+            'В тестовой опции выбрано не "нулевая стоимость"')
         await this.calcAmmount.waitFor()
-        expect(await this.calcAmmount.inputValue()).toEqual("4")
+        expect(await this.calcAmmount.inputValue()).toEqual("4",
+            'Тираж по умолчанию не равен 4')
         await this.calcUnitPrice.waitFor()
-        await expect(this.calcUnitPrice).toHaveValue("27.5")
+        await expect(this.calcUnitPrice).toHaveValue("27.5",
+            'Стоимость за единицу не равно 27.5')
         await this.calcTotalPrice.waitFor()
-        await expect(this.calcTotalPrice).toHaveValue("110")
+        await expect(this.calcTotalPrice).toHaveValue("110",
+            'Общая сумма расчёта не равна 110')
+        await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 
     changingTheFirstAttribute = async () => {
         await this.calcAttribute2.click()
-        expect(await this.calcAttribute2List.count()).toEqual(2)
+        expect(await this.calcAttribute2List.count()).toEqual(2, 'Количество параметров в Атрибуте не равно двум')
 
         await this.calcAttribute1.click()
         await this.calcAttribute1Item2.click()
-        expect(await this.calcAttribute2.textContent()).toEqual("Не выбрано")
+        expect(await this.calcAttribute2.textContent()).toEqual("Не выбрано", 'Во втором атирбуте выбрано не значение "Не выбрано"')
         await this.errorAlert.waitFor()
-        expect(await this.errorAlert.textContent()).toEqual("Сборка не найдена ")
+        expect(await this.errorAlert.textContent()).toEqual("Сборка не найдена ", 'В алерте об ошибке отображается не "Сборка не найдена"')
     }
 
     changingTheSecondAttribute = async () => {

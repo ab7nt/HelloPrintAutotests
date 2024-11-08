@@ -7,7 +7,7 @@ export
             for (let i = 0; i < count; i++) {
                 const text = await elements.nth(i).inputValue();
                 expect(Number(text)).not.toBeNaN();
-                console.warn((Number(text)))
+                // console.warn((Number(text)))
             }
         },
 
