@@ -1,44 +1,42 @@
 import { expect } from "@playwright/test"
-import exp from "constants";
 
-export
-    const helpers = {
-        async checkingMultipleElementsForTheTypeNumber(elements) {
-            const count = await elements.count()
-            for (let i = 0; i < count; i++) {
-                const text = await elements.nth(i).inputValue();
-                expect(Number(text)).not.toBeNaN()
-                // console.warn((Number(text)))
-            }
-        },
+export const helpers = {
+    async checkingMultipleElementsForTheTypeNumber(elements) {
+        const count = await elements.count()
+        for (let i = 0; i < count; i++) {
+            const text = await elements.nth(i).inputValue();
+            expect(Number(text)).not.toBeNaN()
+            // console.warn((Number(text)))
+        }
+    },
 
-        async applyUrgencyCategories(urgentCategoryRadioButtons, calcUnitPrice, calcTotalPrice) {
-            const calcUnitPriceWithoutUrgent = await calcUnitPrice.inputValue()
-            const calcTotalPriceWithoutUrgent = await calcTotalPrice.inputValue()
+    async applyUrgencyCategories(urgentCategoryRadioButtons, calcUnitPrice, calcTotalPrice) {
+        const calcUnitPriceWithoutUrgent = Number(await calcUnitPrice.inputValue())
+        const calcTotalPriceWithoutUrgent = Number(await calcTotalPrice.inputValue())
 
-            const count = await urgentCategoryRadioButtons.count()
-            for (let i = 1; i < count; i++) {
-                const labelText = await urgentCategoryRadioButtons.nth(i).innerText()
-                const startIndex = labelText.indexOf('(') + 1
-                const endIndex = labelText.indexOf('%)')
-                const numberString = labelText.slice(startIndex, endIndex).trim()
-                const discountAmount = Number(numberString)
-                // console.warn(discountAmount)
-                const calcUnitPriceBeforeUrgent = await calcUnitPrice.inputValue()
-                const calcTotalPriceBeforeUrgent = await calcTotalPrice.inputValue()
-                await urgentCategoryRadioButtons.nth(i).click()
-                const calcUnitPriceAfterUrgent = await calcUnitPrice.inputValue()
-                const calcTotalPriceAfterUrgent = await calcTotalPrice.inputValue()
+        const count = await urgentCategoryRadioButtons.count()
+        for (let i = 1; i < count; i++) {
 
-                const calcUnitPriceWithUrgent = (Number(calcUnitPriceWithoutUrgent)) + (Number(calcUnitPriceWithoutUrgent)) * (discountAmount / 100)
-                const calcTotalPriceWithUrgent = (Number(calcTotalPriceWithoutUrgent)) + (Number(calcTotalPriceWithoutUrgent)) * (discountAmount / 100)
-                // console.warn(Math.round(calcUnitPriceWithUrgent * 100) / 100)
-                expect(calcUnitPriceWithUrgent.toFixed(1)).toEqual(Number(calcUnitPriceAfterUrgent).toFixed(1))
-                expect(calcTotalPriceWithUrgent.toFixed(1)).toEqual(Number(calcTotalPriceAfterUrgent).toFixed(1))
-            }
-            await urgentCategoryRadioButtons.nth(0).click()
-            expect(await calcUnitPrice.inputValue()).toEqual(calcUnitPriceWithoutUrgent)
-            expect(await calcTotalPrice.inputValue()).toEqual(calcTotalPriceWithoutUrgent)
+            // Получение размера скидки/наценки из названия срочности
+            const labelText = await urgentCategoryRadioButtons.nth(i).innerText()
+            const discountAmount = Number(labelText.match(/-?\d+/)[0], 10)
+
+            // Применение категории срочности и сравненеие значений
+            await urgentCategoryRadioButtons.nth(i).click()
+            const calcUnitPriceAfterUrgent = Number(await calcUnitPrice.inputValue())
+            const calcUnitPriceWithUrgent = calcUnitPriceWithoutUrgent + calcUnitPriceWithoutUrgent * (discountAmount / 100)
+            expect(calcUnitPriceWithUrgent.toFixed(1)).toEqual(calcUnitPriceAfterUrgent.toFixed(1))
+            // console.warn(Math.round(calcUnitPriceWithUrgent * 100) / 100)
+
+            const calcTotalPriceAfterUrgent = Number(await calcTotalPrice.inputValue())
+            const calcTotalPriceWithUrgent = calcTotalPriceWithoutUrgent + calcTotalPriceWithoutUrgent * (discountAmount / 100)
+            expect(calcTotalPriceWithUrgent.toFixed(1)).toEqual(calcTotalPriceAfterUrgent.toFixed(1))
         }
 
+        // Возврат значения без скидки/наценки и сравнение значений с изначальным
+        await urgentCategoryRadioButtons.nth(0).click()
+        expect(Number(await calcUnitPrice.inputValue())).toEqual(calcUnitPriceWithoutUrgent)
+        expect(Number(await calcTotalPrice.inputValue())).toEqual(calcTotalPriceWithoutUrgent)
     }
+
+}
