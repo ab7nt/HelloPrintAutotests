@@ -31,6 +31,18 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
   },
 
+  // afterEach: async ({ test }, done) => {
+  //   try {
+  //     await test.context.close();
+  //     done();
+  //   } catch (error) {
+  //     console.error('Ошибка при закрытии контекста:', error);
+  //     await test.browserContext.screenshot({ path: 'screenshot.png' });
+  //     done(error);
+  //   }
+  // },
+
+
   /* Configure projects for major browsers */
   projects: [
     {

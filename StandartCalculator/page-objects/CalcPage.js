@@ -207,10 +207,17 @@ export class CalcPage {
             'Стоимость за единицу не равна 23.1')
         await expect(this.calcTotalPrice).toHaveValue("462",
             'Общая сумма расчёта не равна 462')
+
+        await this.calcPriceInputs.first().waitFor({ state: 'visible', timeout: 5000 })
         await helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
 
-        // await this.page.pause()
+        await helpers.applyUrgencyCategories(this.urgentCategoryRadioButtons, this.calcTotalPrice)
+    }
 
-        await helpers.applyUrgencyCategories(this.urgentCategoryRadioButtons, this.calcUnitPrice, this.calcTotalPrice)
+    testNan = async () => {
+        await this.calcTestOption1.click()
+        await this.calcTestOption1Item1.click()
+        await this.calcPriceInputs.first().waitFor()
+        helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
     }
 }

@@ -4,6 +4,11 @@ import { LoginPage } from "../page-objects/loginPage";
 import { CalcPage } from "../page-objects/CalcPage";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 
+// test.afterEach(async ({ page }, testInfo) => {
+//   if (testInfo.status === "passed") {
+//     await page.screenshot({ path: 'screenshot.png' })
+//   }
+// })
 
 test('Calculation in a standard calculator', async ({ page }) => {
   // Settings
@@ -28,15 +33,20 @@ test('Calculation in a standard calculator', async ({ page }) => {
 
   // Checking
   await calcPage.checkingTheDefaultValuesForCustomPrintRuns()
-  await calcPage.changingTheFirstAttribute()
-  await calcPage.changingTheSecondAttribute()
-  await calcPage.selectTheFirstItemTestOption()
-  await calcPage.checkingTheMinimumCost()
-  await calcPage.checkingTheCostPerUnit()
-  await calcPage.ceckingTheCostPerPrintRun()
-  await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
+  // await calcPage.changingTheFirstAttribute()
+  // await calcPage.changingTheSecondAttribute()
+  // await calcPage.selectTheFirstItemTestOption()
+  // await calcPage.checkingTheMinimumCost()
+  // await calcPage.checkingTheCostPerUnit()
+  // await calcPage.ceckingTheCostPerPrintRun()
+  // await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
   await calcPage.checkingTheSpecifiedPrintRuns()
+  // await calcPage.testNan()
+
+  // if (test.state === "failed") {
+  //   await page.screenshot({ path: 'screenshot.png' })
+  // }
 
   // Pause test
-  await page.pause()
+  // await page.pause()
 });
