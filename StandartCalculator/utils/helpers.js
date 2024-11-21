@@ -1,6 +1,7 @@
 import { expect } from "@playwright/test"
 
 export const helpers = {
+
    async checkingMultipleElementsForTheTypeNumber(elements) {
       const count = await elements.count()
       for (let i = 0; i < count; i++) {
@@ -29,6 +30,15 @@ export const helpers = {
       // Возврат значения без скидки/наценки и сравнение значений с изначальным
       await urgentCategoryRadioButtons.nth(0).click()
       expect(Number(await calcTotalPrice.inputValue())).toEqual(calcTotalPriceWithoutUrgent)
-   }
+   },
 
+   async checkingTextForAnArrayOfElements(text, elements) {
+      // const elements = elements;
+      const count = await elements.count();
+
+      for (let i = 0; i < count; i++) {
+         const currentText = await elements.nth(i).textContent();
+         expect(currentText.trim()).toBe(text);
+      }
+   }
 }

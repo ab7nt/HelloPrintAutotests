@@ -12,7 +12,7 @@ import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 //   }
 // })
 
-test.only('Calculation in a tiles standard calculator', async ({ page }) => {
+test('Calculation in a tiles standard calculator', async ({ page }) => {
   // Settings
   test.setTimeout(300 * 1000)
 

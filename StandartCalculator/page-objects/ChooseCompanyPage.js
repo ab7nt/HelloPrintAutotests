@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test"
+
 export class ChooseCompanyPage {
     constructor(page) {
         this.page = page
@@ -8,7 +10,8 @@ export class ChooseCompanyPage {
     choosingCompany = async () => {
         await this.page.waitForURL(/company/)
         await this.companyList.waitFor()
-        await this.companyList.selectOption({ value: "51" })
+        await this.companyList.selectOption({ value: '51' })
+        await expect(this.companyList).toHaveValue('51')
         await this.submitButton.click()
     }
 }
