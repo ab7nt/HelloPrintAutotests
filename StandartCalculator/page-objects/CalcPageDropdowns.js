@@ -1,14 +1,15 @@
 import { expect } from "@playwright/test";
-import { helpers } from "./../utils/helpers"
+import { helpers } from "../utils/helpers"
 
-export class CalcPage {
+export class CalcPageDropdowns {
     constructor(page) {
         this.page = page
         this.calcGgroupList = this.page.locator("div[uitest='calc-group']")
         this.calcGgroup = this.calcGgroupList.nth(0)
         this.calcGgroupItem = this.page.getByText('ТЕСТОВЫЕ', { exact: true })
         this.calcSubGroup = this.calcGgroupList.nth(1)
-        this.calcSubGroupItem1 = this.page.getByText("Тест стандартный (пользовательское) произвольные тиражи", { exact: true })
+        this.calcSubGroupItem1 = this.page.getByText("Тест стандартный (пользовательское) произвольные тиражи (плитками)", { exact: true })
+        // this.calcSubGroupItems = this.page.locator('div[uitest="calculation-interface__calculator-changer"] div.custom-option')
         this.calcSubGroupItem2 = this.page.getByText("Тест стандартный (пользовательское) заданные тиражи", { exact: true })
         this.calcAttribute1 = this.calcGgroupList.nth(2)
         this.calcAttribute1List = this.calcAttribute1.locator("div.custom-option")
@@ -35,7 +36,11 @@ export class CalcPage {
         this.urgentCategoryRadioButtons = this.page.locator("input[name='inlineRadioPriceOptions'] ~ label")
     }
 
-    selectGroupAndSubgroup = async () => {
+    // defineTheCalculatorDisplayType = async () => {
+    //     if 
+    // }
+
+    selectGroupAndSubgroup = async (calculatorDisplayType) => {
         await this.page.waitForURL(/calculator/)
         await this.calcGgroup.waitFor()
         await this.calcGgroup.nth(0).click()
@@ -44,6 +49,13 @@ export class CalcPage {
 
         await this.calcSubGroup.waitFor()
         await this.calcSubGroup.click()
+        await this.calcSubGroupItems.first().waitFor()
+        // if (calculatorDisplayType === 'списки') {
+        //     await this.calcSubGroupItems.nth(0).click();
+        // } else if (calculatorDisplayType === 'плитки') {
+        //     await this.calcSubGroupItems.nth(1).click();
+        // }
+        // calculatorDisplayType === 'плитки' ? await this.calcSubGroupItems.nth(1).click() : 
         await this.calcSubGroupItem1.waitFor()
         await this.calcSubGroupItem1.click()
     }

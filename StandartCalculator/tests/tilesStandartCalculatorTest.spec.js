@@ -1,8 +1,10 @@
 // import * as nodeFetch from "node-fetch"
 import { test, expect } from "@playwright/test"
 import { LoginPage } from "../page-objects/loginPage";
-import { CalcPage } from "../page-objects/CalcPage";
+import { CalcPageTiles } from "../page-objects/CalcPageTiles";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
+
+// const calculatorDisplayType = "плитки"
 
 // test.afterEach(async ({ page }, testInfo) => {
 //   if (testInfo.status === "passed") {
@@ -10,7 +12,7 @@ import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 //   }
 // })
 
-test('Calculation in a standard calculator', async ({ page }) => {
+test.only('Calculation in a tiles standard calculator', async ({ page }) => {
   // Settings
   test.setTimeout(300 * 1000)
 
@@ -19,7 +21,7 @@ test('Calculation in a standard calculator', async ({ page }) => {
 
   // Page objects
   const loginPage = new LoginPage(page)
-  const calcPage = new CalcPage(page)
+  const calcPageTiles = new CalcPageTiles(page)
   const chooseCompanyPage = new ChooseCompanyPage(page)
 
   // login
@@ -29,24 +31,26 @@ test('Calculation in a standard calculator', async ({ page }) => {
   await chooseCompanyPage.choosingCompany()
 
   // Select group and subgroup
-  await calcPage.selectGroupAndSubgroup()
+  await calcPageTiles.selectGroupAndSubgroup()
+
+
 
   // Checking
-  await calcPage.checkingTheDefaultValuesForCustomPrintRuns()
-  // await calcPage.changingTheFirstAttribute()
-  // await calcPage.changingTheSecondAttribute()
-  // await calcPage.selectTheFirstItemTestOption()
-  // await calcPage.checkingTheMinimumCost()
-  // await calcPage.checkingTheCostPerUnit()
-  // await calcPage.ceckingTheCostPerPrintRun()
-  // await calcPage.checkingTheConnectionWithAnotherCalculatorOrBuild()
-  await calcPage.checkingTheSpecifiedPrintRuns()
-  // await calcPage.testNan()
+  await calcPageTiles.checkingTheDefaultValuesForCustomPrintRuns()
+  await calcPageTiles.changingTheFirstAttribute()
+  await calcPageTiles.changingTheSecondAttribute()
+  await calcPageTiles.selectTheFirstItemTestOption()
+  // await calcPageTiles.checkingTheMinimumCost()
+  // await calcPageTiles.checkingTheCostPerUnit()
+  // await calcPageTiles.ceckingTheCostPerPrintRun()
+  // await calcPageTiles.checkingTheConnectionWithAnotherCalculatorOrBuild()
+  // await calcPageTiles.checkingTheSpecifiedPrintRuns()
+  // await calcPageTiles.testNan()
 
   // if (test.state === "failed") {
   //   await page.screenshot({ path: 'screenshot.png' })
   // }
 
   // Pause test
-  // await page.pause()
+  await page.pause()
 });
