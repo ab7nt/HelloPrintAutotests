@@ -29,37 +29,27 @@ test.only('filtering the register', async ({ page }) => {
    // filtering the register by order status
    await orderRegisterPage.resetAllFilters()
    await orderRegisterPage.openPopUpFilter()
-   await orderRegisterPage.filterByStatusOrder()
+   await orderRegisterPage.filteringByStatusOrder()
 
    // filtering the register by order manager
    await orderRegisterPage.resetAllFilters()
    await orderRegisterPage.openPopUpFilter()
-   await orderRegisterPage.filterByManager()
+   await orderRegisterPage.filteringByManager()
 
-   // await page.pause()
+   // filtering the register filtering by order company
+   await orderRegisterPage.resetAllFilters()
+   await orderRegisterPage.openPopUpFilter()
+   await orderRegisterPage.filteringByCompany()
+
+   // filtering the register filtering by product
+   await orderRegisterPage.resetAllFilters()
+   await orderRegisterPage.openPopUpFilter()
+   await orderRegisterPage.filteringByProduct()
+
+   // filtering the register filtering by order creation date
+   await orderRegisterPage.resetAllFilters()
+   await orderRegisterPage.openPopUpFilter()
+   await orderRegisterPage.filteringByOrderCreationDate()
+
+   await page.pause()
 })
-
-// test('filtering the register by order manager', async ({ page }) => {
-//    // Visit page
-//    await page.goto("/order");
-
-//    // Page objects
-//    const loginPage = new LoginPage(page)
-//    const chooseCompanyPage = new ChooseCompanyPage(page)
-//    const orderRegisterPage = new OrderRegisterPage(page)
-
-//    // login
-//    await loginPage.enterUsernameAndPassword()
-
-//    // Select company
-//    await chooseCompanyPage.choosingCompany()
-
-//    // Reset all filters
-//    await orderRegisterPage.resetAllFilters()
-
-//    // Checking
-//    await orderRegisterPage.openPopUpFilter()
-//    await orderRegisterPage.filterByManager()
-
-//    await page.pause()
-// })

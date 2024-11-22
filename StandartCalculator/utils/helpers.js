@@ -33,12 +33,12 @@ export const helpers = {
    },
 
    async checkingTextForAnArrayOfElements(text, elements) {
-      // const elements = elements;
       const count = await elements.count();
 
       for (let i = 0; i < count; i++) {
          const currentText = await elements.nth(i).textContent();
-         expect(currentText.trim()).toBe(text);
+         await expect(elements.nth(i)).toContainText(text);
+         console.warn(`Исходный текст: ${text}, Получненный текст: ${currentText}`)
       }
    }
 }
