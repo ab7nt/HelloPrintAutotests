@@ -23,7 +23,7 @@ export class OrderRegisterPage {
       // Локаторы менеджера заказа
       this.managerFilterField = this.mainBlockFields.nth(1)
       this.managerFilterInput = page.locator('div#filter-block-general input[aria-controls*="select2-manager"]')
-      this.optionListAfterFill = page.locator('ul[id*="select2-manager"] li')
+      this.optionListAfterFillManager = page.locator('ul[id*="select2-manager"] li')
       this.columnWithOrderManagers = page.locator('div[tabulator-field="manager_name"].tabulator-cell')
       this.resetAllFiltersButton = page.locator('div.cancel-search-button')
       // Локаторы компании заказа
@@ -70,14 +70,42 @@ export class OrderRegisterPage {
       this.paymentTypeFilterField = this.invoiceBlockFields.nth(1)
       this.paymentTypeFilterSelect = page.locator('div#filter-block-invoice select[name="payment_type[]"]')
       this.columnWithOrderPaymentType = page.locator('div[tabulator-field="payment_types"].tabulator-cell')
+      // Локаторы для оригинала УПД
+      this.originalUpdFilterField = this.invoiceBlockFields.nth(2)
+      this.originalUpdFilterSelect = page.locator('div#filter-block-invoice select[name="original_upd[]"]')
+      this.columnWithOrderOriginalUpd = page.locator('div[tabulator-field="original_upd_text"].tabulator-cell')
+      // Локаторы для созданного счёта
+      this.createdInvoiceFilterField = this.invoiceBlockFields.nth(4)
+      this.createdInvoiceFilterSelect = page.locator('div#filter-block-invoice select[name="created_invoice"]')
+      this.columnWithOrderCreatedInvoice = page.locator('div[tabulator-field="created_invoice"].tabulator-cell')
+      // Локаторы для созданного УПД
+      this.createdUpdFilterField = this.invoiceBlockFields.nth(5)
+      this.createdUpdFilterSelect = page.locator('div#filter-block-invoice select[name="created_upd"]')
+      this.columnWithOrderCreatedUpd = page.locator('div[tabulator-field="created_upd"].tabulator-cell')
+      // Локаторы для поставщика (наше юр.лицо) 
+      this.paymentsPartnerCompanyFilterField = this.invoiceBlockFields.nth(6)
+      this.paymentsPartnerCompanyFilterSelect = page.locator('div#filter-block-invoice select[name="payments_partner_company[]"]')
+      this.columnWithOrderPaymentsPartnerCompany = page.locator('div[tabulator-field="payments_partner_company"].tabulator-cell')
+
 
       // Локаторы для блока "Контрагенты"
       this.buttonBlockPartner = page.locator('button.filter-header-button[data-target="#filter-block-partner"]')
       this.partnerBlockFields = page.locator('div#filter-block-partner span.select2-selection')
       // Локаторы для контрагента
-      this.partnerFilterField = this.stageBlockFields.nth(0)
-      this.partnerFilterSelect = page.locator('div#filter-block-stage select[name="partner_id[]"]')
+      this.partnerFilterField = this.partnerBlockFields.nth(0)
+      this.partnerFilterInput = page.locator('div:has(select[name="partner_id[]"]) > span input')
+      this.optionListAfterFillPartner = page.locator('ul[id*="select2-partner_id"] li')
       this.columnWithOrderPartner = page.locator('div[tabulator-field="partner_name"].tabulator-cell')
+      // Локаторы для представителя
+      this.partnerUserFilterField = this.partnerBlockFields.nth(1)
+      this.partnerUserFilterInput = page.locator('div:has(select[name="partner_user_id[]"]) > span input')
+      this.optionListAfterFillPartnerUser = page.locator('ul[id*="select2-partner_user_id"] li')
+      this.columnWithOrderPartnerUser = page.locator('div[tabulator-field="partner_user_name"].tabulator-cell')
+      // Локаторы для юридического лица контрагента
+      this.partnerCompanyFilterField = this.partnerBlockFields.nth(2)
+      this.partnerCompanyFilterInput = page.locator('div:has(select[name="partner_company_id[]"]) > span input')
+      this.optionListAfterFillPartnerCompany = page.locator('ul[id*="select2-partner_company_id"] li')
+      this.columnWithOrderPartnerCompany = page.locator('div[tabulator-field="partner_company_name"].tabulator-cell')
    }
 
    openPopUpFilter = async () => {
@@ -114,8 +142,8 @@ export class OrderRegisterPage {
       await this.managerFilterField.click()
       await this.managerFilterInput.fill(filtersInfo.managerLastname)
       await expect(this.managerFilterInput).toHaveValue(filtersInfo.managerLastname)
-      await this.optionListAfterFill.waitFor()
-      await this.optionListAfterFill.click()
+      await this.optionListAfterFillManager.waitFor()
+      await this.optionListAfterFillManager.click()
       await this.submitButton.click()
       await this.page.waitForLoadState('load')
       await expect(this.selectedTags).toContainText(`Менеджер: ${filtersInfo.managerLastname}`)
@@ -254,5 +282,120 @@ export class OrderRegisterPage {
       await expect(this.selectedTags).toContainText(`Способ оплаты ${filtersInfo.paymentType}`)
       await this.rowsRegistryTable.first().waitFor()
       await helpers.checkingTextForAnArrayOfElements(filtersInfo.paymentType, this.columnWithOrderPaymentType)
+   }
+
+   filteringByOriginalUpd = async () => {
+      await this.buttonBlockInvoice.waitFor()
+      await this.buttonBlockInvoice.click()
+      await this.originalUpdFilterField.waitFor()
+      await this.originalUpdFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.originalUpd}` }).click()
+      expect(await this.originalUpdFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.originalUpd)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`УПД оригинал: ${filtersInfo.originalUpd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.originalUpd, this.columnWithOrderOriginalUpd)
+   }
+
+   filteringByCreatedInvoice = async () => {
+      await this.buttonBlockInvoice.waitFor()
+      await this.buttonBlockInvoice.click()
+      await this.createdInvoiceFilterField.waitFor()
+      await this.createdInvoiceFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.createdInvoice}` }).click()
+      expect(await this.createdInvoiceFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.createdInvoice)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Создан счет: ${filtersInfo.createdInvoice}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.createdInvoice, this.columnWithOrderCreatedInvoice)
+   }
+
+   filteringByCreatedUpd = async () => {
+      await this.buttonBlockInvoice.waitFor()
+      await this.buttonBlockInvoice.click()
+      await this.createdUpdFilterField.waitFor()
+      await this.createdUpdFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.createdUpd}` }).click()
+      expect(await this.createdUpdFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.createdUpd)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Создан УПД: ${filtersInfo.createdUpd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.createdUpd, this.columnWithOrderCreatedUpd)
+   }
+
+   filteringByPaymentsPartnerCompany = async () => {
+      await this.buttonBlockInvoice.waitFor()
+      await this.buttonBlockInvoice.click()
+      await this.paymentsPartnerCompanyFilterField.waitFor()
+      await this.paymentsPartnerCompanyFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.paymentsPartnerCompany}` }).click()
+      expect(await this.paymentsPartnerCompanyFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.paymentsPartnerCompany)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Поставщик ( Наше юр. лицо): ${filtersInfo.paymentsPartnerCompany}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.paymentsPartnerCompany, this.columnWithOrderPaymentsPartnerCompany)
+   }
+
+   filteringByPartner = async () => {
+      await this.buttonBlockPartner.waitFor()
+      await this.buttonBlockPartner.click()
+      await this.partnerFilterField.waitFor()
+      await this.partnerFilterField.click()
+      await this.partnerFilterInput.fill(filtersInfo.partner)
+      await expect(this.partnerFilterInput).toHaveValue(filtersInfo.partner)
+      await this.optionListAfterFillPartner.waitFor()
+      await this.optionListAfterFillPartner.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Контрагент: ${filtersInfo.partner}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.partner, this.columnWithOrderPartner)
+   }
+
+   filteringByPartnerUser = async () => {
+      await this.buttonBlockPartner.waitFor()
+      await this.buttonBlockPartner.click()
+      await this.partnerUserFilterField.waitFor()
+      await this.partnerUserFilterField.click()
+      await this.partnerUserFilterInput.fill(filtersInfo.partnerUser)
+      await expect(this.partnerUserFilterInput).toHaveValue(filtersInfo.partnerUser)
+      await this.optionListAfterFillPartnerUser.waitFor()
+      await this.optionListAfterFillPartnerUser.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Представитель: ${filtersInfo.partnerUser}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.partnerUser, this.columnWithOrderPartnerUser)
+   }
+
+   filteringByPartnerCompany = async () => {
+      await this.buttonBlockPartner.waitFor()
+      await this.buttonBlockPartner.click()
+      await this.partnerCompanyFilterField.waitFor()
+      await this.partnerCompanyFilterField.click()
+      await this.partnerCompanyFilterInput.fill(filtersInfo.partnerCompany)
+      await expect(this.partnerCompanyFilterInput).toHaveValue(filtersInfo.partnerCompany)
+      await this.optionListAfterFillPartnerCompany.waitFor()
+      await this.optionListAfterFillPartnerCompany.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Юридическое лицо: ${filtersInfo.partnerCompany}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.partnerCompany, this.columnWithOrderPartnerCompany)
    }
 }
