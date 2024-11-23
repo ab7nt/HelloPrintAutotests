@@ -38,7 +38,7 @@ export const helpers = {
       for (let i = 0; i < count; i++) {
          const currentText = await elements.nth(i).textContent();
          await expect(elements.nth(i)).toContainText(text);
-         console.warn(`Исходный текст: ${text}, Получненный текст: ${currentText}`)
+         // console.warn(`Исходный текст: ${text}, Получненный текст: ${currentText}`)
       }
    }
 }

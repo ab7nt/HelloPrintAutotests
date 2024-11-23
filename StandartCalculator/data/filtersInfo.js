@@ -16,5 +16,6 @@ export const filtersInfo = {
     paymentsPartnerCompany: 'ООО "МДМПРИНТ"',
     partner: 'ГЕНПРОЕКТ',
     partnerUser: 'Михаил Генпроект',
-    partnerCompany: 'ООО "ГЕНПРОЕКТ"'
+    partnerCompany: 'ООО "ГЕНПРОЕКТ"',
+    partnerCompanyInn: '7702395360',
 }

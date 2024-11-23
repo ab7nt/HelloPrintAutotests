@@ -13,6 +13,7 @@ export class OrderRegisterPage {
       this.submitButton = page.locator('button[type="submit"]')
       this.rowsRegistryTable = page.locator('div.tabulator-row')
       this.selectedTags = page.locator('ul.selected-tags')
+      this.dateTimePicker = page.locator('div.xdsoft_datetimepicker')
 
       // Локаторы из блока "Основное"
       this.mainBlockFields = page.locator('div#filter-block-general span.select2-selection')
@@ -40,8 +41,32 @@ export class OrderRegisterPage {
       // Дата оформления
       this.orderCreateDateBeginInput = page.locator('div#filter-block-date input[name="created_at_begin"]')
       this.orderCreateDateEndInput = page.locator('div#filter-block-date input[name="created_at_end"]')
-      this.dateTimePicker = page.locator('div.xdsoft_datetimepicker')
       this.columnWithOrderCreateDate = page.locator('div[tabulator-field="created_at"].tabulator-cell')
+      // Готовность спуска
+      this.prepressAtDateBeginInput = page.locator('div#filter-block-date input[name="prepress_at_begin"]')
+      this.prepressAtDateEndInput = page.locator('div#filter-block-date input[name="prepress_at_end"]')
+      this.columnWithPrepressAtDate = page.locator('div[tabulator-field="prepress_at"].tabulator-cell')
+      // Готовность спуска
+      this.layoutAtDateBeginInput = page.locator('div#filter-block-date input[name="layout_at_begin"]')
+      this.layoutAtDateEndInput = page.locator('div#filter-block-date input[name="layout_at_end"]')
+      this.columnWithLayoutAtDate = page.locator('div[tabulator-field="layout_at"].tabulator-cell')
+      // Макет - Для дизайнеров
+      this.impositionAtDateBeginInput = page.locator('div#filter-block-date input[name="imposition_at_begin"]')
+      this.impositionAtDateEndInput = page.locator('div#filter-block-date input[name="imposition_at_end"]')
+      this.columnWithImpositionAtDate = page.locator('div[tabulator-field="imposition_at"].tabulator-cell')
+      // Готовность на производстве
+      this.productionAtDateBeginInput = page.locator('div#filter-block-date input[name="production_at_begin"]')
+      this.productionAtDateEndInput = page.locator('div#filter-block-date input[name="production_at_end"]')
+      this.columnWithProductionAtDate = page.locator('div[tabulator-field="production_at"].tabulator-cell')
+      // Выдача заказа
+      this.deliveryAtDateBeginInput = page.locator('div#filter-block-date input[name="delivery_at_begin"]')
+      this.deliveryAtDateEndInput = page.locator('div#filter-block-date input[name="delivery_at_end"]')
+      this.columnWithDeliveryAtDate = page.locator('div[tabulator-field="delivery_at"].tabulator-cell')
+      // Заказа закрыт
+      this.completedAtDateBeginInput = page.locator('div#filter-block-date input[name="completed_at_begin"]')
+      this.completedAtDateEndInput = page.locator('div#filter-block-date input[name="completed_at_end"]')
+      this.columnWithCompletedAtDate = page.locator('div[tabulator-field="completed_at"].tabulator-cell')
+
 
       // Локаторы из блока "Маршрут и срочность"
       this.buttonBlockStage = page.locator('button.filter-header-button[data-target="#filter-block-stage"]')
@@ -87,7 +112,6 @@ export class OrderRegisterPage {
       this.paymentsPartnerCompanyFilterSelect = page.locator('div#filter-block-invoice select[name="payments_partner_company[]"]')
       this.columnWithOrderPaymentsPartnerCompany = page.locator('div[tabulator-field="payments_partner_company"].tabulator-cell')
 
-
       // Локаторы для блока "Контрагенты"
       this.buttonBlockPartner = page.locator('button.filter-header-button[data-target="#filter-block-partner"]')
       this.partnerBlockFields = page.locator('div#filter-block-partner span.select2-selection')
@@ -106,6 +130,15 @@ export class OrderRegisterPage {
       this.partnerCompanyFilterInput = page.locator('div:has(select[name="partner_company_id[]"]) > span input')
       this.optionListAfterFillPartnerCompany = page.locator('ul[id*="select2-partner_company_id"] li')
       this.columnWithOrderPartnerCompany = page.locator('div[tabulator-field="partner_company_name"].tabulator-cell')
+      // Локаторы для типа клиента
+      this.partnerTypedFilterField = this.partnerBlockFields.nth(3)
+      this.partnerTypeFilterSelect = page.locator('div#filter-block-invoice select[name="partner_client_type_id[]"]')
+      // this.columnWithOrderPartnerType = page.locator('div[tabulator-field="created_upd"].tabulator-cell')
+      // Локаторы для ИНН контрагента
+      this.partnerCompanyInnFilterField = this.partnerBlockFields.nth(4)
+      this.partnerCompanyInnFilterInput = page.locator('div:has(select[name="inn[]"]) > span input')
+      this.optionListAfterFillPartnerCompanyInn = page.locator('ul[id*="select2-inn"] li')
+      this.columnWithOrderPartnerCompanyInn = page.locator('div[tabulator-field="partner_company_inn"].tabulator-cell')
    }
 
    openPopUpFilter = async () => {
@@ -193,8 +226,104 @@ export class OrderRegisterPage {
       await this.page.waitForLoadState('load')
       await expect(this.selectedTags)
          .toContainText(`Оформлен: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
-      await this.rowsRegistryTable.nth(29).waitFor()
+      await this.rowsRegistryTable.first().waitFor()
       await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithOrderCreateDate)
+   }
+
+   filteringByOrderPrepressAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.prepressAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.prepressAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.prepressAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.prepressAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Готовность спуска: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithOrderCreateDate)
+   }
+
+   filteringByOrderLayoutAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.layoutAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.layoutAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.layoutAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.layoutAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Готовность макета: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithLayoutAtDate)
+   }
+
+   filteringByOrderImpositionAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.impositionAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.impositionAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.impositionAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.impositionAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Макет - Для дизайнеров: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithImpositionAtDate)
+   }
+
+   filteringByOrderProductionAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.productionAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.productionAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.productionAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.productionAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Готовность на производстве: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithProductionAtDate)
+   }
+
+   filteringByOrderDeliveryAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.deliveryAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.deliveryAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.deliveryAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.deliveryAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Выдача заказа: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithDeliveryAtDate)
+   }
+
+   filteringByOrderCompletedAt = async () => {
+      await this.buttonBlockDate.waitFor()
+      await this.buttonBlockDate.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.completedAtDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.completedAtDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.completedAtDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.completedAtDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Заказ закрыт: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithCompletedAtDate)
    }
 
    filteringByOrderStageDepartment = async () => {
@@ -397,5 +526,22 @@ export class OrderRegisterPage {
       await expect(this.selectedTags).toContainText(`Юридическое лицо: ${filtersInfo.partnerCompany}`)
       await this.rowsRegistryTable.first().waitFor()
       await helpers.checkingTextForAnArrayOfElements(filtersInfo.partnerCompany, this.columnWithOrderPartnerCompany)
+   }
+
+   filteringByInn = async () => {
+      await this.buttonBlockPartner.waitFor()
+      await this.buttonBlockPartner.click()
+      await this.partnerCompanyInnFilterField.waitFor()
+      await this.partnerCompanyInnFilterField.click()
+      await this.partnerCompanyInnFilterInput.fill(filtersInfo.partnerCompanyInn)
+      await expect(this.partnerCompanyInnFilterInput).toHaveValue(filtersInfo.partnerCompanyInn)
+      await this.optionListAfterFillPartnerCompanyInn.waitFor()
+      await this.optionListAfterFillPartnerCompanyInn.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`ИНН: ${filtersInfo.partnerCompanyInn}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.partnerCompanyInn, this.columnWithOrderPartnerCompanyInn)
    }
 }
