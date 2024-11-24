@@ -18,4 +18,7 @@ export const filtersInfo = {
     partnerUser: 'Михаил Генпроект',
     partnerCompany: 'ООО "ГЕНПРОЕКТ"',
     partnerCompanyInn: '7702395360',
+    contractorAdded: "Да",
+    contractor: "Группа М",
+    contractorNumber: "59308",
 }

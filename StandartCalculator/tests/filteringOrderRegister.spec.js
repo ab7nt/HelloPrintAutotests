@@ -3,9 +3,10 @@ import { LoginPage } from "../page-objects/loginPage"
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 import { OrderRegisterPage } from "./../page-objects/OrderRegisterPage"
 
-describe('Проверка фильтрации реестра заказов', () => {
+describe.only('Проверка фильтрации реестра заказов', () => {
    // Настройки
    test.setTimeout(300 * 1000)
+
    test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page)
       const chooseCompanyPage = new ChooseCompanyPage(page)
@@ -56,7 +57,7 @@ describe('Проверка фильтрации реестра заказов', 
       });
    })
 
-   describe.only('Проверка фильтров из блока "Даты и сроки"', () => {
+   describe('Проверка фильтров из блока "Даты и сроки"', () => {
       test('Проверка фильтрации по дате оформления заказа', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderCreationDate()
@@ -81,7 +82,7 @@ describe('Проверка фильтрации реестра заказов', 
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderDeliveryAt()
       });
-      test.only('Проверка фильтрации по дате закрытия заказа', async ({ page }) => {
+      test('Проверка фильтрации по дате закрытия заказа', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderCompletedAt()
       });
@@ -134,6 +135,25 @@ describe('Проверка фильтрации реестра заказов', 
       test('Проверка фильтрации по ИНН контрагента', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByInn()
+      });
+   })
+
+   describe('Проверка фильтров из блока "Подряд"', () => {
+      test('Проверка фильтрации по добавлен ли подряд', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.filteringByContractorAdded()
+      });
+      test('Проверка фильтрации по подрядчику', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.filteringByContractor()
+      });
+      test('Проверка фильтрации по номеру от подрядчика', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.filteringByContractorNumber()
+      });
+      test('Проверка фильтрации по дате поставки', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.filteringByContractorDate()
       });
    })
 });

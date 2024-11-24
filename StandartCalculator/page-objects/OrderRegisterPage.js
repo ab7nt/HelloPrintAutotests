@@ -67,7 +67,6 @@ export class OrderRegisterPage {
       this.completedAtDateEndInput = page.locator('div#filter-block-date input[name="completed_at_end"]')
       this.columnWithCompletedAtDate = page.locator('div[tabulator-field="completed_at"].tabulator-cell')
 
-
       // Локаторы из блока "Маршрут и срочность"
       this.buttonBlockStage = page.locator('button.filter-header-button[data-target="#filter-block-stage"]')
       this.stageBlockFields = page.locator('div#filter-block-stage span.select2-selection')
@@ -139,6 +138,36 @@ export class OrderRegisterPage {
       this.partnerCompanyInnFilterInput = page.locator('div:has(select[name="inn[]"]) > span input')
       this.optionListAfterFillPartnerCompanyInn = page.locator('ul[id*="select2-inn"] li')
       this.columnWithOrderPartnerCompanyInn = page.locator('div[tabulator-field="partner_company_inn"].tabulator-cell')
+
+      // Локаторы для блока "Подряд"
+      this.buttonBlockContractor = page.locator('button.filter-header-button[data-target="#filter-block-contractor"]')
+      this.contractorBlockFields = page.locator('div#filter-block-contractor span.select2-selection')
+      // Локаторы для "Добавлен подряд"
+      this.contractorFilterField = this.contractorBlockFields.nth(0)
+      this.contractorFilterSelect = page.locator('div#filter-block-contractor select[name="contractor"]')
+      this.columnWithOrderContractor = page.locator('div[tabulator-field="partners"].tabulator-cell')
+      // Локаторы для "Подрядчик"
+      this.contractorFilterField = this.contractorBlockFields.nth(1)
+      this.contractorFilterInput = page.locator('div:has(select[name="partners[]"]) > span input')
+      this.optionListAfterFillContractor = page.locator('ul[id*="select2-partners"] li')
+      this.columnWithOrderContractor = page.locator('div[tabulator-field="partners"].tabulator-cell')
+      // Локаторы для "Номер от одрядчика"
+      this.contractorNumberFilterField = this.contractorBlockFields.nth(2)
+      this.contractorNumberFilterInput = page.locator('div:has(select[name="contractor_numbers[]"]) > span input')
+      this.optionListAfterFillContractorNumber = page.locator('ul[id*="select2-contractor_numbers"] li')
+      this.columnWithOrderContractorNumber = page.locator('div[tabulator-field="contractor_numbers"].tabulator-cell')
+      // Локаторы для "Дата поставки"
+      this.contractorDateBeginInput = page.locator('div#filter-block-contractor input[name="contractor_at_begin"]')
+      this.contractorDateEndInput = page.locator('div#filter-block-contractor input[name="contractor_at_end"]')
+      this.columnWithOrderСontractorDate = page.locator('div[tabulator-field="contractor_delivery_at"].tabulator-cell')
+
+      // Локаторы для блока "Остальное"
+      this.buttonBlockOther = page.locator('button.filter-header-button[data-target="#filter-block-other"]')
+      this.otherBlockFields = page.locator('div#filter-block-other span.select2-selection')
+      // Локаторы для "Правки по макету"
+      this.contractorFilterField = this.contractorBlockFields.nth(0)
+      this.contractorFilterSelect = page.locator('div#filter-block-other select[name="is_layout_edit"]')
+      this.columnWithOrderContractor = page.locator('div[tabulator-field="partners"].tabulator-cell')
    }
 
    openPopUpFilter = async () => {
@@ -543,5 +572,72 @@ export class OrderRegisterPage {
       await expect(this.selectedTags).toContainText(`ИНН: ${filtersInfo.partnerCompanyInn}`)
       await this.rowsRegistryTable.first().waitFor()
       await helpers.checkingTextForAnArrayOfElements(filtersInfo.partnerCompanyInn, this.columnWithOrderPartnerCompanyInn)
+   }
+
+   filteringByContractorAdded = async () => {
+      await this.buttonBlockContractor.waitFor()
+      await this.buttonBlockContractor.click()
+      await this.contractorFilterField.waitFor()
+      await this.contractorFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.contractorAdded}` }).click()
+      expect(await this.contractorFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.contractorAdded)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Добавлен подряд: ${filtersInfo.contractorAdded}`)
+      await this.rowsRegistryTable.first().waitFor()
+      // await helpers.checkingTextForAnArrayOfElements(filtersInfo.createdInvoice, this.columnWithOrderContractor)
+      await helpers.areAllStringsNotEmpty(this.columnWithOrderContractor)
+   }
+
+   filteringByContractor = async () => {
+      await this.buttonBlockContractor.waitFor()
+      await this.buttonBlockContractor.click()
+      await this.contractorFilterField.waitFor()
+      await this.contractorFilterField.click()
+      await this.contractorFilterInput.fill(filtersInfo.contractor)
+      await expect(this.contractorFilterInput).toHaveValue(filtersInfo.contractor)
+      await this.optionListAfterFillContractor.waitFor()
+      await this.optionListAfterFillContractor.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Подрядчики: ${filtersInfo.contractor}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.contractor, this.columnWithOrderContractor)
+   }
+
+   filteringByContractorNumber = async () => {
+      await this.buttonBlockContractor.waitFor()
+      await this.buttonBlockContractor.click()
+      await this.contractorNumberFilterField.waitFor()
+      await this.contractorNumberFilterField.click()
+      await this.contractorNumberFilterInput.fill(filtersInfo.contractorNumber)
+      await expect(this.contractorNumberFilterInput).toHaveValue(filtersInfo.contractorNumber)
+      await this.optionListAfterFillContractorNumber.waitFor()
+      await this.optionListAfterFillContractorNumber.first().click()
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Номер от подрядчика: ${filtersInfo.contractorNumber}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.contractorNumber, this.columnWithOrderContractorNumber)
+   }
+
+   filteringByContractorDate = async () => {
+      await this.buttonBlockContractor.waitFor()
+      await this.buttonBlockContractor.click()
+      // expect(this.dateTimePicker).toBeVisible()
+      await this.contractorDateBeginInput.fill(filtersInfo.orderCreateDateBegin)
+      await expect(this.contractorDateBeginInput).toHaveValue(filtersInfo.orderCreateDateBegin)
+      await this.contractorDateEndInput.fill(filtersInfo.orderCreateDateEnd)
+      await expect(this.contractorDateEndInput).toHaveValue(filtersInfo.orderCreateDateEnd)
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Дата поставки: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithOrderСontractorDate)
    }
 }

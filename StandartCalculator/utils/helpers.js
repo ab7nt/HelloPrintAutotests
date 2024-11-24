@@ -40,5 +40,13 @@ export const helpers = {
          await expect(elements.nth(i)).toContainText(text);
          // console.warn(`Исходный текст: ${text}, Получненный текст: ${currentText}`)
       }
+   },
+
+   async areAllStringsNotEmpty(elements) {
+      const count = await elements.count();
+
+      for (let i = 0; i < count; i++) {
+         await expect(elements.nth(i).textContent()).not.toBe('');
+      }
    }
 }

@@ -24,24 +24,12 @@ module.exports = defineConfig({
   reporter: 'list',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://dev.helloprint.ru',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    headless: false, // Запуск тестов без интерфейса
+    baseURL: 'https://dev.helloprint.ru', // Base URL to use in actions like `await page.goto('/')`
+    trace: 'on-first-retry', // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
+    screenshot: 'only-on-failure', // Делать скриншот только в случае ошибки
   },
-
-  // afterEach: async ({ test }, done) => {
-  //   try {
-  //     await test.context.close();
-  //     done();
-  //   } catch (error) {
-  //     console.error('Ошибка при закрытии контекста:', error);
-  //     await test.browserContext.screenshot({ path: 'screenshot.png' });
-  //     done(error);
-  //   }
-  // },
-
+  outputDir: 'test-results/', // Папка для сохранения результатов
 
   /* Configure projects for major browsers */
   projects: [
@@ -50,6 +38,8 @@ module.exports = defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1600, height: 1000 },
+        // browserName: 'chromium',
+        // viewport: null,
         // args: ['--start-maximized']
       },
     },
