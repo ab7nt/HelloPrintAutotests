@@ -165,9 +165,32 @@ export class OrderRegisterPage {
       this.buttonBlockOther = page.locator('button.filter-header-button[data-target="#filter-block-other"]')
       this.otherBlockFields = page.locator('div#filter-block-other span.select2-selection')
       // Локаторы для "Правки по макету"
-      this.contractorFilterField = this.contractorBlockFields.nth(0)
-      this.contractorFilterSelect = page.locator('div#filter-block-other select[name="is_layout_edit"]')
-      this.columnWithOrderContractor = page.locator('div[tabulator-field="partners"].tabulator-cell')
+      this.layoutEditFilterField = this.otherBlockFields.nth(0)
+      this.layoutEditFilterSelect = page.locator('div#filter-block-other select[name="is_layout_edit"]')
+      this.columnWithOrderLayoutEdit = page.locator('div[tabulator-field="is_layout_edit"].tabulator-cell')
+      // Локаторы для "Объёмный заказ"
+      this.volumeFilterField = this.otherBlockFields.nth(1)
+      this.volumeFilterSelect = page.locator('div#filter-block-other select[name="is_volume_order"]')
+      this.columnWithOrderVolume = page.locator('div[tabulator-field="is_volume"].tabulator-cell')
+      // Локаторы для "Габаритный"
+      this.oversizeFilterField = this.otherBlockFields.nth(2)
+      this.oversizeFilterSelect = page.locator('div#filter-block-other select[name="is_oversized_order"]')
+      // this.columnWithOrderOversize = page.locator('div[tabulator-field="is_volume"].tabulator-cell')
+      // Локаторы для "Источник рекламы"
+      this.adSourceFilterField = this.contractorBlockFields.nth(3)
+      this.adSourceFilterInput = page.locator('div:has(select[name="ad_source_id[]"]) > span input')
+      this.optionListAfterFillAdSource = page.locator('ul[id*="select2-ad_source"] li')
+      // this.columnWithOrderAdSource = page.locator('div[tabulator-field="contractor_numbers"].tabulator-cell')
+       // Локаторы для "Источник рекламы"
+       this.adSourceFilterField = this.contractorBlockFields.nth(4)
+       this.adSourceFilterInput = page.locator('div:has(select[name="ad_source_id[]"]) > span input')
+       this.optionListAfterFillAdSource = page.locator('ul[id*="select2-ad_source"] li')
+      // this.columnWithOrderAdSource = page.locator('div[tabulator-field="contractor_numbers"].tabulator-cell')
+       // Локаторы для "Наименование"
+       this.adSourceFilterField = this.contractorBlockFields.nth(6)
+       this.adSourceFilterInput = page.locator('div:has(select[name="ad_source_id[]"]) > span input')
+       this.optionListAfterFillAdSource = page.locator('ul[id*="select2-ad_source"] li')
+       // this.columnWithOrderAdSource = page.locator('div[tabulator-field="contractor_numbers"].tabulator-cell')
    }
 
    openPopUpFilter = async () => {
@@ -638,6 +661,57 @@ export class OrderRegisterPage {
       await expect(this.selectedTags)
          .toContainText(`Дата поставки: c ${filtersInfo.orderCreateDateBegin} по ${filtersInfo.orderCreateDateEnd}`)
       await this.rowsRegistryTable.first().waitFor()
-      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3), this.columnWithOrderСontractorDate)
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.orderCreateDateBegin.split(' ')[0].slice(3),
+         this.columnWithOrderСontractorDate)
    }
+
+   filteringByLayoutEdit = async () => {
+      await this.buttonBlockOther.waitFor()
+      await this.buttonBlockOther.click()
+      await this.layoutEditFilterField.waitFor()
+      await this.layoutEditFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.layuotEdit}` }).click()
+      expect(await this.layoutEditFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.layuotEdit)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Правки по макету: ${filtersInfo.layuotEdit}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.layuotEdit, this.columnWithOrderLayoutEdit)
+   }
+
+   filteringByVolume = async () => {
+      await this.buttonBlockOther.waitFor()
+      await this.buttonBlockOther.click()
+      await this.volumeFilterField.waitFor()
+      await this.volumeFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.volume}` }).click()
+      expect(await this.volumeFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.volume)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Объёмный заказ: ${filtersInfo.volume}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.volume, this.columnWithOrderVolume)
+   }
+
+   filteringByOversize = async () => {
+      await this.buttonBlockOther.waitFor()
+      await this.buttonBlockOther.click()
+      await this.volumeFilterField.waitFor()
+      await this.volumeFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: `${filtersInfo.volume}` }).click()
+      expect(await this.volumeFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.volume)
+      await this.submitButton.waitFor()
+      await this.submitButton.click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags).toContainText(`Объёмный заказ: ${filtersInfo.volume}`)
+      await this.rowsRegistryTable.first().waitFor()
+      await helpers.checkingTextForAnArrayOfElements(filtersInfo.volume, this.columnWithOrderVolume)
+   }
+
+
 }
