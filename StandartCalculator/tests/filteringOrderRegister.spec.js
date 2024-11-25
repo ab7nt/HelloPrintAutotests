@@ -5,7 +5,7 @@ import { OrderRegisterPage } from "./../page-objects/OrderRegisterPage.js"
 
 describe('Проверка фильтрации реестра заказов', () => {
    // Настройки
-   test.setTimeout(300 * 1000)
+   test.setTimeout(90 * 1000)
 
    test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page)
