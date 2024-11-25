@@ -12,6 +12,7 @@ export class ChooseCompanyPage {
         await this.companyList.waitFor()
         await this.companyList.selectOption({ value: '51' })
         await expect(this.companyList).toHaveValue('51')
+        await expect(this.submitButton).toBeEnabled()
         await this.submitButton.click()
     }
 }

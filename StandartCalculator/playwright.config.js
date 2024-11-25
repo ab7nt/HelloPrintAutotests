@@ -24,7 +24,7 @@ module.exports = defineConfig({
   reporter: 'list',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false, // Запуск тестов без интерфейса
+    headless: true, // Запуск тестов без интерфейса
     baseURL: 'https://dev.helloprint.ru', // Base URL to use in actions like `await page.goto('/')`
     trace: 'on-first-retry', // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
     screenshot: 'only-on-failure', // Делать скриншот только в случае ошибки

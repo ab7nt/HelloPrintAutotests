@@ -1,10 +1,12 @@
 export const filtersInfo = {
     orderStatus: 'Новый | Расчёт',
+    productStatus: 'В работе',
     managerLastname: 'Курятов',
     company: 'Типография МДМпринт',
     product: 'сканирование',
-    orderCreateDateBegin: '01.01.2024 00:00',
-    orderCreateDateEnd: '31.01.2024 23:59',
+    nomenclatureName: 'Листовка',
+    orderCreateDateBegin: '01.03.2024 00:00',
+    orderCreateDateEnd: '31.03.2024 23:59',
     stage: 'Препресс',
     express: 'Да',
     executor: 'Мильченко Ден',
@@ -23,4 +25,5 @@ export const filtersInfo = {
     contractorNumber: '59308',
     layuotEdit: 'Да',
     volume: 'Да',
+    defect: 'Да',
 }

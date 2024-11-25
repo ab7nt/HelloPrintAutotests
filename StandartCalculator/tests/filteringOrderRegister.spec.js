@@ -1,9 +1,9 @@
 import { describe, test } from "@playwright/test"
-import { LoginPage } from "../page-objects/loginPage"
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
-import { OrderRegisterPage } from "./../page-objects/OrderRegisterPage"
+import { LoginPage } from "../page-objects/loginPage.js"
+import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage.js"
+import { OrderRegisterPage } from "./../page-objects/OrderRegisterPage.js"
 
-describe.only('Проверка фильтрации реестра заказов', () => {
+describe('Проверка фильтрации реестра заказов', () => {
    // Настройки
    test.setTimeout(300 * 1000)
 
@@ -51,7 +51,7 @@ describe.only('Проверка фильтрации реестра заказо
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderExpress()
       });
-      test('Проверка филььтра "Исполнитель"', async ({ page }) => {
+      test('Проверка фильтра "Исполнитель"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderExecutor()
       });
