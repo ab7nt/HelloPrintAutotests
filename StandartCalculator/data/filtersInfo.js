@@ -1,7 +1,7 @@
 export const filtersInfo = {
     orderStatus: 'Новый | Расчёт',
     productStatus: 'В работе',
-    managerLastname: 'Курятов',
+    managerLastname: 'Яковлева',
     company: 'Типография МДМпринт',
     product: 'сканирование',
     nomenclatureName: 'Листовка',
@@ -16,7 +16,7 @@ export const filtersInfo = {
     createdInvoice: 'Да',
     createdUpd: 'Да',
     paymentsPartnerCompany: 'ООО "МДМПРИНТ"',
-    partner: 'ГЕНПРОЕКТ',
+    partner: 'Фиктивный Клиент',
     partnerUser: 'Михаил Генпроект',
     partnerCompany: 'ООО "ГЕНПРОЕКТ"',
     partnerCompanyInn: '7702395360',
@@ -26,4 +26,5 @@ export const filtersInfo = {
     layuotEdit: 'Да',
     volume: 'Да',
     defect: 'Да',
+    // partnerForCalculation: 'ООО «ИНТЕРТРЕЙД»',
 }
