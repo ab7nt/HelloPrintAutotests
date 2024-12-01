@@ -8,6 +8,8 @@ export const filtersInfo = {
     orderCreateDateBegin: '01.03.2024 00:00',
     orderCreateDateEnd: '31.03.2024 23:59',
     stage: 'Препресс',
+    stageOneForTemlate: 'Цифровая печать (простые заказы)',
+    stageTwoForTemlate: 'Цифровая печать (сложные заказы)',
     express: 'Да',
     executor: 'Мильченко Ден',
     paymentStatus: 'Оплачен частично',
@@ -27,4 +29,5 @@ export const filtersInfo = {
     volume: 'Да',
     defect: 'Да',
     // partnerForCalculation: 'ООО «ИНТЕРТРЕЙД»',
+    templateName: 'Статус и два участка',
 }

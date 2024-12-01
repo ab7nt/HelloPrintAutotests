@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test"
+import { expect } from "@playwright/test"
 import { helpers } from "../utils/helpers.js"
 import { filtersInfo } from "./../data/filtersInfo.js"
 
@@ -7,13 +7,19 @@ export class OrderRegisterPage {
       this.page = page
 
       // Общие локаторы
-      this.openPopUpFiltersButton = page.locator('button[data-target="#search-filters-block"]')
       this.popUpFilters = page.locator('div#search-filters-block')
+      this.popUpFiltersIsVisible = page.locator('div#search-filters-block.is-visible')
+      this.openPopUpFiltersButton = page.locator('button[data-target="#search-filters-block"]')
       this.optionList = page.locator('ul.select2-results__options li')
       this.submitButton = page.locator('button[type="submit"]')
       this.rowsRegistryTable = page.locator('div.tabulator-row')
       this.selectedTags = page.locator('ul.selected-tags')
       this.dateTimePicker = page.locator('div.xdsoft_datetimepicker')
+      this.saveTemplateButton = page.locator('button[id="save_filter_btn"]')
+      this.saveTempalePopupInput = page.locator('div:has(h5:has-text("Введите название шаблона")) ~ div.modal-body input')
+      this.saveTempalePopupSaveButton = page.locator('div:has(h5:has-text("Введите название шаблона")) ~ div.modal-footer button.btn-success')
+      this.deleteTemplateButton = page.locator('li.search-with-filters__filters-template i')
+      this.deleteTemplateButtonConfirm = page.locator('div:has(h3:has-text("Вы уверены, что хотите удалить фильтр?")) ~ div.modal-footer button.bootbox-accept')
 
       // Локаторы из блока "Основное"
       this.mainBlockFields = page.locator('div#filter-block-general span.select2-selection')
@@ -204,6 +210,15 @@ export class OrderRegisterPage {
       await this.page.waitForLoadState('load')
       await this.resetAllFiltersButton.waitFor()
       await this.resetAllFiltersButton.click()
+      await this.page.waitForLoadState('load')
+   }
+
+   openPopUpFilterAndresetAllFilters = async () => {
+      await this.openPopUpFiltersButton.waitFor()
+      await this.openPopUpFiltersButton.click()
+      await expect(this.popUpFilters).toBeVisible()
+      await this.page.locator('button[value="clear"]').waitFor()
+      await this.page.locator('button[value="clear"]').click()
       await this.page.waitForLoadState('load')
    }
 
@@ -713,5 +728,93 @@ export class OrderRegisterPage {
       await helpers.checkingTextForAnArrayOfElements(filtersInfo.volume, this.columnWithOrderVolume)
    }
 
+   deleteTemplatesIfTheyAreCreate = async () => {
+      const count = await this.deleteTemplateButton.count()
+      if (count > 0) {
+         for (let i = 0; i < count; i++) {
+            const element = await this.deleteTemplateButton.first()
+            await element.click()
+            await this.deleteTemplateButtonConfirm.first().waitFor()
+            await this.deleteTemplateButtonConfirm.first().click()
+            await this.openPopUpFiltersButton.waitFor()
+            await this.openPopUpFiltersButton.click()
+         }
+      }
+   }
 
+   createTemplate = async () => {
+      // Выбор статуса
+      await this.statusFilterField.waitFor()
+      await this.statusFilterField.click()
+      await expect(this.optionList.first()).toBeVisible()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: filtersInfo.productStatus }).click()
+      expect(await this.statusFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.productStatus)
+      // Выбор участков
+      await this.buttonBlockStage.waitFor()
+      await this.buttonBlockStage.click()
+      await this.stageDepartmentFilterField.waitFor()
+      await this.stageDepartmentFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: filtersInfo.stageOneForTemlate }).click()
+      await this.stageDepartmentFilterField.waitFor()
+      await this.stageDepartmentFilterField.click()
+      await this.optionList.first().waitFor()
+      await this.optionList.filter({ hasText: filtersInfo.stageTwoForTemlate }).click()
+      await this.stageDepartmentFilterField.click()
+      expect(await this.page.locator('span[aria-owns*="select2-area_id"]'))
+         .toContainText(filtersInfo.stageOneForTemlate, filtersInfo.stageOneForTemlate)
+      // Сохранение шаблона фильтров
+      await this.saveTemplateButton.waitFor()
+      await this.saveTemplateButton.click()
+      await this.saveTempalePopupInput.fill(filtersInfo.templateName)
+      await expect(this.saveTempalePopupInput).toHaveValue(filtersInfo.templateName)
+      await this.saveTempalePopupSaveButton.click()
+   }
+
+   filteringByFilterTemplate = async () => {
+      await this.deleteTemplatesIfTheyAreCreate()
+      await this.createTemplate()
+      await this.page.locator('div.search-with-filters__filters')
+      await this.openPopUpFiltersButton.waitFor()
+      await this.openPopUpFiltersButton.click()
+      await this.page.locator('li.search-with-filters__filters-template').filter({ hasText: filtersInfo.templateName }).waitFor()
+      await this.page.locator('li.search-with-filters__filters-template').filter({ hasText: filtersInfo.templateName }).click()
+      await this.page.waitForLoadState('load')
+      await expect(this.selectedTags)
+         .toContainText(`Статус: ${filtersInfo.productStatus} Участок: ${filtersInfo.stageOneForTemlate} Участок: ${filtersInfo.stageTwoForTemlate}`)
+      await this.rowsRegistryTable.first().waitFor()
+      // await helpers.checkingTextForAnArrayOfElements(filtersInfo.productStatus, this.columnWithOrderStatuses)
+      // await helpers.checkingTextForAnArrayOfElements(`${filtersInfo.stageOneForTemlate} ${filtersInfo.stageTwoForTemlate}`, this.columnWithOrderStageDepartment)
+   }
+
+   checkingTheTemplateLimit = async () => {
+      if (await this.deleteTemplateButton.count() === 0) {
+         await this.createTemplate()
+         await this.openPopUpFiltersButton.click()
+         console.log('Первый сценарий')
+      }
+
+      if (await this.deleteTemplateButton.count() >= 1 && await this.deleteTemplateButton.count() < 5) {
+         for (let i = await this.deleteTemplateButton.count(); i < 5; i++) {
+            if (!this.popUpFiltersIsVisible) {
+               await this.openPopUpFiltersButton.click()
+            }
+            await this.saveTemplateButton.waitFor()
+            await this.saveTemplateButton.click()
+            await this.saveTempalePopupInput.fill(filtersInfo.templateName)
+            await expect(this.saveTempalePopupInput).toHaveValue(filtersInfo.templateName)
+            await this.saveTempalePopupSaveButton.click()
+            console.log('Второй сценарий')
+            await this.openPopUpFiltersButton.click()
+         }
+      }
+
+      if (await this.deleteTemplateButton.count() >= 5) {
+         await this.saveTemplateButton.waitFor()
+         await this.saveTemplateButton.click()
+         await expect(this.page.locator('div.alert.alert-warning:has-text("Превышен лимит")')).toBeVisible()
+         console.log('Третий сценарий')
+      }
+   }
 }

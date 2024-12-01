@@ -157,7 +157,6 @@ describe('Проверка фильтрации реестра заказов', 
       });
    })
 
-
    describe('Проверка фильтров из блока "Остальное"', () => {
       test('Проверка фильтра "Правки по макету"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
@@ -168,4 +167,18 @@ describe('Проверка фильтрации реестра заказов', 
          await orderRegisterPage.filteringByVolume()
       });
    })
+
+
+   describe('Проверка создания шаблона и фильтрации по нескольким фильтрам', () => {
+      test('Создание шаблона фильтров "Статус" и "Участок"', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.filteringByFilterTemplate()
+      })
+      test('Проверка лимита на создание шаблонов', async ({ page }) => {
+         const orderRegisterPage = new OrderRegisterPage(page)
+         await orderRegisterPage.checkingTheTemplateLimit()
+      })
+   })
+
+
 });
