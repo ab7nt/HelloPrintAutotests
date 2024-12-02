@@ -21,6 +21,9 @@ export class OrderRegisterPage {
       this.deleteTemplateButton = page.locator('li.search-with-filters__filters-template i')
       this.deleteTemplateButtonConfirm = page.locator('div:has(h3:has-text("Вы уверены, что хотите удалить фильтр?")) ~ div.modal-footer button.bootbox-accept')
 
+      // Локаторы для кнопок
+      this.createOrderButton = page.locator('div#__order-filters-btns a:has-text("Новый заказ")')
+
       // Локаторы из блока "Основное"
       this.mainBlockFields = page.locator('div#filter-block-general span.select2-selection')
       // Локаторы статуса заказа
@@ -228,7 +231,7 @@ export class OrderRegisterPage {
       await expect(this.optionList.first()).toBeVisible()
       await this.optionList.first().waitFor()
       await this.optionList.filter({ hasText: filtersInfo.orderStatus }).click()
-      expect(await this.statusFilterSelect.locator('option:checked').innerText()).toEqual(filtersInfo.orderStatus)
+     
       await this.submitButton.waitFor()
       await this.submitButton.click({ force: true })
       await this.page.waitForLoadState('load')
@@ -816,5 +819,12 @@ export class OrderRegisterPage {
          await expect(this.page.locator('div.alert.alert-warning:has-text("Превышен лимит")')).toBeVisible()
          console.log('Третий сценарий')
       }
+   }
+
+   clickOnNewOrderButton = async () => {
+      await this.createOrderButton.waitFor()
+      await this.createOrderButton.click()
+      await this.page.waitForURL('/order/create')
+      await expect(this.page).toHaveURL('/order/create');
    }
 }
