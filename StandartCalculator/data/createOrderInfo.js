@@ -3,7 +3,7 @@ export const createOrderInfo = {
     lastname: '',
     middlename: '',
     partner: 'Реальный тест',
-    partnerUser: 'Тестим',
+    partnerUser: 'Тест API',
     nameOfTheLegalEntity: '',
     phone: '',
     email: '',

@@ -1,6 +1,5 @@
 import { expect } from "@playwright/test"
 import { createOrderInfo } from "../data/createOrderInfo"
-import exp from "constants"
 
 export class CreateOrderPage {
    constructor(page) {
@@ -19,35 +18,43 @@ export class CreateOrderPage {
       this.orderPartnerSelect = page.locator('select[uitest="order-partner"]')
       this.orderPartnerSelectInput = page.locator('input[aria-controls*="select2-partner_id"]')
       this.orderPartnerCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.copygray svg')
+      this.orderPartnerInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.select2-prepend svg')
       // Представитель
       this.chooseUserPartnerButton = page.locator('a#choose_userpartner_btn')
       this.orderPartnerUserField = page.locator('span[aria-labelledby*="select2-partner_user_id"]')
       this.orderPartnerUserSelect = page.locator('select[uitest="order-partner-user"]')
       this.orderPartnerUserSelectInput = page.locator('input[aria-controls*="select2-partner_user_id"]')
       this.orderPartnerUserCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.copygray svg')
+      this.orderPartnerUserInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.select2-prepend svg')
       // Телефон
       this.orderPhoneField = page.locator('span[aria-labelledby*="select2-partner_phone"]')
       this.orderPhoneSelect = page.locator('select[uitest="order-partner-phone"]')
       this.orderPhoneCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.copygray svg')
+      this.orderPhoneInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.select2-prepend svg')
       // Email
       this.orderEmailField = page.locator('span[aria-labelledby*="select2-partner_email"]')
       this.orderEmailSelect = page.locator('select[uitest="order-partner-email"]')
       this.orderEmailCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.copygray svg')
+      this.orderEmailInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.select2-prepend svg')
       // Telegram
       this.orderTelegramField = page.locator('span[aria-labelledby*="select2-partner_telegram"]')
       this.orderTelegramSelect = page.locator('select[name="partner_telegram"]')
       this.orderTelegramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.copygray svg')
+      this.orderTelegramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.select2-prepend svg')
       // Vk
       this.orderVkField = page.locator('span[aria-labelledby*="select2-partner_vk"]')
       this.orderVkSelect = page.locator('select[name="partner_vk"]')
       this.orderVkCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.copygray svg')
+      this.orderVkInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.select2-prepend svg')
       // Instagram
       this.orderInstagramField = page.locator('span[aria-labelledby*="select2-partner_instagram"]')
       this.orderInstagramSelect = page.locator('select[name="partner_instagram"]')
       this.orderInstagramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.copygray svg')
+      this.orderInstagramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.select2-prepend svg')
       // Юр. лицо
       this.orderLegalEntitySelect = page.locator('select[name="partner_company_id"]')
       this.orderLegalEntityCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Юр. лицо")) + div span.copygray svg')
+      this.legalEntityInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Юр. лицо")) + div span.select2-prepend svg')
 
       // Пaраметры
       // Оформленно в
@@ -95,5 +102,17 @@ export class CreateOrderPage {
       await expect(this.successAlertCopyText).toBeVisible()
       await this.successAlertCopyTextCloseButton.click()
       await expect(this.successAlertCopyText).not.toBeVisible()
+   }
+
+   clickOnOpenNewTabButtonAndChecks = async (context, button, id) => {
+      const [newPage] = await Promise.all([
+         context.waitForEvent('page'),
+         await button.first().click(),
+      ]);
+      // Ожидание загрузки новой вкладки
+      await newPage.waitForLoadState()
+      // Проверка, что URL соответствует ожидаемому
+      expect(newPage.url()).toContain(`/${id}/edit`)
+      await newPage.close()
    }
 }

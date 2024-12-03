@@ -100,8 +100,48 @@ describe('Создание заказа', () => {
 		// Юр. лицо
 		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderLegalEntityCopyTextButton)
 		await helpers.checkClipboardText(page, await (createOrderPage.orderLegalEntitySelect).innerText())
+	})
 
+	test("Проверка кнопки перехода в карточку", async ({ page, context }) => {
+		const orderRegisterPage = new OrderRegisterPage(page)
+		const createOrderPage = new CreateOrderPage(page)
 
-		await page.pause()
+		// Нажатие на кнопку "Новый заказ" в реестре заказов
+		await orderRegisterPage.clickOnNewOrderButton()
+
+		// Выбор контрагента и представителя
+		await createOrderPage.selectPartner()
+		await createOrderPage.selectPartnerUser()
+
+		const idForCheckPartnerUrl = await (createOrderPage.orderPartnerSelect).inputValue()
+		// const idForCheckPartnerUserUrl = await (createOrderPage.orderPartnerUserSelect).inputValue()
+		const idForCheckPartnerUserUrl = 202439 // Временная заплатка, так как value в select не соответсвует id представителя
+		const idForCheckLegalEntityUrl = await (createOrderPage.orderLegalEntitySelect).inputValue()
+
+		// Нажатие на кнопку открытия в новой вкладке и проверка наличия id в URL новой страницы
+		// Контрагент
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderPartnerInNewTabButton, idForCheckPartnerUrl)
+		// Представитель
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderPartnerUserInNewTabButton, idForCheckPartnerUserUrl)
+		// Телефон
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderPhoneInNewTabButton, idForCheckPartnerUserUrl)
+		// Email
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderEmailInNewTabButton, idForCheckPartnerUserUrl)
+		// Телеграм
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderTelegramInNewTabButton, idForCheckPartnerUserUrl)
+		// Вконтакте
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderVkInNewTabButton, idForCheckPartnerUserUrl)
+		// Инстаграм
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.orderInstagramInNewTabButton, idForCheckPartnerUserUrl)
+		// Юр. лицо
+		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
+			context, createOrderPage.legalEntityInNewTabButton, idForCheckLegalEntityUrl)
 	})
 })
