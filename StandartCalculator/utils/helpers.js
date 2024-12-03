@@ -48,5 +48,15 @@ export const helpers = {
       for (let i = 0; i < count; i++) {
          await expect(elements.nth(i).textContent()).not.toBe('');
       }
+   },
+
+   async checkClipboardText(page, textToCheck) {
+      // Получение текста из буфера обмена
+      const clipboardText = await page.evaluate(async () => {
+         return await navigator.clipboard.readText(); // Чтение текста из буфера обмена
+      });
+
+      // Проверка, что текст в буфере обмена соответствует ожидаемому
+      await expect(clipboardText).toBe(textToCheck)
    }
 }

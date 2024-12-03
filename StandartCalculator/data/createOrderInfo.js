@@ -7,4 +7,7 @@ export const createOrderInfo = {
     nameOfTheLegalEntity: '',
     phone: '',
     email: '',
+    telegram: '',
+    vk: '',
+    instagram: '',
 }
