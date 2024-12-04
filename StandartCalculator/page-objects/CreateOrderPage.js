@@ -12,82 +12,109 @@ export class CreateOrderPage {
       this.successAlertCopyText = page.locator('div[role="alert"]').filter({ hasText: 'Данные скопированы в буфер обмена' })
       this.successAlertCopyTextCloseButton = this.successAlertCopyText.locator('button.close')
 
-      // Заказчик
+      // Заказчик:
       // Контрагент
-      this.orderPartnerField = page.locator('span[aria-labelledby*="select2-partner_id"]')
-      this.orderPartnerSelect = page.locator('select[uitest="order-partner"]')
-      this.orderPartnerSelectInput = page.locator('input[aria-controls*="select2-partner_id"]')
-      this.orderPartnerCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.copygray svg')
-      this.orderPartnerInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.select2-prepend svg')
+      this.partnerField = page.locator('span[aria-labelledby*="select2-partner_id"]')
+      this.partnerSelect = page.locator('select[uitest="order-partner"]')
+      this.partnerInput = page.locator('input[aria-controls*="select2-partner_id"]')
+      this.partnerCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.copygray svg')
+      this.partnerInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Контрагент")) + div span.select2-prepend svg')
       // Представитель
       this.chooseUserPartnerButton = page.locator('a#choose_userpartner_btn')
-      this.orderPartnerUserField = page.locator('span[aria-labelledby*="select2-partner_user_id"]')
-      this.orderPartnerUserSelect = page.locator('select[uitest="order-partner-user"]')
-      this.orderPartnerUserSelectInput = page.locator('input[aria-controls*="select2-partner_user_id"]')
-      this.orderPartnerUserCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.copygray svg')
-      this.orderPartnerUserInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.select2-prepend svg')
+      this.partnerUserField = page.locator('span[aria-labelledby*="select2-partner_user_id"]')
+      this.partnerUserSelect = page.locator('select[uitest="order-partner-user"]')
+      this.partnerUserInput = page.locator('input[aria-controls*="select2-partner_user_id"]')
+      this.partnerUserCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.copygray svg')
+      this.partnerUserInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Представитель")) + div span.select2-prepend svg')
       // Телефон
-      this.orderPhoneField = page.locator('span[aria-labelledby*="select2-partner_phone"]')
-      this.orderPhoneSelect = page.locator('select[uitest="order-partner-phone"]')
-      this.orderPhoneCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.copygray svg')
-      this.orderPhoneInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.select2-prepend svg')
+      this.phoneField = page.locator('span[aria-labelledby*="select2-partner_phone"]')
+      this.phoneSelect = page.locator('select[uitest="order-partner-phone"]')
+      this.phoneCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.copygray svg')
+      this.phoneInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телефон")) + div span.select2-prepend svg')
       // Email
-      this.orderEmailField = page.locator('span[aria-labelledby*="select2-partner_email"]')
-      this.orderEmailSelect = page.locator('select[uitest="order-partner-email"]')
-      this.orderEmailCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.copygray svg')
-      this.orderEmailInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.select2-prepend svg')
+      this.emailField = page.locator('span[aria-labelledby*="select2-partner_email"]')
+      this.emailSelect = page.locator('select[uitest="order-partner-email"]')
+      this.emailCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.copygray svg')
+      this.emailInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Email")) + div span.select2-prepend svg')
       // Telegram
-      this.orderTelegramField = page.locator('span[aria-labelledby*="select2-partner_telegram"]')
-      this.orderTelegramSelect = page.locator('select[name="partner_telegram"]')
-      this.orderTelegramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.copygray svg')
-      this.orderTelegramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.select2-prepend svg')
+      this.telegramField = page.locator('span[aria-labelledby*="select2-partner_telegram"]')
+      this.telegramSelect = page.locator('select[name="partner_telegram"]')
+      this.telegramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.copygray svg')
+      this.telegramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Телеграм")) + div span.select2-prepend svg')
       // Vk
-      this.orderVkField = page.locator('span[aria-labelledby*="select2-partner_vk"]')
-      this.orderVkSelect = page.locator('select[name="partner_vk"]')
-      this.orderVkCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.copygray svg')
-      this.orderVkInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.select2-prepend svg')
+      this.vkField = page.locator('span[aria-labelledby*="select2-partner_vk"]')
+      this.vkSelect = page.locator('select[name="partner_vk"]')
+      this.vkCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.copygray svg')
+      this.vkInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Вконтакте")) + div span.select2-prepend svg')
       // Instagram
-      this.orderInstagramField = page.locator('span[aria-labelledby*="select2-partner_instagram"]')
-      this.orderInstagramSelect = page.locator('select[name="partner_instagram"]')
-      this.orderInstagramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.copygray svg')
-      this.orderInstagramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.select2-prepend svg')
+      this.instagramField = page.locator('span[aria-labelledby*="select2-partner_instagram"]')
+      this.instagramSelect = page.locator('select[name="partner_instagram"]')
+      this.instagramCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.copygray svg')
+      this.instagramInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Инстаграм")) + div span.select2-prepend svg')
       // Юр. лицо
-      this.orderLegalEntitySelect = page.locator('select[name="partner_company_id"]')
-      this.orderLegalEntityCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Юр. лицо")) + div span.copygray svg')
+      this.legalEntitySelect = page.locator('select[name="partner_company_id"]')
+      this.legalEntityCopyTextButton = page.locator('div.col-xl-4:has(label:has-text("Юр. лицо")) + div span.copygray svg')
       this.legalEntityInNewTabButton = page.locator('div.col-xl-4:has(label:has-text("Юр. лицо")) + div span.select2-prepend svg')
 
-      // Пaраметры
+      // Пaраметры:
       // Оформленно в
-      this.orderObject = page.locator('span[id*="select2-object_id"]')
+      this.orderObjectField = page.locator('span[id*="select2-object_id"]')
+      this.orderObjectSelect = page.locator('select[uitest="order-object"]')
+      this.orderObjectInput = page.locator('input[aria-controls*="select2-object_id"]')
+      // Правки по макету
+      this.layoutField = page.locator('span[aria-labelledby*="select2-is_layout"]')
+      this.layoutSelect = page.locator('select[uitest="order-layout"]')
+      // Срочность
+      this.expressField = page.locator('span[aria-labelledby*="select2-custom_express"]')
+      this.expressSelect = page.locator('select[id="custom_express"]')
+      // Крупногабаритный
+      this.oversizedField = page.locator('span[aria-labelledby*="select2-is_oversized"]')
+      this.oversizedSelect = page.locator('select[uitest="order-oversized"]')
+      // Объёмный заказ
+      this.volumeField = page.locator('span[aria-labelledby*="select2-is_volume"]')
+      this.volumeSelect = page.locator('select[uitest="order-volume"]')
+      // Офсетная печать
+      this.offsetField = page.locator('span[aria-labelledby*="select2-is_offset"]')
+      this.offsetSelect = page.locator('select[name="is_offset_order"]')
       // Комментарий к выдаче
-      this.extraditionComment = page.locator('span[id*="select2-comment"]')
+      this.extraditionCommentField = page.locator('span[id*="select2-comment"]')
       this.extraditionCommentSelect = page.locator('select[uitest="order-comment"]')
       this.extraditionCommentInput = page.locator('input[aria-controls*="select2-comment"]')
+
+      // Дополнительно:
+      // Источник
+      this.sourceField = page.locator('span[id*="select2-source_id"]')
+      this.sourceSelect = page.locator('select[uitest="order-source"]')
+      this.sourceInput = page.locator('input[aria-controls*="select2-source_id"]')
+      // Реклама
+      this.adSourceField = page.locator('span[id*="select2-ad_source_id"]')
+      this.adSourceSelect = page.locator('uitest="order-ad-source"')
+      this.adSourceInput = page.locator('input[aria-controls*="select2-ad_source_id"]')
    }
 
    selectPartner = async () => {
-      await this.orderPartnerField.waitFor()
-      await this.orderPartnerField.click()
-      await this.orderPartnerSelectInput.fill(createOrderInfo.partner)
-      await expect(this.orderPartnerSelectInput).toHaveValue(createOrderInfo.partner)
+      await this.partnerField.waitFor()
+      await this.partnerField.click()
+      await this.partnerInput.fill(createOrderInfo.partner)
+      await expect(this.partnerInput).toHaveValue(createOrderInfo.partner)
       await this.optionList.filter({ hasText: new RegExp(`^${createOrderInfo.partner}$`) }).click()
-      expect(await this.orderPartnerSelect.locator('option:checked').innerText()).toEqual(createOrderInfo.partner)
+      expect(await this.partnerSelect.locator('option:checked').innerText()).toEqual(createOrderInfo.partner)
    }
 
    selectPartnerUser = async () => {
       await this.chooseUserPartnerButton.waitFor()
       await this.chooseUserPartnerButton.click()
-      await this.orderPartnerUserField.waitFor()
-      await this.orderPartnerUserField.click()
+      await this.partnerUserField.waitFor()
+      await this.partnerUserField.click()
       await this.optionList.filter({ hasText: createOrderInfo.partnerUser }).click()
       // expect(await this.orderPartnerUserSelect.locator('option:checked').innerText()).toEqual(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`)
-      expect(await this.orderPartnerUserSelect).toContainText(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`) // альтернативная проверка, так как некорретный текст в DOM'e
+      expect(await this.partnerUserSelect).toContainText(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`) // альтернативная проверка, так как некорретный текст в DOM'e
 
-      createOrderInfo.phone = await this.orderPhoneField.innerText()
-      createOrderInfo.email = await this.orderEmailField.innerText()
-      createOrderInfo.telegram = await this.orderTelegramField.innerText()
-      createOrderInfo.vk = await this.orderVkField.innerText()
-      createOrderInfo.instagram = await this.orderInstagramField.innerText()
+      createOrderInfo.phone = await this.phoneField.innerText()
+      createOrderInfo.email = await this.emailField.innerText()
+      createOrderInfo.telegram = await this.telegramField.innerText()
+      createOrderInfo.vk = await this.vkField.innerText()
+      createOrderInfo.instagram = await this.instagramField.innerText()
    }
 
    clickOnNewOrderButton = async () => {

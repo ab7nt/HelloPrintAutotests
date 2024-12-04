@@ -8,7 +8,7 @@ import { OrderPage } from "../page-objects/OrderPage";
 import { createOrderInfo } from "../data/createOrderInfo";
 import { helpers } from "../utils/helpers";
 
-describe('Создание заказа', () => {
+describe.parallel('Создание заказа', () => {
 	// Настройки
 	test.setTimeout(90 * 1000)
 
@@ -38,7 +38,7 @@ describe('Создание заказа', () => {
 
 		// Сравнение названия компании на странице создания заказа с компанией, отображённой в левом сайд-меню
 		const userCompany = await (await leftSideMenu.userCompany).innerText();
-		const orderCompany = await (await createOrderPage.orderObject).innerText();
+		const orderCompany = await (await createOrderPage.orderObjectField).innerText();
 		expect(userCompany).toEqual(orderCompany);
 		// Выбор контрагента и представителя
 		await createOrderPage.selectPartner()
@@ -77,29 +77,29 @@ describe('Создание заказа', () => {
 		await createOrderPage.selectPartnerUser()
 		// Нажатие на нопку копирования и проверка текста в буфер обмена
 		// Контрагент
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderPartnerCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderPartnerField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.partnerCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.partnerField).innerText())
 		// Представитель
 		// await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderPartnerUserCopyTextButton)
 		// await helpers.checkClipboardText(page, await (createOrderPage.orderPartnerUserField).innerText())
 		// Телефон
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderPhoneCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderPhoneField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.phoneCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.phoneField).innerText())
 		// Email
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderEmailCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderEmailField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.emailCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.emailField).innerText())
 		// Телеграм
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderTelegramCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderTelegramField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.telegramCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.telegramField).innerText())
 		// Вконтакте
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderVkCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderVkField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.vkCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.vkField).innerText())
 		// Инстаграм
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderInstagramCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderInstagramField).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.instagramCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.instagramField).innerText())
 		// Юр. лицо
-		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.orderLegalEntityCopyTextButton)
-		await helpers.checkClipboardText(page, await (createOrderPage.orderLegalEntitySelect).innerText())
+		await createOrderPage.clickOnCopyToClipboardButton(createOrderPage.legalEntityCopyTextButton)
+		await helpers.checkClipboardText(page, await (createOrderPage.legalEntitySelect).innerText())
 	})
 
 	test("Проверка кнопки перехода в карточку", async ({ page, context }) => {
@@ -113,33 +113,33 @@ describe('Создание заказа', () => {
 		await createOrderPage.selectPartner()
 		await createOrderPage.selectPartnerUser()
 
-		const idForCheckPartnerUrl = await (createOrderPage.orderPartnerSelect).inputValue()
-		// const idForCheckPartnerUserUrl = await (createOrderPage.orderPartnerUserSelect).inputValue()
-		const idForCheckPartnerUserUrl = 202439 // Временная заплатка, так как value в select не соответсвует id представителя
-		const idForCheckLegalEntityUrl = await (createOrderPage.orderLegalEntitySelect).inputValue()
+		// Сохранение выбранных значений из селектов, чтобы проверить их наличие в URL страниц, открытых в новых вкладках
+		const idForCheckPartnerUrl = await (createOrderPage.partnerSelect).inputValue()
+		const idForCheckPartnerUserUrl = 202439 // Временная заплатка, так как value в select не соответсвует id представителя. Вместо числа должно быть await (createOrderPage.orderPartnerUserSelect).inputValue()
+		const idForCheckLegalEntityUrl = await (createOrderPage.legalEntitySelect).inputValue()
 
 		// Нажатие на кнопку открытия в новой вкладке и проверка наличия id в URL новой страницы
 		// Контрагент
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderPartnerInNewTabButton, idForCheckPartnerUrl)
+			context, createOrderPage.partnerInNewTabButton, idForCheckPartnerUrl)
 		// Представитель
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderPartnerUserInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.partnerUserInNewTabButton, idForCheckPartnerUserUrl)
 		// Телефон
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderPhoneInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.phoneInNewTabButton, idForCheckPartnerUserUrl)
 		// Email
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderEmailInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.emailInNewTabButton, idForCheckPartnerUserUrl)
 		// Телеграм
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderTelegramInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.telegramInNewTabButton, idForCheckPartnerUserUrl)
 		// Вконтакте
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderVkInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.vkInNewTabButton, idForCheckPartnerUserUrl)
 		// Инстаграм
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
-			context, createOrderPage.orderInstagramInNewTabButton, idForCheckPartnerUserUrl)
+			context, createOrderPage.instagramInNewTabButton, idForCheckPartnerUserUrl)
 		// Юр. лицо
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
 			context, createOrderPage.legalEntityInNewTabButton, idForCheckLegalEntityUrl)
