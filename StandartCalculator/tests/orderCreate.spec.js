@@ -40,16 +40,31 @@ describe.parallel('Создание заказа', () => {
 		const userCompany = await (await leftSideMenu.userCompany).innerText();
 		const orderCompany = await (await createOrderPage.orderObjectField).innerText();
 		expect(userCompany).toEqual(orderCompany);
+
 		// Выбор контрагента и представителя
 		await createOrderPage.selectPartner()
 		await createOrderPage.selectPartnerUser()
+
+		// Выбор параметров в блоке "Параметры"
+		await createOrderPage.selectOrderObject()
+		await createOrderPage.selectLayout()
+		await createOrderPage.selectExpress()
+		await createOrderPage.selectOversized()
+		await createOrderPage.selectVolume()
+		await createOrderPage.selectOffset()
+		await createOrderPage.selectExtraditionComment()
+
+		// Выбор параметров в блоке "Дополнительно"
+		await createOrderPage.selectSource()
+		await createOrderPage.selectAdSource()
+
 		// Нажатие на кнопку "Создать заказ" на странице создания заказа
 		await createOrderPage.clickOnNewOrderButton()
 
 		// Проверка контрагента в карточке заказа
 		const orderPartner = await (await orderPage.partner).innerText()
 		expect(orderPartner).toEqual(createOrderInfo.partner)
-		// Проверка контрагента в карточке заказа
+		// Проверка представителя в карточке заказа
 		const orderPartnerUser = await (await orderPage.partnerUser).innerText()
 		expect(orderPartnerUser).toEqual(createOrderInfo.partnerUser)
 		// Проверка контактов в карточке заказа
@@ -63,6 +78,8 @@ describe.parallel('Создание заказа', () => {
 		expect(orderVk).toEqual(createOrderInfo.vk)
 		const orderInstagram = await (await orderPage.instagram).innerText()
 		expect(orderInstagram).toEqual(createOrderInfo.instagram)
+		// Проверка дополнительных параметров
+		
 	})
 
 	test("Проверка кнопки копирования в буфер обмена", async ({ page }) => {

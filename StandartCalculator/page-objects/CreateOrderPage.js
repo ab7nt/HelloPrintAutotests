@@ -60,7 +60,6 @@ export class CreateOrderPage {
       // Оформленно в
       this.orderObjectField = page.locator('span[id*="select2-object_id"]')
       this.orderObjectSelect = page.locator('select[uitest="order-object"]')
-      this.orderObjectInput = page.locator('input[aria-controls*="select2-object_id"]')
       // Правки по макету
       this.layoutField = page.locator('span[aria-labelledby*="select2-is_layout"]')
       this.layoutSelect = page.locator('select[uitest="order-layout"]')
@@ -88,7 +87,7 @@ export class CreateOrderPage {
       this.sourceInput = page.locator('input[aria-controls*="select2-source_id"]')
       // Реклама
       this.adSourceField = page.locator('span[id*="select2-ad_source_id"]')
-      this.adSourceSelect = page.locator('uitest="order-ad-source"')
+      this.adSourceSelect = page.locator('select[uitest="order-ad-source"]')
       this.adSourceInput = page.locator('input[aria-controls*="select2-ad_source_id"]')
    }
 
@@ -115,6 +114,67 @@ export class CreateOrderPage {
       createOrderInfo.telegram = await this.telegramField.innerText()
       createOrderInfo.vk = await this.vkField.innerText()
       createOrderInfo.instagram = await this.instagramField.innerText()
+      createOrderInfo.layout = await this.layoutField.innerText()
+      createOrderInfo.express = await this.expressField.innerText()
+      createOrderInfo.oversized = await this.oversizedField.innerText()
+      createOrderInfo.volume = await this.volumeField.innerText()
+      createOrderInfo.offset = await this.offsetField.innerText()
+      createOrderInfo.source = await this.sourceField.innerText()
+      createOrderInfo.adSource = await this.adSourceField.innerText()
+   }
+
+   selectOrderObject = async () => {
+      await this.orderObjectField.click()
+      await this.optionList.filter({ hasText: 'Типография МДМпринт' }).click()
+      expect(await this.orderObjectSelect.locator('option:checked').innerText()).toEqual('Типография МДМпринт')
+   }
+
+   selectLayout = async () => {
+      await this.layoutField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.layoutSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectExpress = async () => {
+      await this.expressField.click()
+      await this.optionList.filter({ hasText: 'Срочность 10' }).click()
+      expect(await this.expressSelect.locator('option:checked').innerText()).toEqual('Срочность 10')
+   }
+
+   selectOversized = async () => {
+      await this.oversizedField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.oversizedSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectVolume = async () => {
+      await this.volumeField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.volumeSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectOffset = async () => {
+      await this.offsetField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.offsetSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectExtraditionComment = async () => {
+      await this.extraditionCommentField.click()
+      await this.optionList.filter({ hasText: 'оплачен' }).click()
+      expect(await this.extraditionCommentSelect.locator('option:checked').innerText()).toEqual('оплачен')
+   }
+
+   selectSource = async () => {
+      await this.sourceField.click()
+      await this.optionList.filter({ hasText: 'mdmprint.ru' }).click()
+      expect(await this.sourceSelect.locator('option:checked').innerText()).toEqual('mdmprint.ru')
+   }
+
+   selectAdSource = async () => {
+      await this.adSourceField.click()
+      await this.optionList.filter({ hasText: 'Perfect erp' }).click()
+      expect(await this.adSourceSelect.locator('option:checked').innerText()).toEqual('Perfect erp')
    }
 
    clickOnNewOrderButton = async () => {
