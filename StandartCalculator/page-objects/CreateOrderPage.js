@@ -108,19 +108,6 @@ export class CreateOrderPage {
       await this.optionList.filter({ hasText: createOrderInfo.partnerUser }).click()
       // expect(await this.orderPartnerUserSelect.locator('option:checked').innerText()).toEqual(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`)
       expect(await this.partnerUserSelect).toContainText(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`) // альтернативная проверка, так как некорретный текст в DOM'e
-
-      createOrderInfo.phone = await this.phoneField.innerText()
-      createOrderInfo.email = await this.emailField.innerText()
-      createOrderInfo.telegram = await this.telegramField.innerText()
-      createOrderInfo.vk = await this.vkField.innerText()
-      createOrderInfo.instagram = await this.instagramField.innerText()
-      createOrderInfo.layout = await this.layoutField.innerText()
-      createOrderInfo.express = await this.expressField.innerText()
-      createOrderInfo.oversized = await this.oversizedField.innerText()
-      createOrderInfo.volume = await this.volumeField.innerText()
-      createOrderInfo.offset = await this.offsetField.innerText()
-      createOrderInfo.source = await this.sourceField.innerText()
-      createOrderInfo.adSource = await this.adSourceField.innerText()
    }
 
    selectOrderObject = async () => {
@@ -175,6 +162,21 @@ export class CreateOrderPage {
       await this.adSourceField.click()
       await this.optionList.filter({ hasText: 'Perfect erp' }).click()
       expect(await this.adSourceSelect.locator('option:checked').innerText()).toEqual('Perfect erp')
+   }
+
+   collectingTextFromFilledFields = async () => {
+      createOrderInfo.phone = await this.phoneField.innerText()
+      createOrderInfo.email = await this.emailField.innerText()
+      createOrderInfo.telegram = await this.telegramField.innerText()
+      createOrderInfo.vk = await this.vkField.innerText()
+      createOrderInfo.instagram = await this.instagramField.innerText()
+      createOrderInfo.layout = await this.layoutField.innerText()
+      createOrderInfo.express = await this.expressField.innerText()
+      createOrderInfo.oversized = await this.oversizedField.innerText()
+      createOrderInfo.volume = await this.volumeField.innerText()
+      createOrderInfo.offset = await this.offsetField.innerText()
+      createOrderInfo.source = await this.sourceField.innerText()
+      createOrderInfo.adSource = await this.adSourceField.innerText()
    }
 
    clickOnNewOrderButton = async () => {

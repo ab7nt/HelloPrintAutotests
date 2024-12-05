@@ -58,8 +58,16 @@ describe.parallel('Создание заказа', () => {
 		await createOrderPage.selectSource()
 		await createOrderPage.selectAdSource()
 
+		// Сбор данных из заполненных полей
+		await createOrderPage.collectingTextFromFilledFields()
+
 		// Нажатие на кнопку "Создать заказ" на странице создания заказа
 		await createOrderPage.clickOnNewOrderButton()
+		await page.waitForLoadState('networkidle')
+
+		// Проверка параметров в блокес номером заказа и действиями
+		// const orderExpress = await (await orderPage.expressField).innerText()
+		// expect(orderExpress).toEqual(createOrderInfo.express)
 
 		// Проверка контрагента в карточке заказа
 		const orderPartner = await (await orderPage.partner).innerText()
@@ -69,17 +77,28 @@ describe.parallel('Создание заказа', () => {
 		expect(orderPartnerUser).toEqual(createOrderInfo.partnerUser)
 		// Проверка контактов в карточке заказа
 		const orderPhone = await (await orderPage.phone).innerText()
-		expect(orderPhone).toEqual(createOrderInfo.phone)
 		const orderEmail = await (await orderPage.email).innerText()
-		expect(orderEmail).toEqual(createOrderInfo.email)
 		const orderTelegram = await (await orderPage.telegram).innerText()
-		expect(orderTelegram).toEqual(createOrderInfo.telegram)
 		const orderVk = await (await orderPage.vk).innerText()
-		expect(orderVk).toEqual(createOrderInfo.vk)
 		const orderInstagram = await (await orderPage.instagram).innerText()
+		expect(orderPhone).toEqual(createOrderInfo.phone)
+		expect(orderEmail).toEqual(createOrderInfo.email)
+		expect(orderTelegram).toEqual(createOrderInfo.telegram)
+		expect(orderVk).toEqual(createOrderInfo.vk)
 		expect(orderInstagram).toEqual(createOrderInfo.instagram)
 		// Проверка дополнительных параметров
-		
+		const orderLayout = await (await orderPage.layoutField).innerText()
+		const orderVolume = await (await orderPage.volumeField).innerText()
+		const orderOversized = await (await orderPage.oversizedField).innerText()
+		const orderOffset = await (await orderPage.offsetField).innerText()
+		const orderAdSource = await (await orderPage.adSourceField).innerText()
+		const orderSource = await (await orderPage.sourceField).innerText()
+		expect(orderLayout).toEqual(createOrderInfo.layout)
+		expect(orderVolume).toEqual(createOrderInfo.volume)
+		expect(orderOversized).toEqual(createOrderInfo.oversized)
+		expect(orderOffset).toEqual(createOrderInfo.offset)
+		expect(orderAdSource).toEqual(createOrderInfo.adSource)
+		expect(orderSource).toEqual(createOrderInfo.source)
 	})
 
 	test("Проверка кнопки копирования в буфер обмена", async ({ page }) => {
