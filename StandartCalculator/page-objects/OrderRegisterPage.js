@@ -23,6 +23,7 @@ export class OrderRegisterPage {
 
       // Локаторы для кнопок
       this.createOrderButton = page.locator('div#__order-filters-btns a:has-text("Новый заказ")')
+      this.openCalcButton = page.locator('div#__order-filters-btns a:has-text("Калькулятор")')
 
       // Локаторы из блока "Основное"
       this.mainBlockFields = page.locator('div#filter-block-general span.select2-selection')
@@ -231,7 +232,7 @@ export class OrderRegisterPage {
       await expect(this.optionList.first()).toBeVisible()
       await this.optionList.first().waitFor()
       await this.optionList.filter({ hasText: filtersInfo.orderStatus }).click()
-     
+
       await this.submitButton.waitFor()
       await this.submitButton.click({ force: true })
       await this.page.waitForLoadState('load')
@@ -795,7 +796,6 @@ export class OrderRegisterPage {
       if (await this.deleteTemplateButton.count() === 0) {
          await this.createTemplate()
          await this.openPopUpFiltersButton.click()
-         console.log('Первый сценарий')
       }
 
       if (await this.deleteTemplateButton.count() >= 1 && await this.deleteTemplateButton.count() < 5) {
@@ -808,7 +808,6 @@ export class OrderRegisterPage {
             await this.saveTempalePopupInput.fill(filtersInfo.templateName)
             await expect(this.saveTempalePopupInput).toHaveValue(filtersInfo.templateName)
             await this.saveTempalePopupSaveButton.click()
-            console.log('Второй сценарий')
             await this.openPopUpFiltersButton.click()
          }
       }
@@ -817,7 +816,6 @@ export class OrderRegisterPage {
          await this.saveTemplateButton.waitFor()
          await this.saveTemplateButton.click()
          await expect(this.page.locator('div.alert.alert-warning:has-text("Превышен лимит")')).toBeVisible()
-         console.log('Третий сценарий')
       }
    }
 
@@ -826,5 +824,11 @@ export class OrderRegisterPage {
       await this.createOrderButton.click()
       await this.page.waitForURL('/order/create')
       await expect(this.page).toHaveURL('/order/create');
+   }
+
+   clickOnOpenCalcButton = async () => {
+      await this.openCalcButton.waitFor()
+      await this.openCalcButton.click()
+      await this.page.waitForURL('/calculator')
    }
 }

@@ -1,14 +1,30 @@
 import { expect } from "@playwright/test"
+import { helpers } from "../utils/helpers"
+import { filtersInfo } from "../data/filtersInfo"
+import { createOrderInfo } from "../data/createOrderInfo"
 
 export class OrderPage {
    constructor(page) {
       this.page = page
+
+      // Общие локаторы
+      this.optionList = page.locator('ul.select2-results__options li')
+      this.successAlertCopyText = page.locator('div[role="alert"]').filter({ hasText: 'Данные скопированы в буфер обмена' })
+      // Поп-ап срочности
+      this.popUp = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
+      this.popUpSubmitButton = this.popUp.locator('button.bootbox-accept')
 
       // Хлебные крошки
       this.headerTitle = page.locator('header span.page-header__title')
       // Блок с номером заказа и действиями
       this.expressSelect = page.locator('select[data-select2-id="custom_express"]')
       this.expressField = page.locator('span[aria-labelledby*="select2-custom_express"]')
+      // Доп. номер
+      this.additionalNumberField = page.locator('div:has(select[name="additional_number[]"]) > span')
+      this.additionalNumberSelect = page.locator('select[name="additional_number[]"]')
+      this.additionalNumberInput = page.locator('input[aria-controls*="select2-additional_number"]')
+      this.additionalNumber = page.locator('li[title="Test123123123"]')
+
 
       // Заказчик
       this.partner = page.locator('span[id*="select2-partner_id"]')
@@ -50,4 +66,27 @@ export class OrderPage {
 
    }
 
+   enterAdditionalNumber = async () => {
+      await this.additionalNumberField.waitFor()
+      await this.additionalNumberField.click()
+      await this.additionalNumberInput.fill(createOrderInfo.additionalNumber)
+      await this.optionList.filter({ hasText: createOrderInfo.additionalNumber }).click()
+   }
+
+   clickOnAdditionalNunber = async () => {
+      await this.additionalNumber.waitFor()
+      await this.additionalNumber.click()
+      await helpers.checkClipboardText(this.page, (await (this.additionalNumber).innerText()).slice(1))
+      await expect(this.successAlertCopyText).toBeVisible()
+   }
+
+   selectExpress = async () => {
+      await this.expressField.waitFor()
+      await this.expressField.click()
+      await this.optionList.filter({ hasText: 'Срочность 10' }).click()
+      expect(createOrderInfo.express).toBe(await this.expressField.innerText())
+      expect(this.popUp).toBeVisible()
+      await this.popUpSubmitButton.click()
+      expect(this.popUp).not.toBeVisible()
+   }
 }

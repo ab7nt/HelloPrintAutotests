@@ -10,4 +10,6 @@ export const createOrderInfo = {
     telegram: '',
     vk: '',
     instagram: '',
+    additionalNumber: 'Test123123123',
+    express: 'Срочность 10',
 }

@@ -57,6 +57,6 @@ export const helpers = {
       });
 
       // Проверка, что текст в буфере обмена соответствует ожидаемому
-      await expect(clipboardText).toBe(textToCheck)
+      expect(clipboardText).toBe(textToCheck)
    }
 }

@@ -31,6 +31,9 @@ export class CalcPageTiles {
         this.calcTotalPrice = this.page.locator("input#ed6").nth(1)
         this.errorAlert = this.page.locator("div[role='alert']")
         this.urgentCategoryRadioButtons = this.page.locator("input[name='inlineRadioPriceOptions'] ~ label")
+
+        // Локаторы для кнопок
+        this.createOrderButton = page.locator('div.bottom-btn button').filter({ hasText: 'Создать заказ' })
     }
 
     selectGroupAndSubgroup = async () => {
@@ -208,5 +211,11 @@ export class CalcPageTiles {
         await this.calcTestOption1Item1.click()
         await this.calcPriceInputs.first().waitFor()
         helpers.checkingMultipleElementsForTheTypeNumber(this.calcPriceInputs)
+    }
+
+    clickOnCreateOrderButton = async () => {
+        await this.createOrderButton.waitFor()
+        await this.createOrderButton.click()
+        await this.page.waitForURL('/order/create')
     }
 }

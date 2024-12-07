@@ -6,6 +6,7 @@ import { CreateOrderPage } from "../page-objects/CreateOrderPage";
 import { LeftSideMenu } from "../page-objects/LeftSideMenu";
 import { OrderPage } from "../page-objects/OrderPage";
 import { createOrderInfo } from "../data/createOrderInfo";
+import { CalcPageTiles } from "../page-objects/CalcPageTiles";
 import { helpers } from "../utils/helpers";
 
 describe.parallel('Создание заказа', () => {
@@ -99,6 +100,24 @@ describe.parallel('Создание заказа', () => {
 		expect(orderOffset).toEqual(createOrderInfo.offset)
 		expect(orderAdSource).toEqual(createOrderInfo.adSource)
 		expect(orderSource).toEqual(createOrderInfo.source)
+	})
+
+	test("Создание заказа из реестра заказов через кнопку Калькулятор", async ({ page }) => {
+		const orderRegisterPage = new OrderRegisterPage(page)
+		const createOrderPage = new CreateOrderPage(page)
+		const calcPageTiles = new CalcPageTiles(page)
+
+		// Нажатие на кнопку "Калькулятор" в реестре заказов
+		await orderRegisterPage.clickOnOpenCalcButton()
+
+		//
+		await calcPageTiles.clickOnCreateOrderButton()
+
+		//
+		await createOrderPage.selectPartner()
+		await createOrderPage.clickOnNewOrderButton()
+
+		await page.pause()
 	})
 
 	test("Проверка кнопки копирования в буфер обмена", async ({ page }) => {
