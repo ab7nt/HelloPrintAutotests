@@ -5,6 +5,7 @@ import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
 import { CreateOrderPage } from "../page-objects/CreateOrderPage";
 import { OrderPage } from "../page-objects/OrderPage";
 import { createOrderInfo } from "../data/createOrderInfo";
+import { orderInfo } from "../data/orderInfo";
 
 describe.parallel('Функции общей панели для большинства вкладок заказа', () => {
     // Настройки
@@ -75,5 +76,34 @@ describe.parallel('Функции общей панели для большин�
         await page.reload()
         await page.waitForLoadState('networkidle')
         expect('Да').toBe(await orderPage.expressField.innerText()) //Пока проверка идёт на Да", так как заказ создаётся 
+    })
+
+    test('Установить заказу каждый статус', async ({ page }) => {
+        const orderRegisterPage = new OrderRegisterPage(page)
+        const createOrderPage = new CreateOrderPage(page)
+        const orderPage = new OrderPage(page)
+
+        // Нажатие на кнопку "Новый заказ" в реестре заказов
+        await orderRegisterPage.clickOnNewOrderButton()
+
+        // Выбор контрагента и представителя
+        await createOrderPage.selectPartner()
+        await createOrderPage.selectPartnerUser()
+
+        // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        await createOrderPage.clickOnNewOrderButton()
+
+        // Выбоор статусов кроме "В работе" и "Отменён"
+        await page.waitForLoadState('networkidle')
+        await orderPage.selectOrderStatus(orderInfo.statusIssued)
+        await orderPage.selectOrderStatus(orderInfo.statusReadyToSent)
+        await orderPage.selectOrderStatus(orderInfo.statusReadyToIssued)
+        await orderPage.selectOrderStatus(orderInfo.statusIssued)
+        await orderPage.selectOrderStatus(orderInfo.statusClosed)
+        await orderPage.selectOrderStatus(orderInfo.statusNew)
+
+
+
+        await page.pause()
     })
 })

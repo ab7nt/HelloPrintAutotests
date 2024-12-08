@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test"
 import { helpers } from "../utils/helpers"
-import { filtersInfo } from "../data/filtersInfo"
 import { createOrderInfo } from "../data/createOrderInfo"
+
 
 export class OrderPage {
    constructor(page) {
@@ -10,6 +10,9 @@ export class OrderPage {
       // Общие локаторы
       this.optionList = page.locator('ul.select2-results__options li')
       this.successAlertCopyText = page.locator('div[role="alert"]').filter({ hasText: 'Данные скопированы в буфер обмена' })
+      this.successAlertSaveChanges = page.locator('div[role="alert"]').filter({ hasText: ' Информация о заказе успешно обновлена' })
+
+
       // Поп-ап срочности
       this.popUp = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
       this.popUpSubmitButton = this.popUp.locator('button.bootbox-accept')
@@ -24,6 +27,11 @@ export class OrderPage {
       this.additionalNumberSelect = page.locator('select[name="additional_number[]"]')
       this.additionalNumberInput = page.locator('input[aria-controls*="select2-additional_number"]')
       this.additionalNumber = page.locator('li[title="Test123123123"]')
+      // Статус заказа
+      this.orderStatusField = page.locator('div.status-container span[aria-labelledby*="select2-status_id"]')
+      this.orderStatusSelect = page.locator('select[name="status_id"]')
+
+
 
 
       // Заказчик
@@ -88,5 +96,16 @@ export class OrderPage {
       expect(this.popUp).toBeVisible()
       await this.popUpSubmitButton.click()
       expect(this.popUp).not.toBeVisible()
+   }
+
+   selectOrderStatus = async (status) => {
+      await this.orderStatusField.waitFor()
+      await this.orderStatusField.click()
+      await this.optionList.filter({ hasText: status }).click()
+      await expect(this.successAlertSaveChanges).toBeVisible()
+      expect(await this.orderStatusField.innerText()).toBe(status)
+      await this.page.reload()
+      await this.page.waitForLoadState('networkidle')
+      expect(await this.orderStatusField.innerText()).toBe(status)
    }
 }
