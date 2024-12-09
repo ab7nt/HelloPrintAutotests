@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test"
 import { helpers } from "../utils/helpers"
 import { createOrderInfo } from "../data/createOrderInfo"
-
+import { orderInfo } from "../data/orderInfo"
 
 export class OrderPage {
    constructor(page) {
@@ -10,12 +10,19 @@ export class OrderPage {
       // Общие локаторы
       this.optionList = page.locator('ul.select2-results__options li')
       this.successAlertCopyText = page.locator('div[role="alert"]').filter({ hasText: 'Данные скопированы в буфер обмена' })
-      this.successAlertSaveChanges = page.locator('div[role="alert"]').filter({ hasText: ' Информация о заказе успешно обновлена' })
+      this.successAlertSaveChanges = page.locator('div[role="alert"]').filter({ hasText: 'Информация о заказе успешно обновлена' })
+      this.openHistoryTabButton = page.locator('span.open-history-tab')
 
-
-      // Поп-ап срочности
-      this.popUp = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
-      this.popUpSubmitButton = this.popUp.locator('button.bootbox-accept')
+      // Поп-апы
+      // Срочность
+      this.popUpExpress = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
+      this.popUpExpressSubmitButton = this.popUpExpress.locator('button.bootbox-accept')
+      // Причина отмены
+      this.popUpCancel = page.locator('div.modal-dialog').filter({ hasText: 'Укажите причину отмены заказа' })
+      this.popUpCancelReasonButtons = this.popUpCancel.locator('div.reason_button')
+      this.popUpTitleReasonForCancellation = this.popUpCancel.locator('h3').filter({ hasText: orderInfo.reasonForCancellation })
+      this.popUpCancelComment = this.popUpCancel.locator('textarea[name="reason_cancellation"]')
+      this.popUpCancelSubmitButton = this.popUpCancel.locator('button#saveBtn')
 
       // Хлебные крошки
       this.headerTitle = page.locator('header span.page-header__title')
@@ -30,9 +37,6 @@ export class OrderPage {
       // Статус заказа
       this.orderStatusField = page.locator('div.status-container span[aria-labelledby*="select2-status_id"]')
       this.orderStatusSelect = page.locator('select[name="status_id"]')
-
-
-
 
       // Заказчик
       this.partner = page.locator('span[id*="select2-partner_id"]')
@@ -93,9 +97,9 @@ export class OrderPage {
       await this.expressField.click()
       await this.optionList.filter({ hasText: 'Срочность 10' }).click()
       expect(createOrderInfo.express).toBe(await this.expressField.innerText())
-      expect(this.popUp).toBeVisible()
-      await this.popUpSubmitButton.click()
-      expect(this.popUp).not.toBeVisible()
+      expect(this.popUpExpress).toBeVisible()
+      await this.popUpExpressSubmitButton.click()
+      expect(this.popUpExpress).not.toBeVisible()
    }
 
    selectOrderStatus = async (status) => {
@@ -104,8 +108,60 @@ export class OrderPage {
       await this.optionList.filter({ hasText: status }).click()
       await expect(this.successAlertSaveChanges).toBeVisible()
       expect(await this.orderStatusField.innerText()).toBe(status)
-      await this.page.reload()
+      // await this.page.reload()
       await this.page.waitForLoadState('networkidle')
       expect(await this.orderStatusField.innerText()).toBe(status)
+   }
+
+   // selectCancelStatus = async (reason) => {
+   //    await this.orderStatusField.waitFor()
+   //    await this.orderStatusField.click()
+   //    await this.optionList.filter({ hasText: orderInfo.statusCanceled }).waitFor()
+   //    await this.optionList.filter({ hasText: orderInfo.statusCanceled }).click()
+   //    await expect(this.popUpCancel).toBeVisible()
+   //    await this.popUpCancelReasonButtons.filter({ hasText: reason }).click()
+   //    await expect(this.popUpTitleReasonForCancellation).toBeVisible()
+   //    await this.popUpCancelComment.waitFor()
+   //    await this.popUpCancelComment.fill(orderInfo.reasonForCancellation)
+   //    expect(this.popUpCancelComment).toHaveValue(orderInfo.reasonForCancellation)
+   //    await this.popUpCancelSubmitButton.click()
+   //    await expect(this.popUpTitleReasonForCancellation).not.toBeVisible()
+   //    await this.page.waitForLoadState('networkidle')
+   //    expect(await this.orderStatusField.innerText()).toBe(orderInfo.statusCanceled)
+   //    await this.openHistoryTabButton.waitFor()
+   //    await this.openHistoryTabButton.click()
+   //    expect(await this.page.locator('div#history').innerText()).toContain(`Причина: ${orderInfo.reasonForCancellation}`)
+   // }
+
+   selectCancelStatus = async () => {
+      await this.orderStatusField.waitFor()
+      await this.orderStatusField.click()
+      await this.optionList.filter({ hasText: orderInfo.statusCanceled }).waitFor()
+      await this.optionList.filter({ hasText: orderInfo.statusCanceled }).click()
+   }
+
+   selectReasonForCancellation = async (reason) => {
+      await expect(this.popUpCancel).toBeVisible()
+      await this.popUpCancelReasonButtons.filter({ hasText: reason }).click()
+   }
+
+   fillReasonForCancellation = async () => {
+      await expect(this.popUpTitleReasonForCancellation).toBeVisible()
+      await this.popUpCancelComment.waitFor()
+      await this.popUpCancelComment.fill(orderInfo.reasonForCancellation)
+      expect(this.popUpCancelComment).toHaveValue(orderInfo.reasonForCancellation)
+   }
+
+   clickOnSubmitButtonInPopUpCancel = async () => {
+      await this.popUpCancelSubmitButton.click()
+      await expect(this.popUpTitleReasonForCancellation).not.toBeVisible()
+      await this.page.waitForLoadState('networkidle')
+      expect(await this.orderStatusField.innerText()).toBe(orderInfo.statusCanceled)
+   }
+
+   clickOnHistoryButton = async () => {
+      await this.openHistoryTabButton.waitFor()
+      await this.openHistoryTabButton.click()
+      expect(await this.page.locator('div#history').innerText()).toContain(`Причина: ${orderInfo.reasonForCancellation}`)
    }
 }

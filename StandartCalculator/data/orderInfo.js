@@ -5,4 +5,6 @@ export const orderInfo = {
     statusReadyToIssued: 'Заказ - Готов к выдаче',
     statusIssued: 'Заказ - Выдан',
     statusClosed: 'Заказ - Закрыт',
+    statusCanceled: 'Заказ - Отменен',
+    reasonForCancellation: 'Тестовый заказ',
 }

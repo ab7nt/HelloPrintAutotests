@@ -47,7 +47,7 @@ describe.parallel('Функции общей панели для большин�
         // Клик по доп. номеру и проверка скопированного текста 
         await orderPage.clickOnAdditionalNunber()
 
-        // Перезагрузка стракницы и проверка доп. номера (за вычетом символа "х" вначале)
+        // Перезагрузка страницы и проверка доп. номера (за вычетом символа "х" вначале)
         await page.reload()
         await page.waitForLoadState('networkidle')
         expect(createOrderInfo.additionalNumber).toBe((await orderPage.additionalNumber.innerText()).slice(1))
@@ -101,9 +101,31 @@ describe.parallel('Функции общей панели для большин�
         await orderPage.selectOrderStatus(orderInfo.statusIssued)
         await orderPage.selectOrderStatus(orderInfo.statusClosed)
         await orderPage.selectOrderStatus(orderInfo.statusNew)
+    })
 
+    test('Установить заказу статус "Отменён"', async ({ page }) => {
+        const orderRegisterPage = new OrderRegisterPage(page)
+        const createOrderPage = new CreateOrderPage(page)
+        const orderPage = new OrderPage(page)
 
+        // Нажатие на кнопку "Новый заказ" в реестре заказов
+        await orderRegisterPage.clickOnNewOrderButton()
 
-        await page.pause()
+        // Выбор контрагента и представителя
+        await createOrderPage.selectPartner()
+        await createOrderPage.selectPartnerUser()
+
+        // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        await createOrderPage.clickOnNewOrderButton()
+
+        // Выбор статуса "Отменён" с указанием причины
+        await page.waitForLoadState('networkidle')
+        await orderPage.selectCancelStatus()
+        await orderPage.selectReasonForCancellation(orderInfo.reasonForCancellation)
+        await orderPage.fillReasonForCancellation()
+        await orderPage.clickOnSubmitButtonInPopUpCancel()
+
+        // Перход на вкладку "История" и проверка наличия причины отмены
+        await orderPage.clickOnHistoryButton()
     })
 })
