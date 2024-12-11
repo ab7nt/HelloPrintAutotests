@@ -9,10 +9,9 @@ export class OrderRegisterPage {
       // Общие локаторы
       this.popUpFilters = page.locator('div#search-filters-block')
       this.popUpFiltersIsVisible = page.locator('div#search-filters-block.is-visible')
-      this.openPopUpFiltersButton = page.locator('button[data-target="#search-filters-block"]')
       this.optionList = page.locator('ul.select2-results__options li')
       this.submitButton = page.locator('button[type="submit"]')
-      this.rowsRegistryTable = page.locator('div.tabulator-row')
+
       this.selectedTags = page.locator('ul.selected-tags')
       this.dateTimePicker = page.locator('div.xdsoft_datetimepicker')
       this.saveTemplateButton = page.locator('button[id="save_filter_btn"]')
@@ -20,6 +19,20 @@ export class OrderRegisterPage {
       this.saveTempalePopupSaveButton = page.locator('div:has(h5:has-text("Введите название шаблона")) ~ div.modal-footer button.btn-success')
       this.deleteTemplateButton = page.locator('li.search-with-filters__filters-template i')
       this.deleteTemplateButtonConfirm = page.locator('div:has(h3:has-text("Вы уверены, что хотите удалить фильтр?")) ~ div.modal-footer button.bootbox-accept')
+
+      // Локаторы для блока поиска
+      this.searchField = page.locator('input#filter-search-input')
+      this.searchButton = page.locator('button[name="filter_order_mode"]')
+      this.resetAllFiltersButton = page.locator('div.cancel-search-button')
+      this.openPopUpFiltersButton = page.locator('button[data-target="#search-filters-block"]')
+
+      // Локаторы для таблицы
+      this.rowsRegistryTable = page.locator('div.tabulator-row')
+      this.iconTooltip = page.locator('div.icon-tooltip')
+      this.volumeIcon = this.rowsRegistryTable.locator('i.fa-cubes')
+      this.layoutIcon = this.rowsRegistryTable.locator('i.fa-scissors')
+      this.oversizedIcon = this.rowsRegistryTable.locator('i.fa-truck')
+      this.offsetIcon = this.rowsRegistryTable.locator('i.fa-print')
 
       // Локаторы для кнопок
       this.createOrderButton = page.locator('div#__order-filters-btns a:has-text("Новый заказ")')
@@ -36,7 +49,6 @@ export class OrderRegisterPage {
       this.managerFilterInput = page.locator('div#filter-block-general input[aria-controls*="select2-manager"]')
       this.optionListAfterFillManager = page.locator('ul[id*="select2-manager"] li')
       this.columnWithOrderManagers = page.locator('div[tabulator-field="manager_name"].tabulator-cell')
-      this.resetAllFiltersButton = page.locator('div.cancel-search-button')
       // Локаторы компании заказа
       this.companyFilterField = this.mainBlockFields.nth(2)
       this.companyFilterSelect = page.locator('div#filter-block-general select[name="company_id[]"]')
@@ -830,5 +842,45 @@ export class OrderRegisterPage {
       await this.openCalcButton.waitFor()
       await this.openCalcButton.click()
       await this.page.waitForURL('/calculator')
+   }
+
+   searchByOrderNumber = async (text) => {
+      await this.searchField.waitFor()
+      await this.searchField.fill(text)
+      expect(this.searchField).toHaveValue(text)
+      await this.searchButton.click()
+      await this.page.waitForLoadState('networkidle')
+   }
+
+   checkVolumeIcon = async () => {
+      expect(this.volumeIcon).toBeVisible()
+      await this.volumeIcon.waitFor()
+      await this.volumeIcon.hover()
+      await this.iconTooltip.waitFor()
+      expect(await this.iconTooltip.innerText()).toBe('Объёмный заказ')
+   }
+
+   checkLayoutIcon = async () => {
+      expect(this.volumeIcon).toBeVisible()
+      await this.layoutIcon.waitFor()
+      await this.layoutIcon.hover()
+      await this.iconTooltip.waitFor()
+      expect(await this.iconTooltip.innerText()).toBe('Правки по макету в заказе')
+   }
+
+   checkOversizedIcon = async () => {
+      expect(this.volumeIcon).toBeVisible()
+      await this.oversizedIcon.waitFor()
+      await this.oversizedIcon.hover()
+      await this.iconTooltip.waitFor()
+      expect(await this.iconTooltip.innerText()).toBe('Крупногабаритный заказ')
+   }
+
+   checkVOffsetIcon = async () => {
+      expect(this.volumeIcon).toBeVisible()
+      await this.offsetIcon.waitFor()
+      await this.offsetIcon.hover()
+      await this.iconTooltip.waitFor()
+      expect(await this.iconTooltip.innerText()).toBe('Офсетная печать')
    }
 }

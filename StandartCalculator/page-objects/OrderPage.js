@@ -153,4 +153,32 @@ export class OrderPage {
       await this.openHistoryTabButton.click()
       expect(await this.page.locator('div#history').innerText()).toContain(`Причина: ${orderInfo.reasonForCancellation}`)
    }
+
+   selectYesInToLayoutParameter = async () => {
+      await this.layoutField.waitFor()
+      await this.layoutField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.layoutSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectYesInToVolumeParameter = async () => {
+      await this.volumeField.waitFor()
+      await this.volumeField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.volumeSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectYesInToOversizedParameter = async () => {
+      await this.oversizedField.waitFor()
+      await this.oversizedField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.oversizedSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   selectYesInToOffsetParameter = async () => {
+      await this.offsetField.waitFor()
+      await this.offsetField.click()
+      await this.optionList.filter({ hasText: 'Да' }).click()
+      expect(await this.offsetSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
 }

@@ -145,7 +145,7 @@ describe.parallel('Функции общей панели для большин�
         await leftSideMenu.goToTheCompanySettingsPage()
         await companiesListPage.clickOnCompanyName()
 
-        // Установка ограничения для статуса "В работе"
+        // Установка ограничения для статуса "Заказ - Выполнен | Готов к отправке"
         await companySettingsPage.goToTheLimitsTab()
         await companySettingsPage.addNewLimitForOrder()
 
@@ -170,10 +170,55 @@ describe.parallel('Функции общей панели для большин�
         await companySettingsPage.goToTheLimitsTab()
         await companySettingsPage.deleteLimits()
 
-        // Возврат в заказ и повторная попытка выбора статуса ""
+        // Возврат в заказ и повторная попытка выбора статуса "Заказ - Выполнен | Готов к отправке"
         await page.goto(`/order/${orderId}/edit`, { waitUntil: 'networkidle' })
         await orderPage.selectOrderStatusAndChecks(orderInfo.statusReadyToSent)
+    })
 
-        await page.pause()
+    test('Добавление доп. параметров в карточке заказа', async ({ page }) => {
+        const orderRegisterPage = new OrderRegisterPage(page)
+        const createOrderPage = new CreateOrderPage(page)
+        const orderPage = new OrderPage(page)
+
+        // Нажатие на кнопку "Новый заказ" в реестре заказов
+        await orderRegisterPage.clickOnNewOrderButton()
+
+        // Выбор контрагента и представителя
+        await createOrderPage.selectPartner()
+
+        // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        await createOrderPage.clickOnNewOrderButton()
+
+        await page.waitForLoadState('networkidle')
+        const orderId = page.url().match(/\d+/)[0]
+
+        // Проверка, что в доп. параметрах выбрано "Нет"
+        expect(await orderPage.layoutField.innerText()).toBe('Нет')
+        expect(await orderPage.volumeField.innerText()).toBe('Нет')
+        expect(await orderPage.oversizedField.innerText()).toBe('Нет')
+        expect(await orderPage.offsetField.innerText()).toBe('Нет')
+
+        // Выбор "Да" в дополнительных параметрах
+        await orderPage.selectYesInToLayoutParameter()
+        await orderPage.selectYesInToVolumeParameter()
+        await orderPage.selectYesInToOversizedParameter()
+        await orderPage.selectYesInToOffsetParameter()
+
+        // Поиск созданного заказа в реестре заказов
+        await page.goto('/order', { waitUntil: 'load' })
+        await orderRegisterPage.searchByOrderNumber(orderId)
+
+        // Проверка иконок справа от номера заказа в реестре заказов
+        await orderRegisterPage.checkVolumeIcon()
+        await orderRegisterPage.checkLayoutIcon()
+        await orderRegisterPage.checkOversizedIcon()
+        await orderRegisterPage.checkVOffsetIcon()
+
+        // Возврат в карточку заказа и проверка, что в дополнительных параметрах указано "Да"
+        await page.goto(`/order/${orderId}/edit`, { waitUntil: 'networkidle' })
+        expect(await orderPage.layoutField.innerText()).toBe('Да')
+        expect(await orderPage.volumeField.innerText()).toBe('Да')
+        expect(await orderPage.oversizedField.innerText()).toBe('Да')
+        expect(await orderPage.offsetField.innerText()).toBe('Да')
     })
 })
