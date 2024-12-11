@@ -7,6 +7,7 @@ import { OrderPage } from "../page-objects/OrderPage";
 import { LeftSideMenu } from "../page-objects/LeftSideMenu";
 import { createOrderInfo } from "../data/createOrderInfo";
 import { orderInfo } from "../data/orderInfo";
+import { settings } from "../data/settings";
 import { CompaniesListPage } from "../page-objects/CompaniesListPage";
 import { CompanySettingsPage } from "../page-objects/CompanySettingsPage copy";
 
@@ -19,7 +20,7 @@ describe.parallel('Функции общей панели для большин�
         const chooseCompanyPage = new ChooseCompanyPage(page)
 
         // Разрешение на использование буфера обмена
-        await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'https://dev.helloprint.ru/' });
+        await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
 
         // Открытие страницы
         await page.goto("/order")
@@ -221,4 +222,6 @@ describe.parallel('Функции общей панели для большин�
         expect(await orderPage.oversizedField.innerText()).toBe('Да')
         expect(await orderPage.offsetField.innerText()).toBe('Да')
     })
+
+
 })

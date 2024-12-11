@@ -18,7 +18,7 @@ describe.parallel('Создание заказа', () => {
 		const chooseCompanyPage = new ChooseCompanyPage(page)
 
 		// Разрешение на использование буфера обмена
-		await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'https://dev.helloprint.ru/' });
+		await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
 
 		// Открытие страницы
 		await page.goto("/order")
