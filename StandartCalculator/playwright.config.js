@@ -1,5 +1,6 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
+import { settings } from './data/settings';
 
 /**
  * Read environment variables from file.
@@ -25,7 +26,7 @@ module.exports = defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     headless: true, // Запуск тестов без интерфейса
-    baseURL: 'https://dev.helloprint.ru', // Base URL to use in actions like `await page.goto('/')`
+    baseURL: settings.env, // Base URL to use in actions like `await page.goto('/')`
     trace: 'on-first-retry', // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
     screenshot: 'only-on-failure', // Делать скриншот только в случае ошибки
   },
