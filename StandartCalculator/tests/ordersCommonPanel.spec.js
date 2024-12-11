@@ -4,12 +4,15 @@ import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
 import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
 import { CreateOrderPage } from "../page-objects/CreateOrderPage";
 import { OrderPage } from "../page-objects/OrderPage";
+import { LeftSideMenu } from "../page-objects/LeftSideMenu";
 import { createOrderInfo } from "../data/createOrderInfo";
 import { orderInfo } from "../data/orderInfo";
+import { CompaniesListPage } from "../page-objects/CompaniesListPage";
+import { CompanySettingsPage } from "../page-objects/CompanySettingsPage copy";
 
 describe.parallel('Функции общей панели для большинства вкладок заказа', () => {
     // Настройки
-    test.setTimeout(90 * 1000)
+    test.setTimeout(180 * 1000)
 
     test.beforeEach(async ({ page, context }) => {
         const loginPage = new LoginPage(page)
@@ -95,12 +98,12 @@ describe.parallel('Функции общей панели для большин�
 
         // Выбоор статусов кроме "В работе" и "Отменён"
         await page.waitForLoadState('networkidle')
-        await orderPage.selectOrderStatus(orderInfo.statusIssued)
-        await orderPage.selectOrderStatus(orderInfo.statusReadyToSent)
-        await orderPage.selectOrderStatus(orderInfo.statusReadyToIssued)
-        await orderPage.selectOrderStatus(orderInfo.statusIssued)
-        await orderPage.selectOrderStatus(orderInfo.statusClosed)
-        await orderPage.selectOrderStatus(orderInfo.statusNew)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusIssued)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusReadyToSent)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusReadyToIssued)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusIssued)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusClosed)
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusNew)
     })
 
     test('Установить заказу статус "Отменён"', async ({ page }) => {
@@ -127,5 +130,50 @@ describe.parallel('Функции общей панели для большин�
 
         // Перход на вкладку "История" и проверка наличия причины отмены
         await orderPage.clickOnHistoryButton()
+    })
+
+    test('Проверка работы ограничений на смену статуса', async ({ page }) => {
+        const orderRegisterPage = new OrderRegisterPage(page)
+        const createOrderPage = new CreateOrderPage(page)
+        const orderPage = new OrderPage(page)
+        const leftSideMenu = new LeftSideMenu(page)
+        const companiesListPage = new CompaniesListPage(page)
+        const companySettingsPage = new CompanySettingsPage(page)
+
+        // Переход в карточку компании
+        await page.waitForLoadState('load')
+        await leftSideMenu.goToTheCompanySettingsPage()
+        await companiesListPage.clickOnCompanyName()
+
+        // Установка ограничения для статуса "В работе"
+        await companySettingsPage.goToTheLimitsTab()
+        await companySettingsPage.addNewLimitForOrder()
+
+        // Создание заказа
+        await page.goto('/order/create')
+        await createOrderPage.selectPartner()
+        await createOrderPage.clickOnNewOrderButton()
+
+        // Выбор статуса "Заказ - Выполнен | Готов к отправке"
+        await page.waitForLoadState('networkidle')
+        const orderId = page.url().match(/\d+/)[0]
+        await orderPage.selectOrderStatus(orderInfo.statusReadyToSent)
+        await orderPage.popUpLimits.waitFor({ state: 'visible' })
+
+        // Проверка, что в поп-апе есть название статуса (только название, без подстроки "Заказ -") и текс ограничения
+        expect(await orderPage.popUpLimits.innerText()).toContain(orderInfo.statusReadyToSent.split(" - ")[1])
+        expect(await orderPage.popUpLimits.innerText()).toContain('комментарий к выдаче')
+
+        // Возврат в карточку компании и удаление ограничения
+        await leftSideMenu.goToTheCompanySettingsPage()
+        await companiesListPage.clickOnCompanyName()
+        await companySettingsPage.goToTheLimitsTab()
+        await companySettingsPage.deleteLimits()
+
+        // Возврат в заказ и повторная попытка выбора статуса ""
+        await page.goto(`/order/${orderId}/edit`, { waitUntil: 'networkidle' })
+        await orderPage.selectOrderStatusAndChecks(orderInfo.statusReadyToSent)
+
+        await page.pause()
     })
 })

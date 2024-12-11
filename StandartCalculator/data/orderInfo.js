@@ -7,4 +7,5 @@ export const orderInfo = {
     statusClosed: 'Заказ - Закрыт',
     statusCanceled: 'Заказ - Отменен',
     reasonForCancellation: 'Тестовый заказ',
+    limit: 'Добавлен комментарий к выдаче',
 }

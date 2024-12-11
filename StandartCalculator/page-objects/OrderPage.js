@@ -23,6 +23,9 @@ export class OrderPage {
       this.popUpTitleReasonForCancellation = this.popUpCancel.locator('h3').filter({ hasText: orderInfo.reasonForCancellation })
       this.popUpCancelComment = this.popUpCancel.locator('textarea[name="reason_cancellation"]')
       this.popUpCancelSubmitButton = this.popUpCancel.locator('button#saveBtn')
+      // Ограничения
+      this.popUpLimits = page.locator('div.modal-dialog').filter({ hasText: 'Заказ не готов к получению статуса' }).first()
+      this.popUpLimitsTitle = page.locator('div.modal-dialog').locator('h4')
 
       // Хлебные крошки
       this.headerTitle = page.locator('header span.page-header__title')
@@ -106,32 +109,18 @@ export class OrderPage {
       await this.orderStatusField.waitFor()
       await this.orderStatusField.click()
       await this.optionList.filter({ hasText: status }).click()
+   }
+
+   selectOrderStatusAndChecks = async (status) => {
+      await this.orderStatusField.waitFor()
+      await this.orderStatusField.click()
+      await this.optionList.filter({ hasText: status }).click()
       await expect(this.successAlertSaveChanges).toBeVisible()
       expect(await this.orderStatusField.innerText()).toBe(status)
       // await this.page.reload()
       await this.page.waitForLoadState('networkidle')
       expect(await this.orderStatusField.innerText()).toBe(status)
    }
-
-   // selectCancelStatus = async (reason) => {
-   //    await this.orderStatusField.waitFor()
-   //    await this.orderStatusField.click()
-   //    await this.optionList.filter({ hasText: orderInfo.statusCanceled }).waitFor()
-   //    await this.optionList.filter({ hasText: orderInfo.statusCanceled }).click()
-   //    await expect(this.popUpCancel).toBeVisible()
-   //    await this.popUpCancelReasonButtons.filter({ hasText: reason }).click()
-   //    await expect(this.popUpTitleReasonForCancellation).toBeVisible()
-   //    await this.popUpCancelComment.waitFor()
-   //    await this.popUpCancelComment.fill(orderInfo.reasonForCancellation)
-   //    expect(this.popUpCancelComment).toHaveValue(orderInfo.reasonForCancellation)
-   //    await this.popUpCancelSubmitButton.click()
-   //    await expect(this.popUpTitleReasonForCancellation).not.toBeVisible()
-   //    await this.page.waitForLoadState('networkidle')
-   //    expect(await this.orderStatusField.innerText()).toBe(orderInfo.statusCanceled)
-   //    await this.openHistoryTabButton.waitFor()
-   //    await this.openHistoryTabButton.click()
-   //    expect(await this.page.locator('div#history').innerText()).toContain(`Причина: ${orderInfo.reasonForCancellation}`)
-   // }
 
    selectCancelStatus = async () => {
       await this.orderStatusField.waitFor()
