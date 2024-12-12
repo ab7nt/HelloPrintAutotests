@@ -6,12 +6,6 @@ import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 
 // const calculatorDisplayType = "плитки"
 
-// test.afterEach(async ({ page }, testInfo) => {
-//   if (testInfo.status === "passed") {
-//     await page.screenshot({ path: 'screenshot.png' })
-//   }
-// })
-
 test('Calculation in a dropdowns standard calculator', async ({ page }) => {
   // Settings
   test.setTimeout(30 * 1000)

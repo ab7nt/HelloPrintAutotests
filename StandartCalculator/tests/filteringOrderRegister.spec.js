@@ -23,158 +23,158 @@ describe('Проверка фильтрации реестра заказов', 
       await orderRegisterPage.openPopUpFilter()
    })
 
-   describe('Проверка фильтров из блока "Основное"', () => {
-      test('Проверка фильтра "Статус заказа"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Основное"', () => {
+      test('Заказы. Проверка фильтра "Статус заказа"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByStatusOrder()
       });
-      test('Проверка фильтра "Менеджер заказа"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Менеджер заказа"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByManager()
       });
-      test('Проверка фильтра "Компания"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Компания"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByCompany()
       });
-      test('Проверка фильтра "Продукт"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Продукт"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByProduct()
       });
    })
 
-   describe('Проверка фильтров из блока "Маршрут и срочность"', () => {
-      test('Проверка фильтра "Участок"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Маршрут и срочность"', () => {
+      test('Заказы. Проверка фильтра "Участок"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderStageDepartment()
       });
-      test('Проверка фильтра "Срочность"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Срочность"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderExpress()
       });
-      test('Проверка фильтра "Исполнитель"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Исполнитель"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderExecutor()
       });
    })
 
-   describe('Проверка фильтров из блока "Даты и сроки"', () => {
-      test('Проверка фильтра "Заказ оформлен"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Даты и сроки"', () => {
+      test('Заказы. Проверка фильтра "Заказ оформлен"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderCreationDate()
       });
-      test('Проверка фильтра "Готовность спуска"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Готовность спуска"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderPrepressAt()
       });
-      test('Проверка фильтра "Готовность макета"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Готовность макета"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderLayoutAt()
       });
-      test('Проверка фильтра "Макет - Для дизайнеров"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Макет - Для дизайнеров"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderImpositionAt()
       });
-      test('Проверка фильтра "Готовность на производстве"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Готовность на производстве"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderProductionAt()
       });
-      test('Проверка фильтра "Выдача заказа"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Выдача заказа"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderDeliveryAt()
       });
-      test('Проверка фильтра "Заказ закрыт"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Заказ закрыт"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOrderCompletedAt()
       });
    })
 
-   describe('Проверка фильтров из блока "Оплаты и документы"', () => {
-      test('Проверка фильтра "Статус оплаты', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Оплаты и документы"', () => {
+      test('Заказы. Проверка фильтра "Статус оплаты', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPaymentStatus()
       });
-      test('Проверка фильтра "Способ оплаты"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Способ оплаты"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPaymentType()
       });
-      test('Проверка фильтра "УПД оригинал"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "УПД оригинал"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByOriginalUpd()
       });
-      test('Проверка фильтра "Создан счет"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Создан счет"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByCreatedInvoice()
       });
-      test('Проверка фильтра "Создан УПД"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Создан УПД"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByCreatedUpd()
       });
-      test('Проверка фильтра "Поставщик (Наше юр. лицо)"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Поставщик (Наше юр. лицо)"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPaymentsPartnerCompany()
       });
    })
 
-   describe('Проверка фильтров из блока "Контрагенты"', () => {
-      test('Проверка фильтра "Контрагент"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Контрагенты"', () => {
+      test('Заказы. Проверка фильтра "Контрагент"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPartner()
       });
-      test('Проверка фильтра "Представитель"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Представитель"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPartnerUser()
       });
-      test('Проверка фильтра "Юридическое лицо контрагента"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Юридическое лицо контрагента"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByPartnerCompany()
       });
-      // test('Проверка фильтра "Тип клиента"', async ({ page }) => {
+      // test('Заказы. Проверка фильтра "Тип клиента"', async ({ page }) => {
       //    const orderRegisterPage = new OrderRegisterPage(page)
       //    await orderRegisterPage.()
       // });
-      test('Проверка фильтра "ИНН контрагента"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "ИНН контрагента"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByInn()
       });
    })
 
-   describe('Проверка фильтров из блока "Подряд"', () => {
-      test('Проверка фильтра "Добавлен подряд"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Подряд"', () => {
+      test('Заказы. Проверка фильтра "Добавлен подряд"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByContractorAdded()
       });
-      test('Проверка фильтра "Подрядчик"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Подрядчик"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByContractor()
       });
-      test('Проверка фильтра "Номер от подрядчика"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Номер от подрядчика"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByContractorNumber()
       });
-      test('Проверка фильтр "Дата поставки"', async ({ page }) => {
+      test('Заказы. Проверка фильтр "Дата поставки"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByContractorDate()
       });
    })
 
-   describe('Проверка фильтров из блока "Остальное"', () => {
-      test('Проверка фильтра "Правки по макету"', async ({ page }) => {
+   describe('Заказы. Проверка фильтров из блока "Остальное"', () => {
+      test('Заказы. Проверка фильтра "Правки по макету"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByLayoutEdit()
       });
-      test('Проверка фильтра "Объёмный заказ"', async ({ page }) => {
+      test('Заказы. Проверка фильтра "Объёмный заказ"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByVolume()
       });
    })
 
 
-   describe('Проверка создания шаблона и фильтрации по нескольким фильтрам', () => {
-      test('Создание шаблона фильтров "Статус" и "Участок"', async ({ page }) => {
+   describe('Заказы. Проверка создания шаблона и фильтрации по нескольким фильтрам', () => {
+      test('Заказы. Создание шаблона фильтров "Статус" и "Участок"', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.filteringByFilterTemplate()
       })
-      test('Проверка лимита на создание шаблонов', async ({ page }) => {
+      test('Заказы. Проверка лимита на создание шаблонов', async ({ page }) => {
          const orderRegisterPage = new OrderRegisterPage(page)
          await orderRegisterPage.checkingTheTemplateLimit()
       })

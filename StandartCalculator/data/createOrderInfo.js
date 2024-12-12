@@ -11,5 +11,5 @@ export const createOrderInfo = {
     vk: '',
     instagram: '',
     additionalNumber: 'Test123123123',
-    express: 'Срочность 10',
+    express: 'Да',
 }

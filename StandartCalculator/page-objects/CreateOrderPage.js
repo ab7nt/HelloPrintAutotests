@@ -64,8 +64,8 @@ export class CreateOrderPage {
       this.layoutField = page.locator('span[aria-labelledby*="select2-is_layout"]')
       this.layoutSelect = page.locator('select[uitest="order-layout"]')
       // Срочность
-      this.expressField = page.locator('span[aria-labelledby*="select2-custom_express"]')
-      this.expressSelect = page.locator('select[id="custom_express"]')
+      this.expressField = page.locator('span[aria-labelledby*="select2-express"]')
+      this.expressSelect = page.locator('select[uitest="order-express"]')
       // Крупногабаритный
       this.oversizedField = page.locator('span[aria-labelledby*="select2-is_oversized"]')
       this.oversizedSelect = page.locator('select[uitest="order-oversized"]')
@@ -124,8 +124,8 @@ export class CreateOrderPage {
 
    selectExpress = async () => {
       await this.expressField.click()
-      await this.optionList.filter({ hasText: 'Срочность 10' }).click()
-      expect(await this.expressSelect.locator('option:checked').innerText()).toEqual('Срочность 10')
+      await this.optionList.filter({ hasText: createOrderInfo.express }).click()
+      expect(await this.expressSelect.locator('option:checked').innerText()).toEqual(createOrderInfo.express)
    }
 
    selectOversized = async () => {

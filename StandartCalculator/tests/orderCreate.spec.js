@@ -8,8 +8,9 @@ import { OrderPage } from "../page-objects/OrderPage";
 import { createOrderInfo } from "../data/createOrderInfo";
 import { CalcPageTiles } from "../page-objects/CalcPageTiles";
 import { helpers } from "../utils/helpers";
+import { settings } from "../data/settings"
 
-describe.parallel('Создание заказа', () => {
+describe('Создание заказа', () => {
 	// Настройки
 	test.setTimeout(90 * 1000)
 

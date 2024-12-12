@@ -11,7 +11,7 @@ import { settings } from "../data/settings";
 import { CompaniesListPage } from "../page-objects/CompaniesListPage";
 import { CompanySettingsPage } from "../page-objects/CompanySettingsPage copy";
 
-describe.parallel('Функции общей панели для большинства вкладок заказа', () => {
+describe('Функции общей панели для большинства вкладок заказа', () => {
     // Настройки
     test.setTimeout(180 * 1000)
 
@@ -176,7 +176,7 @@ describe.parallel('Функции общей панели для большин�
         await orderPage.selectOrderStatusAndChecks(orderInfo.statusReadyToSent)
     })
 
-    test('Добавление доп. параметров в карточке заказа', async ({ page }) => {
+    test('Добавление доп параметров в карточке заказа', async ({ page }) => {
         const orderRegisterPage = new OrderRegisterPage(page)
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
@@ -191,7 +191,9 @@ describe.parallel('Функции общей панели для большин�
         await createOrderPage.clickOnNewOrderButton()
 
         await page.waitForLoadState('networkidle')
-        const orderId = page.url().match(/\d+/)[0]
+        const orderId = page.url().match(/order\/(\d+)/)[1]
+        console.log(page.url())
+        console.log(orderId)
 
         // Проверка, что в доп. параметрах выбрано "Нет"
         expect(await orderPage.layoutField.innerText()).toBe('Нет')
