@@ -5,8 +5,11 @@ import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
 import { CreateOrderPage } from "../page-objects/CreateOrderPage";
 import { LeftSideMenu } from "../page-objects/LeftSideMenu";
 import { OrderPage } from "../page-objects/OrderPage";
-import { createOrderInfo } from "../data/createOrderInfo";
+import { CashierPage } from "../page-objects/CashierPage";
 import { CalcPageTiles } from "../page-objects/CalcPageTiles";
+import { OrderPageSpecification } from "../page-objects/OrderPageSpecification";
+import { addItemCashier } from "../data/addItemCashier"
+import { createOrderInfo } from "../data/createOrderInfo";
 import { helpers } from "../utils/helpers";
 import { settings } from "../data/settings"
 
@@ -22,7 +25,7 @@ describe('Создание заказа', () => {
 		await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
 
 		// Открытие страницы
-		await page.goto("/order")
+		await page.goto("/")
 		// Авторизация
 		await loginPage.enterUsernameAndPassword()
 		// Выбор компании
@@ -34,6 +37,9 @@ describe('Создание заказа', () => {
 		const createOrderPage = new CreateOrderPage(page)
 		const leftSideMenu = new LeftSideMenu(page)
 		const orderPage = new OrderPage(page)
+
+		// Переход на страницу реестра заказов
+		await leftSideMenu.goToTheOrderRegisterPage()
 
 		// Нажатие на кнопку "Новый заказ" в реестре заказов
 		await orderRegisterPage.clickOnNewOrderButton()
@@ -107,6 +113,10 @@ describe('Создание заказа', () => {
 		const orderRegisterPage = new OrderRegisterPage(page)
 		const createOrderPage = new CreateOrderPage(page)
 		const calcPageTiles = new CalcPageTiles(page)
+		const leftSideMenu = new LeftSideMenu(page)
+
+		// Переход на страницу реестра заказов
+		await leftSideMenu.goToTheOrderRegisterPage()
 
 		// Нажатие на кнопку "Калькулятор" в реестре заказов
 		await orderRegisterPage.clickOnOpenCalcButton()
@@ -122,11 +132,9 @@ describe('Создание заказа', () => {
 	})
 
 	test("Проверка кнопки копирования в буфер обмена", async ({ page }) => {
-		const orderRegisterPage = new OrderRegisterPage(page)
 		const createOrderPage = new CreateOrderPage(page)
 
-		// Нажатие на кнопку "Новый заказ" в реестре заказов
-		await orderRegisterPage.clickOnNewOrderButton()
+		await page.goto('/order/create')
 
 		// Выбор контрагента и представителя
 		await createOrderPage.selectPartner()
@@ -159,11 +167,9 @@ describe('Создание заказа', () => {
 	})
 
 	test("Проверка кнопки перехода в карточку", async ({ page, context }) => {
-		const orderRegisterPage = new OrderRegisterPage(page)
 		const createOrderPage = new CreateOrderPage(page)
 
-		// Нажатие на кнопку "Новый заказ" в реестре заказов
-		await orderRegisterPage.clickOnNewOrderButton()
+		await page.goto('/order/create')
 
 		// Выбор контрагента и представителя
 		await createOrderPage.selectPartner()
@@ -199,5 +205,36 @@ describe('Создание заказа', () => {
 		// Юр. лицо
 		await createOrderPage.clickOnOpenNewTabButtonAndChecks(
 			context, createOrderPage.legalEntityInNewTabButton, idForCheckLegalEntityUrl)
+	})
+
+	test("Создание заказа из рабочего места оператора", async ({ page, context }) => {
+		const cashierPage = new CashierPage(page)
+		const leftSideMenu = new LeftSideMenu(page)
+
+
+		// Переход в рабочее место оператора
+		await leftSideMenu.goToTheCashierPage()
+
+		// Добавление расчёта вручную и нажатие на кнопку "Создать заказ"
+		expect(await cashierPage.tableItems.count()).toBe(0)
+		await cashierPage.addNewItem()
+		expect(await cashierPage.tableItems.count()).toBe(1)
+		await cashierPage.clickOnCreateOrderButton()
+		await cashierPage.clickOnCreateButtonInCreateOrderPopup()
+
+		// Проверка информации на новой вкладке
+		const [newPage] = await Promise.all([
+			context.waitForEvent('page'),
+		]);
+		const orderPageSpecification = new OrderPageSpecification(newPage)
+		await newPage.waitForLoadState('load')
+		await newPage.waitForURL(/\/order\/\d+\/edit/)
+
+		await orderPageSpecification.navItemTabButton.click()
+		await orderPageSpecification.checkTableItemInfo(addItemCashier.name, addItemCashier.price, addItemCashier.qty)
+
+		await newPage.close()
+
+		await page.pause()
 	})
 })
