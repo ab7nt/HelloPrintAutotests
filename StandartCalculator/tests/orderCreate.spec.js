@@ -73,7 +73,7 @@ describe('Создание заказа', () => {
 		await createOrderPage.clickOnNewOrderButton()
 		await page.waitForLoadState('networkidle')
 
-		// Проверка параметров в блокес номером заказа и действиями
+		// Проверка параметров в блоке с номером заказа и действиями
 		// const orderExpress = await (await orderPage.expressField).innerText()
 		// expect(orderExpress).toEqual(createOrderInfo.express)
 

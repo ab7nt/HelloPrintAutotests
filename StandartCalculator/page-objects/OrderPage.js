@@ -13,6 +13,9 @@ export class OrderPage {
       this.successAlertSaveChanges = page.locator('div[role="alert"]').filter({ hasText: 'Информация о заказе успешно обновлена' })
       this.openHistoryTabButton = page.locator('span.open-history-tab')
 
+      // Хлебные крошки
+      this.headerTitle = page.locator('header span.page-header__title')
+
       // Поп-апы
       // Срочность
       this.popUpExpress = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
@@ -27,9 +30,8 @@ export class OrderPage {
       this.popUpLimits = page.locator('div.modal-dialog').filter({ hasText: 'Заказ не готов к получению статуса' }).first()
       this.popUpLimitsTitle = page.locator('div.modal-dialog').locator('h4')
 
-      // Хлебные крошки
-      this.headerTitle = page.locator('header span.page-header__title')
       // Блок с номером заказа и действиями
+      // Срочность
       this.expressSelect = page.locator('select[data-select2-id="custom_express"]')
       this.expressField = page.locator('span[aria-labelledby*="select2-custom_express"]')
       // Доп. номер
@@ -43,7 +45,9 @@ export class OrderPage {
 
       // Заказчик
       this.partner = page.locator('span[id*="select2-partner_id"]')
+      this.chooseUserPartnerButton = page.locator('a#add_partner_user_btn')
       this.partnerUser = page.locator('span[id*="select2-partner_user_id"]')
+      this.partnerUserSelect = page.locator('select[name="partner_user_id"]')
       this.phone = page.locator('span[id*="select2-partner_phone"]')
       this.email = page.locator('span[id*="select2-partner_email"]')
       this.telegram = page.locator('span[id*="select2-partner_telegram"]')
@@ -180,5 +184,15 @@ export class OrderPage {
       await this.offsetField.click()
       await this.optionList.filter({ hasText: 'Да' }).click()
       expect(await this.offsetSelect.locator('option:checked').innerText()).toEqual('Да')
+   }
+
+   chooseUserPartner = async () => {
+      await this.chooseUserPartnerButton.waitFor()
+      await this.chooseUserPartnerButton.click()
+      await this.partnerUser.waitFor()
+      await this.partnerUser.click()
+      await this.optionList.filter({ hasText: createOrderInfo.partnerUser }).click()
+      expect(await this.partnerUserSelect.locator('option:checked').innerText())
+         .toEqual(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`)
    }
 }
