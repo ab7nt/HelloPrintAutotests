@@ -6,6 +6,7 @@ export class LeftSideMenu {
 
       this.userInformationBlock = page.locator('div.user-information__container.user-desktop-container')
       this.userCompany = this.userInformationBlock.locator('div.user-company')
+      this.userName = this.userInformationBlock.locator('div.user-information__name')
       this.firstLevelCashboxLink = page.locator('div[uitest="submenu-mob-cashbox"]')
       this.secondLevelCalculatorItemsLink = page.locator('li[uitest="calculator-items"]').filter({ hasText: 'Рабочее место оператора' })
       this.firstLevelSettingsLink = page.locator('div[uitest="config"]')

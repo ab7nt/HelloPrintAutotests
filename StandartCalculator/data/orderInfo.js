@@ -8,4 +8,5 @@ export const orderInfo = {
     statusCanceled: 'Заказ - Отменен',
     reasonForCancellation: 'Тестовый заказ',
     limit: 'Добавлен комментарий к выдаче',
+    manager2: 'Manager Copy Site',
 }

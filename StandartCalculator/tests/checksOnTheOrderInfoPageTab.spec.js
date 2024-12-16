@@ -12,8 +12,9 @@ import { addItemCashier } from "../data/addItemCashier"
 import { createOrderInfo } from "../data/createOrderInfo";
 import { helpers } from "../utils/helpers";
 import { settings } from "../data/settings"
+import { orderInfo } from "../data/orderInfo";
 
-describe('Создание заказа', () => {
+describe('Заказ. Вкладка "Инфо"', () => {
 	// Настройки
 	test.setTimeout(90 * 1000)
 
@@ -32,7 +33,7 @@ describe('Создание заказа', () => {
 		await chooseCompanyPage.choosingCompany()
 	})
 
-	test("Смена контрагента и представилеля", async ({ page }) => {
+	test('Заказ. Вкладка "Инфо". Смена контрагента и представилеля', async ({ page }) => {
 		const createOrderPage = new CreateOrderPage(page)
 		const orderPage = new OrderPage(page)
 
@@ -74,5 +75,42 @@ describe('Создание заказа', () => {
 		// Проверка емейла в карточке заказа
 		const orderEmaiAfterSelectPartnerUser = await orderPage.email.innerText()
 		expect(orderEmaiAfterSelectPartnerUser).toEqual('testAPI875689596@test.test')
+	})
+
+	test('Заказ. Вкладка "Инфо". Смена менеджера', async ({ page }) => {
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
+		const leftSideMenu = new LeftSideMenu(page)
+
+		await page.goto('/order/create')
+
+		// Выбор контрагента
+		await createOrderPage.selectPartner()
+
+		// Нажатие на кнопку "Создать заказ" на странице создания заказа
+		await createOrderPage.clickOnNewOrderButton()
+		await page.waitForLoadState('networkidle')
+
+		// Проверка, что менеджером является авторизованный пользователь
+		const lastnameCurrentUser = (await leftSideMenu.userName.innerText()).split(' ')[0]
+		const lastnameOrderManager = (await orderPage.managerField.innerText()).split(' ')[0]
+		expect(lastnameCurrentUser).toBe(lastnameOrderManager)
+		// Проверка наличия имени контрагента в хлебных крошках
+		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManager)
+
+		// Смена менеджера
+		await orderPage.managerField.click()
+		await orderPage.optionList.filter({ hasText: orderInfo.manager2 }).click()
+		await orderPage.successAlertSaveChanges.waitFor('visible')
+
+		await page.reload()
+		await page.waitForLoadState('networkidle')
+
+		// Проверка, что менеджер поменялся
+		expect(await orderPage.managerField.innerText()).toBe(orderInfo.manager2)
+
+		// Проверка наличия имени контрагента в хлебных крошках
+		const lastnameOrderManagerAfterChange = (await orderPage.managerField.innerText()).split(' ')[0]
+		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManagerAfterChange)
 	})
 })

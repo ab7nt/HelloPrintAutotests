@@ -79,6 +79,8 @@ export class OrderPage {
       this.sourceSelect = page.locator('select[name="source_id"]')
       this.sourceField = page.locator('span[aria-labelledby*="select2-source_id"]')
 
+      // Менеджер заказа
+      this.managerField = page.locator('span[aria-labelledby*="select2-manager_id"]')
    }
 
    selectPartnerType = async () => {
