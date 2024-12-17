@@ -77,7 +77,7 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(orderEmaiAfterSelectPartnerUser).toEqual('testAPI875689596@test.test')
 	})
 
-	test('Заказ. Вкладка "Инфо". Смена менеджера', async ({ page }) => {
+	test('Заказ. Вкладка "Инфо". Смена менеджера и кнопка "Взять заказ в работу"', async ({ page }) => {
 		const createOrderPage = new CreateOrderPage(page)
 		const orderPage = new OrderPage(page)
 		const leftSideMenu = new LeftSideMenu(page)
@@ -112,6 +112,17 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		// Проверка наличия имени контрагента в хлебных крошках
 		const lastnameOrderManagerAfterChange = (await orderPage.managerField.innerText()).split(' ')[0]
 		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManagerAfterChange)
+
+		// Нажатие на кнопку "Взять заказ в работу" и подтверждение в по-апе
+		await orderPage.changeManagerByClickOnButton()
+
+		await page.reload()
+		await page.waitForLoadState('networkidle')
+
+		// Проверка, что менеджером является авторизованный пользователь
+		expect(lastnameCurrentUser).toBe(lastnameOrderManager)
+		// Проверка наличия имени контрагента в хлебных крошках
+		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManager)
 	})
 
 	test('Заказ. Вкладка "Инфо". Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
@@ -143,4 +154,8 @@ describe('Заказ. Вкладка "Инфо"', () => {
 			/\/partner\/\d+\/edit\?is_user_partner_create=true#agents/,
 			'div#create-user-partner-modal')
 	})
+
+	// test('Заказ. Вкладка "Инфо". Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
+
+	// })
 })

@@ -158,11 +158,11 @@ describe('Функции общей панели для большинства �
         await page.waitForLoadState('networkidle')
         const orderId = page.url().match(/\d+/)[0]
         await orderPage.selectOrderStatus(orderInfo.statusReadyToSent)
-        await orderPage.popUpLimits.waitFor({ state: 'visible' })
+        await orderPage.popupLimits.waitFor({ state: 'visible' })
 
         // Проверка, что в поп-апе есть название статуса (только название, без подстроки "Заказ -") и текс ограничения
-        expect(await orderPage.popUpLimits.innerText()).toContain(orderInfo.statusReadyToSent.split(" - ")[1])
-        expect(await orderPage.popUpLimits.innerText()).toContain('комментарий к выдаче')
+        expect(await orderPage.popupLimits.innerText()).toContain(orderInfo.statusReadyToSent.split(" - ")[1])
+        expect(await orderPage.popupLimits.innerText()).toContain('комментарий к выдаче')
 
         // Возврат в карточку компании и удаление ограничения
         await leftSideMenu.goToTheCompanySettingsPage()

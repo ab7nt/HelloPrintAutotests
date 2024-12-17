@@ -18,17 +18,20 @@ export class OrderPage {
 
       // Поп-апы
       // Срочность
-      this.popUpExpress = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
-      this.popUpExpressSubmitButton = this.popUpExpress.locator('button.bootbox-accept')
+      this.popupExpress = page.locator('div.modal-dialog').filter({ hasText: 'Стоимость заказа будет пересчитана' })
+      this.popupExpressSubmitButton = this.popupExpress.locator('button.bootbox-accept')
       // Причина отмены
-      this.popUpCancel = page.locator('div.modal-dialog').filter({ hasText: 'Укажите причину отмены заказа' })
-      this.popUpCancelReasonButtons = this.popUpCancel.locator('div.reason_button')
-      this.popUpTitleReasonForCancellation = this.popUpCancel.locator('h3').filter({ hasText: orderInfo.reasonForCancellation })
-      this.popUpCancelComment = this.popUpCancel.locator('textarea[name="reason_cancellation"]')
-      this.popUpCancelSubmitButton = this.popUpCancel.locator('button#saveBtn')
+      this.popupCancel = page.locator('div.modal-dialog').filter({ hasText: 'Укажите причину отмены заказа' })
+      this.popupCancelReasonButtons = this.popupCancel.locator('div.reason_button')
+      this.popupTitleReasonForCancellation = this.popupCancel.locator('h3').filter({ hasText: orderInfo.reasonForCancellation })
+      this.popupCancelComment = this.popupCancel.locator('textarea[name="reason_cancellation"]')
+      this.popupCancelSubmitButton = this.popupCancel.locator('button#saveBtn')
       // Ограничения
-      this.popUpLimits = page.locator('div.modal-dialog').filter({ hasText: 'Заказ не готов к получению статуса' }).first()
-      this.popUpLimitsTitle = page.locator('div.modal-dialog').locator('h4')
+      this.popupLimits = page.locator('div.modal-dialog').filter({ hasText: 'Заказ не готов к получению статуса' }).first()
+      this.popupLimitsTitle = page.locator('div.modal-dialog').locator('h4')
+      // Изменить менеджера
+      this.popupChangeManager = page.locator('div.modal-dialog').filter({ hasText: 'Изменить менеджера' })
+      this.popupChangeManagerSaveButton = this.popupChangeManager.locator('button#saveManagerBtn')
 
       // Блок с номером заказа и действиями
       // Срочность
@@ -82,10 +85,7 @@ export class OrderPage {
 
       // Менеджер заказа
       this.managerField = page.locator('span[aria-labelledby*="select2-manager_id"]')
-   }
-
-   selectPartnerType = async () => {
-
+      this.changeManagerButton = page.locator('div#change-manager-btn')
    }
 
    enterAdditionalNumber = async () => {
@@ -107,9 +107,9 @@ export class OrderPage {
       await this.expressField.click()
       await this.optionList.filter({ hasText: 'Срочность 10' }).click()
       expect(createOrderInfo.express).toBe(await this.expressField.innerText())
-      expect(this.popUpExpress).toBeVisible()
-      await this.popUpExpressSubmitButton.click()
-      expect(this.popUpExpress).not.toBeVisible()
+      expect(this.popupExpress).toBeVisible()
+      await this.popupExpressSubmitButton.click()
+      expect(this.popupExpress).not.toBeVisible()
    }
 
    selectOrderStatus = async (status) => {
@@ -137,20 +137,20 @@ export class OrderPage {
    }
 
    selectReasonForCancellation = async (reason) => {
-      await expect(this.popUpCancel).toBeVisible()
-      await this.popUpCancelReasonButtons.filter({ hasText: reason }).click()
+      await expect(this.popupCancel).toBeVisible()
+      await this.popupCancelReasonButtons.filter({ hasText: reason }).click()
    }
 
    fillReasonForCancellation = async () => {
-      await expect(this.popUpTitleReasonForCancellation).toBeVisible()
-      await this.popUpCancelComment.waitFor()
-      await this.popUpCancelComment.fill(orderInfo.reasonForCancellation)
-      expect(this.popUpCancelComment).toHaveValue(orderInfo.reasonForCancellation)
+      await expect(this.popupTitleReasonForCancellation).toBeVisible()
+      await this.popupCancelComment.waitFor()
+      await this.popupCancelComment.fill(orderInfo.reasonForCancellation)
+      expect(this.popupCancelComment).toHaveValue(orderInfo.reasonForCancellation)
    }
 
    clickOnSubmitButtonInPopUpCancel = async () => {
-      await this.popUpCancelSubmitButton.click()
-      await expect(this.popUpTitleReasonForCancellation).not.toBeVisible()
+      await this.popupCancelSubmitButton.click()
+      await expect(this.popupTitleReasonForCancellation).not.toBeVisible()
       await this.page.waitForLoadState('networkidle')
       expect(await this.orderStatusField.innerText()).toBe(orderInfo.statusCanceled)
    }
@@ -211,5 +211,14 @@ export class OrderPage {
       await this.partnerUserField.click()
       await this.createPartnerButton.waitFor()
       await this.createPartnerButton.click()
+   }
+
+   changeManagerByClickOnButton = async () => {
+      await this.changeManagerButton.waitFor()
+      await this.changeManagerButton.click()
+      await this.popupChangeManager.waitFor('visible')
+      await this.popupChangeManagerSaveButton.waitFor()
+      await this.popupChangeManagerSaveButton.click()
+      await this.successAlertSaveChanges.waitFor('visible')
    }
 }
