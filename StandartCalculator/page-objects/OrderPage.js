@@ -44,9 +44,10 @@ export class OrderPage {
       this.orderStatusSelect = page.locator('select[name="status_id"]')
 
       // Заказчик
-      this.partner = page.locator('span[id*="select2-partner_id"]')
+      this.createPartnerButton = this.optionList.filter({ hasText: '+ Добавить' })
+      this.partnerField = page.locator('span[id*="select2-partner_id"]')
       this.chooseUserPartnerButton = page.locator('a#add_partner_user_btn')
-      this.partnerUser = page.locator('span[id*="select2-partner_user_id"]')
+      this.partnerUserField = page.locator('span[id*="select2-partner_user_id"]')
       this.partnerUserSelect = page.locator('select[name="partner_user_id"]')
       this.phone = page.locator('span[id*="select2-partner_phone"]')
       this.email = page.locator('span[id*="select2-partner_email"]')
@@ -191,10 +192,24 @@ export class OrderPage {
    chooseUserPartner = async () => {
       await this.chooseUserPartnerButton.waitFor()
       await this.chooseUserPartnerButton.click()
-      await this.partnerUser.waitFor()
-      await this.partnerUser.click()
+      await this.partnerUserField.waitFor()
+      await this.partnerUserField.click()
       await this.optionList.filter({ hasText: createOrderInfo.partnerUser }).click()
       expect(await this.partnerUserSelect.locator('option:checked').innerText())
          .toEqual(`${createOrderInfo.partnerUser} (${createOrderInfo.partner})`)
+   }
+
+   clickOnCreatePartnerButtonFromPartnerField = async () => {
+      await this.partnerField.waitFor()
+      await this.partnerField.click()
+      await this.createPartnerButton.waitFor()
+      await this.createPartnerButton.click()
+   }
+
+   clickOnCreatePartnerButtonFromPartnerUserField = async () => {
+      await this.partnerUserField.waitFor()
+      await this.partnerUserField.click()
+      await this.createPartnerButton.waitFor()
+      await this.createPartnerButton.click()
    }
 }

@@ -1,4 +1,4 @@
-import { describe, test, expect, wait_until } from "@playwright/test";
+import { describe, test, expect, } from "@playwright/test";
 import { LoginPage } from "../page-objects/loginPage";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
 import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
@@ -134,7 +134,6 @@ describe('Функции общей панели для большинства �
     })
 
     test('Проверка работы ограничений на смену статуса', async ({ page }) => {
-        const orderRegisterPage = new OrderRegisterPage(page)
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
         const leftSideMenu = new LeftSideMenu(page)

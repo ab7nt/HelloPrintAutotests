@@ -23,7 +23,7 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		const chooseCompanyPage = new ChooseCompanyPage(page)
 
 		// Разрешение на использование буфера обмена
-		await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
+		// await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
 
 		// Открытие страницы
 		await page.goto("/")
@@ -50,7 +50,7 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		await page.waitForLoadState('networkidle')
 
 		// Проверка контрагента в карточке заказа
-		const orderPartner = await orderPage.partner.innerText()
+		const orderPartner = await orderPage.partnerField.innerText()
 		expect(orderPartner).toEqual(createOrderInfo.partner)
 		// Проверка телефона в карточке заказа
 		const orderPhone = await orderPage.phone.innerText()
@@ -112,5 +112,35 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		// Проверка наличия имени контрагента в хлебных крошках
 		const lastnameOrderManagerAfterChange = (await orderPage.managerField.innerText()).split(' ')[0]
 		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManagerAfterChange)
+	})
+
+	test('Заказ. Вкладка "Инфо". Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
+
+		await page.goto('/order/create')
+
+		// Выбор контрагента и представителя
+		await createOrderPage.selectPartner()
+		await createOrderPage.selectPartnerUser()
+
+		// Нажатие на кнопку "Создать заказ" на странице создания заказа
+		await createOrderPage.clickOnNewOrderButton()
+		await page.waitForLoadState('networkidle')
+
+		// Открытие страницы создания контрагента при нажатии на "+Добавить" в поле "Контрагент"
+		await orderPage.clickOnCreatePartnerButtonFromPartnerField()
+
+		// Проверка открытия страницы создания контрагента в ноовй вкладке
+		await helpers.checkingANewPageOpen(context, 'partner/create')
+
+		// Открытие страницы создания контрагента при нажатии на "+Добавить" в поле "Контрагент"
+		await orderPage.clickOnCreatePartnerButtonFromPartnerUserField()
+
+		// Проверка открытия страницы контрагента в ноовй вкладке и формы создания представителя
+		await helpers.checkingANewPageOpen(
+			context,
+			/\/partner\/\d+\/edit\?is_user_partner_create=true#agents/,
+			'div#create-user-partner-modal')
 	})
 })

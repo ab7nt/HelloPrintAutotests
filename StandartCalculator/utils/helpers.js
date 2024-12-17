@@ -46,7 +46,7 @@ export const helpers = {
       const count = await elements.count();
 
       for (let i = 0; i < count; i++) {
-         await expect(elements.nth(i).textContent()).not.toBe('');
+         expect(await elements.nth(i).textContent()).not.toBe('');
       }
    },
 
@@ -58,5 +58,16 @@ export const helpers = {
 
       // Проверка, что текст в буфере обмена соответствует ожидаемому
       expect(clipboardText).toBe(textToCheck)
+   },
+
+   async checkingANewPageOpen(context, url, elLocator) {
+      const [newPage] = await Promise.all([
+         context.waitForEvent('page'),
+      ]);
+      await newPage.waitForLoadState('load')
+      expect(newPage.url()).toMatch(url)
+      if (elLocator) await newPage.locator(elLocator).waitFor('visible')
+      await newPage.close()
    }
+
 }
