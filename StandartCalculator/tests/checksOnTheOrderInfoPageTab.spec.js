@@ -10,9 +10,11 @@ import { CalcPageTiles } from "../page-objects/CalcPageTiles";
 import { OrderPageSpecification } from "../page-objects/OrderPageSpecification";
 import { addItemCashier } from "../data/addItemCashier"
 import { createOrderInfo } from "../data/createOrderInfo";
+import { OrderPageStage } from "../page-objects/OrderPageStage";
 import { helpers } from "../utils/helpers";
 import { settings } from "../data/settings"
 import { orderInfo } from "../data/orderInfo";
+import { normalize } from "path";
 
 describe('Заказ. Вкладка "Инфо"', () => {
 	// Настройки
@@ -155,7 +157,69 @@ describe('Заказ. Вкладка "Инфо"', () => {
 			'div#create-user-partner-modal')
 	})
 
-	// test('Заказ. Вкладка "Инфо". Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
+	test('Заказ. Вкладка "Инфо". Проверка блока "Сроки"', async ({ page, }) => {
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
+		const orderPageStage = new OrderPageStage(page)
 
-	// })
+		await page.goto('/order/create')
+
+		// Выбор контрагента
+		await createOrderPage.selectPartner()
+
+		// Нажатие на кнопку "Создать заказ" на странице создания заказа
+		await createOrderPage.clickOnNewOrderButton()
+		await page.waitForLoadState('networkidle')
+
+		// Заполнение дат
+		// Текущая дата для "Готовность макета"
+		const currentDate = new Date()
+		const formattedCurrentDate = await helpers.formatDate(currentDate)
+		await orderPage.enterADateAtDateInput(formattedCurrentDate, orderPage.layoutAtInput)
+		// Плюс 1 день для "Макет - Для дизайнеров"
+		const impositionAtDate = new Date()
+		impositionAtDate.setDate(currentDate.getDate() + 1)
+		const formattedImpositionAtDate = await helpers.formatDate(impositionAtDate)
+		await orderPage.enterADateAtDateInput(formattedImpositionAtDate, orderPage.impositionAtInput)
+		// Плюс 2 дня для "Готовность спуска"
+		const prepressAtDate = new Date()
+		prepressAtDate.setDate(currentDate.getDate() + 2)
+		const formattedPrepressAtDate = await helpers.formatDate(prepressAtDate)
+		await orderPage.enterADateAtDateInput(formattedPrepressAtDate, orderPage.prepressAtInput)
+		// Плюс 3 дня для "Готовность заказа"
+		const productionAtDate = new Date()
+		productionAtDate.setDate(currentDate.getDate() + 3)
+		const formattedProductionAtDate = await helpers.formatDate(productionAtDate)
+		await orderPage.enterADateAtDateInput(formattedProductionAtDate, orderPage.productionAtInput)
+		// Плюс 4 дня для "Выдача"
+		const deliveryAtDate = new Date()
+		deliveryAtDate.setDate(currentDate.getDate() + 4)
+		const formattedDeliveryAtDate = await helpers.formatDate(deliveryAtDate)
+		await orderPage.enterADateAtDateInput(formattedDeliveryAtDate, orderPage.deliveryAtInput)
+
+		// Проверка сохранения дат в карточке заказа
+		await page.reload()
+		expect(orderPage.layoutAtInput).toHaveValue(formattedCurrentDate)
+		expect(orderPage.impositionAtInput).toHaveValue(formattedImpositionAtDate)
+		expect(orderPage.prepressAtInput).toHaveValue(formattedPrepressAtDate)
+		expect(orderPage.productionAtInput).toHaveValue(formattedProductionAtDate)
+		expect(orderPage.deliveryAtInput).toHaveValue(formattedDeliveryAtDate)
+
+		// Проверка дат на вкладке "Маршрут"
+		await orderPage.clickOnTheStageTab()
+
+		expect(helpers.normalizeValue(await orderPageStage.layoutAtField.inputValue()))
+			.toContain(formattedCurrentDate)
+		expect(helpers.normalizeValue(await orderPageStage.impositionAtField.inputValue()))
+			.toContain(formattedImpositionAtDate)
+		expect(helpers.normalizeValue(await orderPageStage.prepressAtField.inputValue()))
+			.toContain(formattedPrepressAtDate)
+		expect(helpers.normalizeValue(await orderPageStage.productionAtField.inputValue()))
+			.toContain(formattedProductionAtDate)
+		expect(helpers.normalizeValue(await orderPageStage.deliveryAtField.inputValue()))
+			.toContain(formattedDeliveryAtDate)
+
+
+		await page.pause()
+	})
 })

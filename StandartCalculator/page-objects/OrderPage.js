@@ -12,9 +12,10 @@ export class OrderPage {
       this.successAlertCopyText = page.locator('div[role="alert"]').filter({ hasText: 'Данные скопированы в буфер обмена' })
       this.successAlertSaveChanges = page.locator('div[role="alert"]').filter({ hasText: 'Информация о заказе успешно обновлена' })
       this.openHistoryTabButton = page.locator('span.open-history-tab')
-
       // Хлебные крошки
       this.headerTitle = page.locator('header span.page-header__title')
+      // Вкладки
+      this.stageTab = page.locator('a#stage_new_tab')
 
       // Поп-апы
       // Срочность
@@ -57,6 +58,17 @@ export class OrderPage {
       this.telegram = page.locator('span[id*="select2-partner_telegram"]')
       this.vk = page.locator('span[id*="select2-partner_vk"]')
       this.instagram = page.locator('span[id*="select2-partner_instagram"]')
+
+      // Сроки
+      // this.dateTimePicker = page.locator('div.xdsoft_datetimepicker[style*="display: block"]')
+      this.labelForIssueAt = page.locator('label[for="issue_at"]')
+      this.openedDateTimePickerSelector = 'div.xdsoft_datetimepicker[style*="display: block"]'
+      this.issueAtInput = page.locator('input[name="issue_at"]')
+      this.layoutAtInput = page.locator('input[name="layout_at"]')
+      this.impositionAtInput = page.locator('input[name="imposition_at"]')
+      this.prepressAtInput = page.locator('input[name="prepress_at"]')
+      this.productionAtInput = page.locator('input[name="production_at"]')
+      this.deliveryAtInput = page.locator('input[name="delivery_at"]')
 
       // Параметры
       // Параметры относящиеся к компании
@@ -220,5 +232,20 @@ export class OrderPage {
       await this.popupChangeManagerSaveButton.waitFor()
       await this.popupChangeManagerSaveButton.click()
       await this.successAlertSaveChanges.waitFor('visible')
+   }
+
+   enterADateAtDateInput = async (date, dateInput) => {
+      await dateInput.waitFor()
+      await dateInput.click()
+      await dateInput.fill(date)
+      await expect(dateInput).toHaveValue(date)
+      await helpers.hidingElementBySelector(this.page, this.openedDateTimePickerSelector)
+      await this.labelForIssueAt.click() // Нужно, чтобы дата сохранилась
+   }
+
+   clickOnTheStageTab = async () => {
+      await this.stageTab.waitFor()
+      await this.stageTab.click()
+      await this.page.waitForLoadState('networkidle')
    }
 }

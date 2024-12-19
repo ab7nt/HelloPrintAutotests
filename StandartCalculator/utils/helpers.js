@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test"
+import { normalize } from "path";
 
 export const helpers = {
 
@@ -68,6 +69,26 @@ export const helpers = {
       expect(newPage.url()).toMatch(url)
       if (elLocator) await newPage.locator(elLocator).waitFor('visible')
       await newPage.close()
-   }
+   },
 
+   async formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0'); // Получаем день
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Получаем месяц (месяцы начинаются с 0)
+      const year = date.getFullYear(); // Получаем год
+      const hours = String(date.getHours()).padStart(2, '0'); // Получаем часы
+      const minutes = String(date.getMinutes()).padStart(2, '0'); // Получаем минуты
+      return `${day}.${month}.${year} ${hours}:${minutes}`; // Форматируем в dd.mm.yyyy HH:mm
+   },
+
+   async hidingElementBySelector(page, selector) {
+      // const openedDateTimePickerSelector = 'div.xdsoft_datetimepicker[style*="display: block"]'
+      await page.waitForSelector(selector, { visible: true });
+      await page.evaluate(selector => {
+         document.querySelector(selector).style.display = 'none'; // Скрываем элемент
+      }, selector);
+   },
+
+   normalizeValue(value) {
+      return value.replace(/\s+/g, ' ')
+   }
 }
