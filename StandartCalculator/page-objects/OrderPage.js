@@ -16,6 +16,11 @@ export class OrderPage {
       this.headerTitle = page.locator('header span.page-header__title')
       // Вкладки
       this.stageTab = page.locator('a#stage_new_tab')
+      // Нижние кнопки 
+      this.moreButton = page.locator('div.order-general-info button.more')
+      this.saveAndCloseButton = page.locator('div.order-general-info input[value="Сохранить и закрыть"]')
+      this.saveButton = page.locator('div.order-general-info input[value="Сохранить"]')
+
 
       // Поп-апы
       // Срочность
@@ -98,6 +103,21 @@ export class OrderPage {
       // Менеджер заказа
       this.managerField = page.locator('span[aria-labelledby*="select2-manager_id"]')
       this.changeManagerButton = page.locator('div#change-manager-btn')
+
+      // Локаторы для блока с дополнительной инофрмацией
+      this.moreBlockInfo = page.locator('div.more-info-block')
+      // Подрядчики
+      // Организация
+      this.contractorOrganizationField = page.locator('span[aria-labelledby*="select2-partners"]').first()
+      this.contractorOrganizationSelect = page.locator('select[name="partners[]"]')
+      this.contractorOrganizationInput = page.locator('input[aria-controls*="select2-partners"]')
+      // Номера заказов
+      this.contractorOrderNumbersField = page.locator('div:has(select[name="orders[1][]"]) > span')
+      this.contractorOrderNumbersSelect = page.locator('select[name="orders[1][]"]')
+      this.contractorOrderNumbersInput = page.locator('input[aria-controls*="select2-orders1"]')
+      this.contractorNumber = page.locator(`li[title="${orderInfo.contractorNumber}"]`)
+      // Дата поставки
+      this.contractorDeliveryDateInput = page.locator('input[name="delivery_dates[]"]').first()
    }
 
    enterAdditionalNumber = async () => {
@@ -247,5 +267,35 @@ export class OrderPage {
       await this.stageTab.waitFor()
       await this.stageTab.click()
       await this.page.waitForLoadState('networkidle')
+   }
+
+   clickOnMoreButton = async () => {
+      await this.moreButton.waitFor()
+      await this.moreButton.click()
+      await this.moreBlockInfo.waitFor('visible')
+   }
+
+   selectContractorsOrganization = async () => {
+      await this.contractorOrganizationField.waitFor()
+      await this.contractorOrganizationField.click()
+      await this.contractorOrganizationInput.fill(orderInfo.contractorName)
+      expect(this.contractorOrganizationInput).toHaveValue(orderInfo.contractorName)
+      await this.optionList.filter({ hasText: orderInfo.contractorName }).waitFor()
+      await this.optionList.filter({ hasText: orderInfo.contractorName }).click()
+      expect(await this.contractorOrganizationField.innerText()).toContain(orderInfo.contractorName)
+   }
+
+   enteringTheContractNumber = async () => {
+      await this.contractorOrderNumbersField.waitFor()
+      await this.contractorOrderNumbersField.click()
+      await this.contractorOrderNumbersInput.fill(orderInfo.contractorNumber)
+      expect(this.contractorOrderNumbersInput).toHaveValue(orderInfo.contractorNumber)
+      await this.optionList.filter({ hasText: orderInfo.additionalNumber }).waitFor()
+      await this.optionList.filter({ hasText: orderInfo.additionalNumber }).click()
+      expect(await this.contractorOrderNumbersField.innerText()).toContain(orderInfo.contractorNumber)
+   }
+
+   selectContractDeliveryDate = async () => {
+      await this.enterADateAtDateInput(orderInfo.contractorDeliveryDate, this.contractorDeliveryDateInput)
    }
 }

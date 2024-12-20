@@ -14,7 +14,6 @@ import { OrderPageStage } from "../page-objects/OrderPageStage";
 import { helpers } from "../utils/helpers";
 import { settings } from "../data/settings"
 import { orderInfo } from "../data/orderInfo";
-import { normalize } from "path";
 
 describe('Заказ. Вкладка "Инфо"', () => {
 	// Настройки
@@ -218,8 +217,37 @@ describe('Заказ. Вкладка "Инфо"', () => {
 			.toContain(formattedProductionAtDate)
 		expect(helpers.normalizeValue(await orderPageStage.deliveryAtField.inputValue()))
 			.toContain(formattedDeliveryAtDate)
+	})
 
+	test('Заказ. Вкладка "Инфо". Добавление подряда', async ({ page, }) => {
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
 
-		await page.pause()
+		await page.goto('/order/create')
+
+		// Выбор контрагента
+		await createOrderPage.selectPartner()
+
+		// Нажатие на кнопку "Создать заказ" на странице создания заказа
+		await createOrderPage.clickOnNewOrderButton()
+		await page.waitForLoadState('networkidle')
+
+		// Открытие блока с дополнительной информацией
+		await orderPage.clickOnMoreButton()
+
+		// Заполненение полей в блоке "Подрядчики"
+		await orderPage.selectContractorsOrganization()
+		await orderPage.enteringTheContractNumber()
+		await orderPage.selectContractDeliveryDate()
+
+		// Ожидание алерта и перезагрузка страницы
+		await orderPage.successAlertSaveChanges.waitFor('visible')
+		await page.reload()
+		await page.waitForLoadState('networkidle')
+
+		// Проверка заполненных данных после перезагрузки
+		expect(await orderPage.contractorOrganizationField.innerText()).toContain(orderInfo.contractorName)
+		expect(await orderPage.contractorOrderNumbersField.innerText()).toContain(orderInfo.contractorNumber.replace('x', ''))
+		expect(orderPage.contractorDeliveryDateInput).toHaveValue(orderInfo.contractorDeliveryDate)
 	})
 })
