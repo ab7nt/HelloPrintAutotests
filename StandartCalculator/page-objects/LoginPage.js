@@ -1,4 +1,4 @@
-import { UserInfo } from "../data/userInfo"
+import { userInfo } from "../data/userInfo"
 
 export class LoginPage {
     constructor(page) {
@@ -10,9 +10,9 @@ export class LoginPage {
 
     enterUsernameAndPassword = async () => {
         await this.loginInput.waitFor()
-        await this.loginInput.fill(UserInfo.name)
+        await this.loginInput.fill(userInfo.name)
         await this.passwordInput.waitFor()
-        await this.passwordInput.fill(UserInfo.password)
+        await this.passwordInput.fill(userInfo.password)
         await this.submitButton.click()
     }
 }

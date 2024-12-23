@@ -7,3 +7,5 @@ tests-examples
 userInfo.js
 filteringOrderRegister.spec.copy.js
 reserve
+api-calls
+test.spec.js

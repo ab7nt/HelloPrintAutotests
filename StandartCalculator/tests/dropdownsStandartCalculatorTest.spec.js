@@ -1,6 +1,6 @@
 // import * as nodeFetch from "node-fetch"
 import { test, expect } from "@playwright/test"
-import { LoginPage } from "../page-objects/loginPage";
+import { LoginPage } from "../page-objects/LoginPage";
 import { CalcPageDropdowns } from "../page-objects/CalcPageDropdowns";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
 

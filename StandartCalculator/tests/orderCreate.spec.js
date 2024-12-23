@@ -1,5 +1,5 @@
 import { describe, test, expect } from "@playwright/test"
-import { LoginPage } from "../page-objects/loginPage";
+import { LoginPage } from "../page-objects/LoginPage";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
 import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
 import { CreateOrderPage } from "../page-objects/CreateOrderPage";

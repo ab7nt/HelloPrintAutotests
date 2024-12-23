@@ -1,5 +1,5 @@
 import { describe, test, expect } from "@playwright/test"
-import { LoginPage } from "../page-objects/loginPage";
+import { LoginPage } from "../page-objects/LoginPage";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
 import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
 import { CreateOrderPage } from "../page-objects/CreateOrderPage";
@@ -249,5 +249,69 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(await orderPage.contractorOrganizationField.innerText()).toContain(orderInfo.contractorName)
 		expect(await orderPage.contractorOrderNumbersField.innerText()).toContain(orderInfo.contractorNumber.replace('x', ''))
 		expect(orderPage.contractorDeliveryDateInput).toHaveValue(orderInfo.contractorDeliveryDate)
+	})
+
+	test('Заказ. Вкладка "Инфо". Добавление доп параметров', async ({ page }) => {
+		const orderRegisterPage = new OrderRegisterPage(page)
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
+
+		// Нажатие на кнопку "Новый заказ" в реестре заказов
+		await orderRegisterPage.clickOnNewOrderButton()
+
+		// Выбор контрагента и представителя
+		await createOrderPage.selectPartner()
+
+		// Нажатие на кнопку "Создать заказ" на странице создания заказа
+		await createOrderPage.clickOnNewOrderButton()
+
+		await page.waitForLoadState('networkidle')
+		const orderId = page.url().match(/order\/(\d+)/)[1]
+		console.log(page.url())
+		console.log(orderId)
+
+		// Проверка, что в доп. параметрах выбрано "Нет"
+		expect(await orderPage.layoutField.innerText()).toBe('Нет')
+		expect(await orderPage.volumeField.innerText()).toBe('Нет')
+		expect(await orderPage.oversizedField.innerText()).toBe('Нет')
+		expect(await orderPage.offsetField.innerText()).toBe('Нет')
+
+		// Выбор "Да" в дополнительных параметрах
+		await orderPage.selectYesInToLayoutParameter()
+		await orderPage.selectYesInToVolumeParameter()
+		await orderPage.selectYesInToOversizedParameter()
+		await orderPage.selectYesInToOffsetParameter()
+
+		// Поиск созданного заказа в реестре заказов
+		await page.goto('/order', { waitUntil: 'load' })
+		await orderRegisterPage.searchByOrderNumber(orderId)
+
+		// Проверка иконок справа от номера заказа в реестре заказов
+		await orderRegisterPage.checkVolumeIcon()
+		await orderRegisterPage.checkLayoutIcon()
+		await orderRegisterPage.checkOversizedIcon()
+		await orderRegisterPage.checkVOffsetIcon()
+
+		// Возврат в карточку заказа и проверка, что в дополнительных параметрах указано "Да"
+		await page.goto(`/order/${orderId}/edit`, { waitUntil: 'networkidle' })
+		expect(await orderPage.layoutField.innerText()).toBe('Да')
+		expect(await orderPage.volumeField.innerText()).toBe('Да')
+		expect(await orderPage.oversizedField.innerText()).toBe('Да')
+		expect(await orderPage.offsetField.innerText()).toBe('Да')
+	})
+
+	test('Заказ. Вкладка "Инфо". Параметры "Оформлен в", "Взят в работу в" и "Выдан в"', async ({ page }) => {
+		const orderRegisterPage = new OrderRegisterPage(page)
+		const createOrderPage = new CreateOrderPage(page)
+		const orderPage = new OrderPage(page)
+
+		// Создание нового заказа и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
+
+		//
+
+
+
+		await page.pause()
 	})
 })

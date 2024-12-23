@@ -1,5 +1,5 @@
 import { test } from "@playwright/test"
-import { LoginPage } from "../page-objects/loginPage";
+import { LoginPage } from "../page-objects/LoginPage";
 import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
 import { PartnerPage } from "../page-objects/partnerCreate";
 

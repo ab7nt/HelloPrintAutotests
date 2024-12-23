@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test"
 import { normalize } from "path";
+import { createOrderByAPI } from "../api-calls/createOrder";
 
 export const helpers = {
 
@@ -90,5 +91,11 @@ export const helpers = {
 
    normalizeValue(value) {
       return value.replace(/\s+/g, ' ')
+   },
+
+   async createNewOrderByApiAndOpenItsPage(page) {
+      const newOrderURL = await createOrderByAPI()
+      await page.goto(newOrderURL)
+      await page.waitForLoadState('domcontentloaded')
    }
 }

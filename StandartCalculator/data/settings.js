@@ -1,3 +1,3 @@
 export const settings = {
-    env: 'https://release1.helloprint.ru/'
+    envURL: 'https://release1.helloprint.ru/'
 }
