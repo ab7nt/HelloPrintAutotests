@@ -23,7 +23,7 @@ describe('Заказ. Вкладка "Инфо".', () => {
 		await helpers.getaAthorizationCookie(browser)
 	})
 
-	test.beforeEach(async ({ page, context }) => {
+	test.beforeEach(async ({ context }) => {
 		await context.addCookies(settings.authorizationCookies)
 	})
 
@@ -58,7 +58,7 @@ describe('Заказ. Вкладка "Инфо".', () => {
 
 		// Добавление представителя
 		await orderPage.chooseUserPartner()
-		await page.reload()
+		await page.reload({ waitUntil: 'networkidle' })
 
 		// Проверка наличия имени контрагента в хлебных крошках
 		expect(await orderPage.headerTitle.innerText()).toContain(createOrderInfo.partnerUser)
