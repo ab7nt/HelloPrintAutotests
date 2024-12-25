@@ -11,5 +11,6 @@ export const orderInfo = {
     manager2: 'Manager Copy Site',
     contractorName: 'Реальный тест',
     contractorNumber: '1122334455',
-    contractorDeliveryDate: '20.12.2024 16:05'
+    contractorDeliveryDate: '20.12.2024 16:05',
+    phone: ''
 }

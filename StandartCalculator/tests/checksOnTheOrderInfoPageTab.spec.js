@@ -48,19 +48,20 @@ describe('Заказ. Вкладка "Инфо".', () => {
 		expect(orderPartner).toEqual(createOrderInfo.partner)
 		// Проверка телефона в карточке заказа
 		const orderPhone = await orderPage.phone.innerText()
-		expect(orderPhone).toEqual(createOrderInfo.phone)
+		expect(orderPhone).toEqual(orderInfo.phone)
 		// Проверка емейла в карточке заказа
 		const orderEmail = await orderPage.email.innerText()
-		expect(orderEmail).toEqual(createOrderInfo.email)
+		expect(orderEmail).toEqual(orderInfo.email)
 
 		// Проверка наличия имени контрагента в хлебных крошках
 		expect(await orderPage.headerTitle.innerText()).toContain(createOrderInfo.partner)
 
 		// Добавление представителя
 		await orderPage.chooseUserPartner()
-		await page.reload({ waitUntil: 'networkidle' })
+		await page.reload()
+		await page.waitForLoadState('networkidle')
 
-		// Проверка наличия имени контрагента в хлебных крошках
+		// Проверка наличия имени представителя в хлебных крошках
 		expect(await orderPage.headerTitle.innerText()).toContain(createOrderInfo.partnerUser)
 
 		// Проверка телефона в карточке заказа

@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test"
 import { createOrderInfo } from "../data/createOrderInfo"
+import { orderInfo } from "../data/orderInfo"
 
 export class CreateOrderPage {
    constructor(page) {
@@ -165,18 +166,18 @@ export class CreateOrderPage {
    }
 
    collectingTextFromFilledFields = async () => {
-      createOrderInfo.phone = await this.phoneField.innerText()
-      createOrderInfo.email = await this.emailField.innerText()
-      createOrderInfo.telegram = await this.telegramField.innerText()
-      createOrderInfo.vk = await this.vkField.innerText()
-      createOrderInfo.instagram = await this.instagramField.innerText()
-      createOrderInfo.layout = await this.layoutField.innerText()
-      createOrderInfo.express = await this.expressField.innerText()
-      createOrderInfo.oversized = await this.oversizedField.innerText()
-      createOrderInfo.volume = await this.volumeField.innerText()
-      createOrderInfo.offset = await this.offsetField.innerText()
-      createOrderInfo.source = await this.sourceField.innerText()
-      createOrderInfo.adSource = await this.adSourceField.innerText()
+      orderInfo.phone = await this.phoneField.innerText()
+      orderInfo.email = await this.emailField.innerText()
+      orderInfo.telegram = await this.telegramField.innerText()
+      orderInfo.vk = await this.vkField.innerText()
+      orderInfo.instagram = await this.instagramField.innerText()
+      orderInfo.layout = await this.layoutField.innerText()
+      orderInfo.express = await this.expressField.innerText()
+      orderInfo.oversized = await this.oversizedField.innerText()
+      orderInfo.volume = await this.volumeField.innerText()
+      orderInfo.offset = await this.offsetField.innerText()
+      orderInfo.source = await this.sourceField.innerText()
+      orderInfo.adSource = await this.adSourceField.innerText()
    }
 
    clickOnNewOrderButton = async () => {

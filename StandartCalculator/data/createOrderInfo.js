@@ -7,7 +7,7 @@ export const createOrderInfo = {
     partnerUser: 'Тест API',
     partnerUserId: '128799',
     nameOfTheLegalEntity: '',
-    phone: '71246146413',
+    phone: 71246146413,
     email: '',
     telegram: '',
     vk: '',
