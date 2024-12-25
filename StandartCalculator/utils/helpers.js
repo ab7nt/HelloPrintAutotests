@@ -1,6 +1,10 @@
 import { expect } from "@playwright/test"
 import { normalize } from "path";
 import { createOrderByAPI } from "../api-calls/createOrder";
+import { getaAthorizationToken } from "../api-calls/authorization";
+import { LoginPage } from "../page-objects/LoginPage";
+import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
+import { settings } from "../data/settings";
 
 export const helpers = {
 
@@ -96,6 +100,27 @@ export const helpers = {
    async createNewOrderByApiAndOpenItsPage(page) {
       const newOrderURL = await createOrderByAPI()
       await page.goto(newOrderURL)
-      await page.waitForLoadState('domcontentloaded')
+      expect(page).toHaveURL(newOrderURL)
+      await page.waitForLoadState('networkidle')
+   },
+
+   async getaAthorizationCookie(browser) {
+      // Создаем новый контекст браузера
+      const browserContext = await browser.newContext();
+      // Создаем новую страницу в этом контексте
+      const page = await browserContext.newPage();
+
+      const loginPage = new LoginPage(page)
+      const chooseCompanyPage = new ChooseCompanyPage(page)
+      // Открытие страницы
+      await page.goto("/login")
+      // Авторизация
+      await loginPage.enterUsernameAndPassword()
+      // // Выбор компании
+      await chooseCompanyPage.choosingCompany()
+      // Сохранение куков авторизации
+      settings.authorizationCookies = await browserContext.cookies()
+      // Закрытие браузера
+      await browserContext.close()
    }
 }

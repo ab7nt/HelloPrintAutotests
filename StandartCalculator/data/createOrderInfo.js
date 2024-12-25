@@ -1,8 +1,9 @@
 export const createOrderInfo = {
-    name: 'Тест',
-    lastname: '',
-    middlename: '',
-    partnerFullName: 'Реальный тест',
+    name: 'По',
+    surname: 'Тестовый',
+    patronymic: 'АПИ',
+    partnerFullName: 'Тестовый По АПИ',
+    partner: 'Реальный тест',
     partnerUser: 'Тест API',
     partnerUserId: '128799',
     nameOfTheLegalEntity: '',

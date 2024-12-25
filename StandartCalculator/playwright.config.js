@@ -24,11 +24,13 @@ module.exports = defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'list',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  timeout: 90 * 1000,  // Время ожидания для всех неявных ожиданий
   use: {
     headless: true, // Запуск тестов без интерфейса
     baseURL: settings.envURL, // Base URL to use in actions like `await page.goto('/')`
     trace: 'on-first-retry', // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
     screenshot: 'only-on-failure', // Делать скриншот только в случае ошибки
+    timeout: 10 * 1000, // Время ожидания для всех явных ожиданий
   },
   outputDir: 'test-results/', // Папка для сохранения результатов
 

@@ -15,26 +15,19 @@ import { helpers } from "../utils/helpers";
 import { settings } from "../data/settings"
 import { orderInfo } from "../data/orderInfo";
 
-describe('Заказ. Вкладка "Инфо"', () => {
+describe('Заказ. Вкладка "Инфо".', () => {
 	// Настройки
 	test.setTimeout(90 * 1000)
 
-	test.beforeEach(async ({ page, context }) => {
-		const loginPage = new LoginPage(page)
-		const chooseCompanyPage = new ChooseCompanyPage(page)
-
-		// Разрешение на использование буфера обмена
-		// await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
-
-		// Открытие страницы
-		await page.goto("/")
-		// Авторизация
-		await loginPage.enterUsernameAndPassword()
-		// Выбор компании
-		await chooseCompanyPage.choosingCompany()
+	test.beforeAll(async ({ browser }) => {
+		await helpers.getaAthorizationCookie(browser)
 	})
 
-	test('Заказ. Вкладка "Инфо". Смена контрагента и представилеля', async ({ page }) => {
+	test.beforeEach(async ({ page, context }) => {
+		await context.addCookies(settings.authorizationCookies)
+	})
+
+	test('Смена контрагента и представилеля', async ({ page }) => {
 		const createOrderPage = new CreateOrderPage(page)
 		const orderPage = new OrderPage(page)
 
@@ -78,19 +71,12 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(orderEmaiAfterSelectPartnerUser).toEqual('testAPI875689596@test.test')
 	})
 
-	test('Заказ. Вкладка "Инфо". Смена менеджера и кнопка "Взять заказ в работу"', async ({ page }) => {
-		const createOrderPage = new CreateOrderPage(page)
+	test('Смена менеджера и кнопка "Взять заказ в работу"', async ({ page }) => {
 		const orderPage = new OrderPage(page)
 		const leftSideMenu = new LeftSideMenu(page)
 
-		await page.goto('/order/create')
-
-		// Выбор контрагента
-		await createOrderPage.selectPartner()
-
-		// Нажатие на кнопку "Создать заказ" на странице создания заказа
-		await createOrderPage.clickOnNewOrderButton()
-		await page.waitForLoadState('networkidle')
+		// Создание нового заказа по API и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
 
 		// Проверка, что менеджером является авторизованный пользователь
 		const lastnameCurrentUser = (await leftSideMenu.userName.innerText()).split(' ')[0]
@@ -126,19 +112,11 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(await orderPage.headerTitle.innerText()).toContain(lastnameOrderManager)
 	})
 
-	test('Заказ. Вкладка "Инфо". Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
-		const createOrderPage = new CreateOrderPage(page)
+	test('Возможность создания контрагента в блоке "Заказчик"', async ({ page, context }) => {
 		const orderPage = new OrderPage(page)
 
-		await page.goto('/order/create')
-
-		// Выбор контрагента и представителя
-		await createOrderPage.selectPartner()
-		await createOrderPage.selectPartnerUser()
-
-		// Нажатие на кнопку "Создать заказ" на странице создания заказа
-		await createOrderPage.clickOnNewOrderButton()
-		await page.waitForLoadState('networkidle')
+		// Создание нового заказа по API и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
 
 		// Открытие страницы создания контрагента при нажатии на "+Добавить" в поле "Контрагент"
 		await orderPage.clickOnCreatePartnerButtonFromPartnerField()
@@ -149,26 +127,19 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		// Открытие страницы создания контрагента при нажатии на "+Добавить" в поле "Контрагент"
 		await orderPage.clickOnCreatePartnerButtonFromPartnerUserField()
 
-		// Проверка открытия страницы контрагента в ноовй вкладке и формы создания представителя
+		// Проверка открытия страницы контрагента в новой вкладке и формы создания представителя
 		await helpers.checkingANewPageOpen(
 			context,
 			/\/partner\/\d+\/edit\?is_user_partner_create=true#agents/,
 			'div#create-user-partner-modal')
 	})
 
-	test('Заказ. Вкладка "Инфо". Проверка блока "Сроки"', async ({ page, }) => {
-		const createOrderPage = new CreateOrderPage(page)
+	test('Проверка блока "Сроки"', async ({ page, }) => {
 		const orderPage = new OrderPage(page)
 		const orderPageStage = new OrderPageStage(page)
 
-		await page.goto('/order/create')
-
-		// Выбор контрагента
-		await createOrderPage.selectPartner()
-
-		// Нажатие на кнопку "Создать заказ" на странице создания заказа
-		await createOrderPage.clickOnNewOrderButton()
-		await page.waitForLoadState('networkidle')
+		// Создание нового заказа по API и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
 
 		// Заполнение дат
 		// Текущая дата для "Готовность макета"
@@ -219,18 +190,11 @@ describe('Заказ. Вкладка "Инфо"', () => {
 			.toContain(formattedDeliveryAtDate)
 	})
 
-	test('Заказ. Вкладка "Инфо". Добавление подряда', async ({ page, }) => {
-		const createOrderPage = new CreateOrderPage(page)
+	test('Добавление подряда', async ({ page, }) => {
 		const orderPage = new OrderPage(page)
 
-		await page.goto('/order/create')
-
-		// Выбор контрагента
-		await createOrderPage.selectPartner()
-
-		// Нажатие на кнопку "Создать заказ" на странице создания заказа
-		await createOrderPage.clickOnNewOrderButton()
-		await page.waitForLoadState('networkidle')
+		// Создание нового заказа по API и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
 
 		// Открытие блока с дополнительной информацией
 		await orderPage.clickOnMoreButton()
@@ -251,24 +215,16 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(orderPage.contractorDeliveryDateInput).toHaveValue(orderInfo.contractorDeliveryDate)
 	})
 
-	test('Заказ. Вкладка "Инфо". Добавление доп параметров', async ({ page }) => {
+	test('Добавление доп параметров', async ({ page }) => {
 		const orderRegisterPage = new OrderRegisterPage(page)
 		const createOrderPage = new CreateOrderPage(page)
 		const orderPage = new OrderPage(page)
 
-		// Нажатие на кнопку "Новый заказ" в реестре заказов
-		await orderRegisterPage.clickOnNewOrderButton()
+		// Создание нового заказа по API и открытие его карточки
+		await helpers.createNewOrderByApiAndOpenItsPage(page)
 
-		// Выбор контрагента и представителя
-		await createOrderPage.selectPartner()
-
-		// Нажатие на кнопку "Создать заказ" на странице создания заказа
-		await createOrderPage.clickOnNewOrderButton()
-
-		await page.waitForLoadState('networkidle')
+		// Сохранение ID заказа для дальнейшего поиска его в реестре и возврата в карточку заказа
 		const orderId = page.url().match(/order\/(\d+)/)[1]
-		console.log(page.url())
-		console.log(orderId)
 
 		// Проверка, что в доп. параметрах выбрано "Нет"
 		expect(await orderPage.layoutField.innerText()).toBe('Нет')
@@ -300,13 +256,12 @@ describe('Заказ. Вкладка "Инфо"', () => {
 		expect(await orderPage.offsetField.innerText()).toBe('Да')
 	})
 
-	test('Заказ. Вкладка "Инфо". Параметры "Оформлен в", "Взят в работу в" и "Выдан в"', async ({ page }) => {
-		const orderRegisterPage = new OrderRegisterPage(page)
-		const createOrderPage = new CreateOrderPage(page)
+	test('Параметры "Оформлен в", "Взят в работу в" и "Выдан в"', async ({ page }) => {
 		const orderPage = new OrderPage(page)
 
-		// Создание нового заказа и открытие его карточки
+		// Создание нового заказа по API и открытие его карточки
 		await helpers.createNewOrderByApiAndOpenItsPage(page)
+		await page.waitForLoadState('networkidle')
 
 		//
 
