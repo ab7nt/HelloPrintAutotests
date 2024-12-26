@@ -1,23 +1,22 @@
 import { describe, test, expect } from "@playwright/test"
-import { LoginPage } from "../page-objects/LoginPage";
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
-import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
-import { CreateOrderPage } from "../page-objects/CreateOrderPage";
-import { LeftSideMenu } from "../page-objects/LeftSideMenu";
-import { OrderPage } from "../page-objects/OrderPage";
-import { CashierPage } from "../page-objects/CashierPage";
-import { CalcPageTiles } from "../page-objects/CalcPageTiles";
-import { OrderPageSpecification } from "../page-objects/OrderPageSpecification";
-import { addItemCashier } from "../data/addItemCashier"
-import { createOrderInfo } from "../data/createOrderInfo";
-import { OrderPageStage } from "../page-objects/OrderPageStage";
-import { helpers } from "../utils/helpers";
-import { settings } from "../data/settings"
-import { orderInfo } from "../data/orderInfo";
+import { LoginPage } from "../../page-objects/LoginPage";
+import { ChooseCompanyPage } from "../../page-objects/ChooseCompanyPage";
+import { OrderRegisterPage } from "../../page-objects/OrderRegisterPage";
+import { CreateOrderPage } from "../../page-objects/CreateOrderPage";
+import { LeftSideMenu } from "../../page-objects/LeftSideMenu";
+import { OrderPage } from "../../page-objects/OrderPage";
+import { CashierPage } from "../../page-objects/CashierPage";
+import { CalcPageTiles } from "../../page-objects/CalcPageTiles";
+import { OrderPageSpecification } from "../../page-objects/OrderPageSpecification";
+import { addItemCashier } from "../../data/addItemCashier"
+import { createOrderInfo } from "../../data/createOrderInfo";
+import { OrderPageStage } from "../../page-objects/OrderPageStage";
+import { helpers } from "../../utils/helpers";
+import { settings } from "../../data/settings"
+import { orderInfo } from "../../data/orderInfo";
 
 describe('Заказ. Вкладка "Инфо".', () => {
 	// Настройки
-	test.setTimeout(90 * 1000)
 
 	test.beforeAll(async ({ browser }) => {
 		await helpers.getaAthorizationCookie(browser)

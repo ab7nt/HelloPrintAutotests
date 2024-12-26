@@ -9,3 +9,4 @@ filteringOrderRegister.spec.copy.js
 reserve
 authorization.js
 test.spec.js
+usersInfo.js

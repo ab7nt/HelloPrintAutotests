@@ -1,7 +1,7 @@
 import { describe, test } from "@playwright/test"
-import { LoginPage } from "../page-objects/LoginPage.js"
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage.js"
-import { OrderRegisterPage } from "./../page-objects/OrderRegisterPage.js"
+import { LoginPage } from "../../page-objects/LoginPage.js"
+import { ChooseCompanyPage } from "../../page-objects/ChooseCompanyPage.js"
+import { OrderRegisterPage } from "../../page-objects/OrderRegisterPage.js"
 
 describe('Проверка фильтрации реестра заказов', () => {
    // Настройки

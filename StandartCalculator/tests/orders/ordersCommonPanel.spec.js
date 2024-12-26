@@ -1,50 +1,61 @@
 import { describe, test, expect, } from "@playwright/test";
-import { LoginPage } from "../page-objects/LoginPage";
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
-import { OrderRegisterPage } from "../page-objects/OrderRegisterPage";
-import { CreateOrderPage } from "../page-objects/CreateOrderPage";
-import { OrderPage } from "../page-objects/OrderPage";
-import { LeftSideMenu } from "../page-objects/LeftSideMenu";
-import { createOrderInfo } from "../data/createOrderInfo";
-import { orderInfo } from "../data/orderInfo";
-import { settings } from "../data/settings";
-import { CompaniesListPage } from "../page-objects/CompaniesListPage";
-import { CompanySettingsPage } from "../page-objects/CompanySettingsPage copy";
-import { helpers } from "../utils/helpers";
+import { LoginPage } from "../../page-objects/LoginPage";
+import { ChooseCompanyPage } from "../../page-objects/ChooseCompanyPage";
+import { OrderRegisterPage } from "../../page-objects/OrderRegisterPage";
+import { CreateOrderPage } from "../../page-objects/CreateOrderPage";
+import { OrderPage } from "../../page-objects/OrderPage";
+import { LeftSideMenu } from "../../page-objects/LeftSideMenu";
+import { createOrderInfo } from "../../data/createOrderInfo";
+import { orderInfo } from "../../data/orderInfo";
+import { settings } from "../../data/settings";
+import { CompaniesListPage } from "../../page-objects/CompaniesListPage";
+import { CompanySettingsPage } from "../../page-objects/CompanySettingsPage copy";
+import { helpers } from "../../utils/helpers";
 
 describe('Функции общей панели для большинства вкладок заказа', () => {
-    // Настройки
-    test.setTimeout(180 * 1000)
+    test.beforeAll(async ({ browser }) => {
+        await helpers.getaAthorizationCookie(browser)
+    })
 
-    test.beforeEach(async ({ page, context }) => {
-        const loginPage = new LoginPage(page)
-        const chooseCompanyPage = new ChooseCompanyPage(page)
+    test.beforeEach(async ({ context }) => {
+        await context.addCookies(settings.authorizationCookies)
 
         // Разрешение на использование буфера обмена
         await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
-
-        // Открытие страницы
-        await page.goto("/")
-        // Авторизация
-        await loginPage.enterUsernameAndPassword()
-        // Выбор компании
-        await chooseCompanyPage.choosingCompany()
     })
+
+    // test.beforeEach(async ({ page, context }) => {
+    //     const loginPage = new LoginPage(page)
+    //     const chooseCompanyPage = new ChooseCompanyPage(page)
+
+    //     // Разрешение на использование буфера обмена
+    //     await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: settings.env });
+
+    //     // Открытие страницы
+    //     await page.goto("/")
+    //     // Авторизация
+    //     await loginPage.enterUsernameAndPassword()
+    //     // Выбор компании
+    //     await chooseCompanyPage.choosingCompany()
+    // })
 
     test('Добавление доп. номера и проверка его сохранения', async ({ page }) => {
         const orderRegisterPage = new OrderRegisterPage(page)
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
 
-        // Нажатие на кнопку "Новый заказ" в реестре заказов
-        await orderRegisterPage.clickOnNewOrderButton()
+        // Создание нового заказа по API и открытие его карточки
+        await helpers.createNewOrderByApiAndOpenItsPage(page)
 
-        // Выбор контрагента и представителя
-        await createOrderPage.selectPartner()
-        await createOrderPage.selectPartnerUser()
+        // // Нажатие на кнопку "Новый заказ" в реестре заказов
+        // await orderRegisterPage.clickOnNewOrderButton()
 
-        // Нажатие на кнопку "Создать заказ" на странице создания заказа
-        await createOrderPage.clickOnNewOrderButton()
+        // // Выбор контрагента и представителя
+        // await createOrderPage.selectPartner()
+        // await createOrderPage.selectPartnerUser()
+
+        // // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        // await createOrderPage.clickOnNewOrderButton()
 
         // Ввод доп. номера в карточке заказа
         await orderPage.enterAdditionalNumber()
@@ -63,18 +74,21 @@ describe('Функции общей панели для большинства �
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
 
-        // Нажатие на кнопку "Новый заказ" в реестре заказов
-        await orderRegisterPage.clickOnNewOrderButton()
+        // Создание нового заказа по API и открытие его карточки
+        await helpers.createNewOrderByApiAndOpenItsPage(page)
 
-        // Выбор контрагента и представителя
-        await createOrderPage.selectPartner()
-        await createOrderPage.selectPartnerUser()
+        // // Нажатие на кнопку "Новый заказ" в реестре заказов
+        // await orderRegisterPage.clickOnNewOrderButton()
 
-        // Нажатие на кнопку "Создать заказ" на странице создания заказа
-        await createOrderPage.clickOnNewOrderButton()
+        // // Выбор контрагента и представителя
+        // await createOrderPage.selectPartner()
+        // await createOrderPage.selectPartnerUser()
+
+        // // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        // await createOrderPage.clickOnNewOrderButton()
 
         // Выбор срочночти
-        await page.waitForLoadState('networkidle')
+        // await page.waitForLoadState('networkidle')
         await orderPage.selectExpress()
 
         // Перезагрузка страницы и проверка срочности
@@ -88,15 +102,18 @@ describe('Функции общей панели для большинства �
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
 
-        // Нажатие на кнопку "Новый заказ" в реестре заказов
-        await orderRegisterPage.clickOnNewOrderButton()
+        // Создание нового заказа по API и открытие его карточки
+        await helpers.createNewOrderByApiAndOpenItsPage(page)
 
-        // Выбор контрагента и представителя
-        await createOrderPage.selectPartner()
-        await createOrderPage.selectPartnerUser()
+        // // Нажатие на кнопку "Новый заказ" в реестре заказов
+        // await orderRegisterPage.clickOnNewOrderButton()
 
-        // Нажатие на кнопку "Создать заказ" на странице создания заказа
-        await createOrderPage.clickOnNewOrderButton()
+        // // Выбор контрагента и представителя
+        // await createOrderPage.selectPartner()
+        // await createOrderPage.selectPartnerUser()
+
+        // // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        // await createOrderPage.clickOnNewOrderButton()
 
         // Выбоор статусов кроме "В работе" и "Отменён"
         await page.waitForLoadState('networkidle')
@@ -113,18 +130,21 @@ describe('Функции общей панели для большинства �
         const createOrderPage = new CreateOrderPage(page)
         const orderPage = new OrderPage(page)
 
-        // Нажатие на кнопку "Новый заказ" в реестре заказов
-        await orderRegisterPage.clickOnNewOrderButton()
+        // Создание нового заказа по API и открытие его карточки
+        await helpers.createNewOrderByApiAndOpenItsPage(page)
 
-        // Выбор контрагента и представителя
-        await createOrderPage.selectPartner()
-        await createOrderPage.selectPartnerUser()
+        // // Нажатие на кнопку "Новый заказ" в реестре заказов
+        // await orderRegisterPage.clickOnNewOrderButton()
 
-        // Нажатие на кнопку "Создать заказ" на странице создания заказа
-        await createOrderPage.clickOnNewOrderButton()
+        // // Выбор контрагента и представителя
+        // await createOrderPage.selectPartner()
+        // await createOrderPage.selectPartnerUser()
+
+        // // Нажатие на кнопку "Создать заказ" на странице создания заказа
+        // await createOrderPage.clickOnNewOrderButton()
 
         // Выбор статуса "Отменён" с указанием причины
-        await page.waitForLoadState('networkidle')
+        // await page.waitForLoadState('networkidle')
         await orderPage.selectCancelStatus()
         await orderPage.selectReasonForCancellation(orderInfo.reasonForCancellation)
         await orderPage.fillReasonForCancellation()
@@ -140,6 +160,8 @@ describe('Функции общей панели для большинства �
         const leftSideMenu = new LeftSideMenu(page)
         const companiesListPage = new CompaniesListPage(page)
         const companySettingsPage = new CompanySettingsPage(page)
+
+        await page.goto('/')
 
         // Переход в карточку компании
         await page.waitForLoadState('load')
@@ -157,7 +179,8 @@ describe('Функции общей панели для большинства �
 
         // Выбор статуса "Заказ - Выполнен | Готов к отправке"
         await page.waitForLoadState('networkidle')
-        const orderId = page.url().match(/\d+/)[0]
+        const orderId = page.url().match(/order\/(\d+)/)[1]
+        // const orderId = page.url().match(/\d+/)[0]
         await orderPage.selectOrderStatus(orderInfo.statusReadyToSent)
         await orderPage.popupLimits.waitFor({ state: 'visible' })
 

@@ -1,7 +1,7 @@
 import { test } from "@playwright/test"
-import { LoginPage } from "../page-objects/LoginPage";
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage";
-import { PartnerPage } from "../page-objects/partnerCreate";
+import { LoginPage } from "../../page-objects/LoginPage";
+import { ChooseCompanyPage } from "../../page-objects/ChooseCompanyPage";
+import { PartnerPage } from "../../page-objects/partnerCreate";
 
 test.afterEach(async ({ page }, testInfo) => {
 	if (testInfo.status === "failed") {

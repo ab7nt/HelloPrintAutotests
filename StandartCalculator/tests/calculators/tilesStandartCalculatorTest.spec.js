@@ -1,8 +1,8 @@
 // import * as nodeFetch from "node-fetch"
 import { test, expect } from "@playwright/test"
-import { LoginPage } from "../page-objects/LoginPage";
-import { CalcPageTiles } from "../page-objects/CalcPageTiles";
-import { ChooseCompanyPage } from "../page-objects/ChooseCompanyPage"
+import { LoginPage } from "../../page-objects/LoginPage";
+import { CalcPageTiles } from "../../page-objects/CalcPageTiles";
+import { ChooseCompanyPage } from "../../page-objects/ChooseCompanyPage"
 
 // const calculatorDisplayType = "плитки"
 

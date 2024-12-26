@@ -34,35 +34,3 @@ export const createOrderByAPI = async () => {
         throw error;
     }
 }
-
-// export const createOrderByAPI = async () => {
-//     const myHeaders = new Headers();
-//     myHeaders.append("Accept", "application/json");
-//     myHeaders.append("Content-Type", "application/json");
-//     myHeaders.append("Authorization", `Bearer ${userInfo.bearerTokenRelease1}`);
-
-//     const raw = JSON.stringify({
-//         "name": createOrderInfo.partnerFullName,
-//         "phone": createOrderInfo.phone
-//     });
-
-//     const requestOptions = {
-//         method: "POST",
-//         headers: myHeaders,
-//         body: raw,
-//         redirect: "follow"
-//     };
-
-//     try {
-//         const response = await fetch(`${settings.envURL}api/v3/request-orders`, requestOptions);
-//         const result = await response.json();
-
-//         if (response.ok) {
-//             return result.link
-//         } else {
-//             console.error("Ошибка при создании заказа:", result);
-//         }
-//     } catch (error) {
-//         console.error("Ошибка:", error);
-//     }
-// }
