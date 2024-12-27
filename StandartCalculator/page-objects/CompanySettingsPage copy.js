@@ -19,12 +19,12 @@ export class CompanySettingsPage {
       this.saveChangesButtonForOrder = page.locator('div#tab_orders button.save-company-status')
       // Локаторы для блока ограничений
       this.limitBlock = page.locator('div#tab_orders div.status-limit-section')
-      this.limitBlockTypeField = page.locator('span[aria-labelledby*="select2-order0status_id"]')
+      this.limitBlockTypeField = page.locator('span[aria-labelledby*="select2-order0status_id"]').first()
       this.limitBlockTypeSelect = page.locator('select[name="order[0][status_id]"]')
       this.optionList = page.locator('ul.select2-results__options li')
       this.limitBlockLimits = page.locator('label.custom-checkbox')
       this.limitBlockCheckboxes = this.limitBlockLimits.locator('input')
-      this.limitBlockDeleteButton = this.limitBlock.locator('div.btn-remove-card')
+      this.limitBlockDeleteButton = this.limitBlock.locator('div.btn-remove-card').first()
    }
 
    goToTheLimitsTab = async () => {
@@ -33,12 +33,15 @@ export class CompanySettingsPage {
       await this.page.waitForLoadState('networkidle')
    }
 
-   addNewLimitForOrder = async () => {
-      // Удаление ограничение, если уже создано
+   removeLimitsForOrderIfItsAdded = async () => {
       if (await this.limitBlockTypeField.isVisible()) {
          await this.deleteLimits()
-      }
 
+         await this.removeLimitsForOrderIfItsAdded()
+      }
+   }
+
+   addNewLimitForOrder = async () => {
       await this.newLimitButtonForOrder.waitFor()
       await this.newLimitButtonForOrder.click()
       expect(this.limitBlock).toBeVisible()
@@ -65,7 +68,8 @@ export class CompanySettingsPage {
       await this.popUpDeleteLimit.waitFor({ state: 'visible' })
       await this.popUpDeleteLimitButtons.filter({ hasText: 'Да' }).click()
       // await this.successAlert.waitFor({ state: 'visible' })
-      // await this.page.waitForLoadState('load')
-      await this.limitBlockDeleteButton.waitFor({ state: 'hidden' })
+      await this.page.waitForLoadState('networkidle')
+      await this.page.reload()
+      // await this.limitBlockDeleteButton.waitFor({ state: 'hidden' })
    }
 }

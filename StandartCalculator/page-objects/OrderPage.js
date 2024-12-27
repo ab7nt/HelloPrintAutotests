@@ -35,6 +35,7 @@ export class OrderPage {
       // Ограничения
       this.popupLimits = page.locator('div.modal-dialog').filter({ hasText: 'Заказ не готов к получению статуса' }).first()
       this.popupLimitsTitle = page.locator('div.modal-dialog').locator('h4')
+      this.popupLimitsCloseButton = this.popupLimits.locator('button.close')
       // Изменить менеджера
       this.popupChangeManager = page.locator('div.modal-dialog').filter({ hasText: 'Изменить менеджера' })
       this.popupChangeManagerSaveButton = this.popupChangeManager.locator('button#saveManagerBtn')
@@ -301,5 +302,11 @@ export class OrderPage {
 
    selectContractDeliveryDate = async () => {
       await this.enterADateAtDateInput(orderInfo.contractorDeliveryDate, this.contractorDeliveryDateInput)
+   }
+
+   closePopupLimits = async () => {
+      await this.popupLimitsCloseButton.waitFor()
+      await this.popupLimitsCloseButton.click()
+      expect(this.popupLimits).not.toBeVisible()
    }
 }

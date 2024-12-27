@@ -12,6 +12,10 @@ export class LeftSideMenu {
       this.firstLevelSettingsLink = page.locator('div[uitest="config"]')
       this.secondLevelCompanyLink = page.locator('li[uitest="company"]')
       this.firstLevelOrderLink = page.locator('div[uitest="submenu-mob-orders"]')
+      // this.secondLevelOrderLinkCreateOrder = page.locator('li[id="order-create"]')
+      this.secondLevelOrderLinkCreateOrder = page.locator('li[id="order-create"] a[href*="create?type=order"]')
+
+
    }
 
    getUserCompanyInfo = async () => {
